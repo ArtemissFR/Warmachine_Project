@@ -9,6 +9,15 @@
 </head>
 
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <span class="loader"></span>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <div class="mesh-bg">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -46,14 +55,18 @@
                 <tbody>
                     <tr>
                         <td>2023-01-01</td>
-                        <td style="color: var(--text-primary); font-weight: 500;">Bench Press</td>
+                        <td style="color: var(--text-primary); font-weight: 500;">
+                            Bench Press <span class="badge badge-new">Nouveau</span>
+                        </td>
                         <td>80</td>
                         <td>10</td>
                         <td>Bonne forme</td>
                     </tr>
                     <tr>
                         <td>2023-01-15</td>
-                        <td style="color: var(--text-primary); font-weight: 500;">Squats</td>
+                        <td style="color: var(--text-primary); font-weight: 500;">
+                            Squats <span class="badge badge-pb">Record !</span>
+                        </td>
                         <td>100</td>
                         <td>8</td>
                         <td>Amélioration</td>
@@ -73,6 +86,8 @@
         <p>&copy; 2026 Portfolio Personnel. Tous droits réservés.</p>
         <p style="font-size: 0.8rem; opacity: 0.6;">Conçu avec passion</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

@@ -9,6 +9,15 @@
 </head>
 
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <span class="loader"></span>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <div class="mesh-bg">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -61,10 +70,18 @@
         </a>
     </main>
 
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" src="">
+    </div>
+
     <footer>
         <p>&copy; 2026 Portfolio Personnel. Tous droits réservés.</p>
         <p style="font-size: 0.8rem; opacity: 0.6;">Conçu avec passion</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
