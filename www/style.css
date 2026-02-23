@@ -1,55 +1,178 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Reset de base + variables modernes */
+* {
     margin: 0;
-    padding: 20px;
-    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h1, h2 {
-    color: #333;
+:root {
+    --bg-primary: #0f0f17;
+    --bg-secondary: #161b22;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #6366f1;
+    /* Indigo moderne */
+    --accent-hover: #818cf8;
+    --glass-bg: rgba(30, 41, 59, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --blur: blur(16px);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0f17 0%, #1e1b4b 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+}
+
+/* Conteneurs avec glassmorphism */
+main,
+.gallery,
+table {
+    background: var(--glass-bg);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin: 1.5rem auto;
+    max-width: 1100px;
+    transition: var(--transition);
+}
+
+h1,
+h2 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(90deg, #c084fc, #818cf8, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Liens / Boutons modernes */
 a {
-    text-decoration: none;
-    color: white;
-    background-color: #007bff;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 5px;
     display: inline-block;
+    padding: 0.85rem 1.75rem;
+    margin: 0.6rem;
+    background: linear-gradient(135deg, var(--accent), #4f46e5);
+    color: white;
+    font-weight: 600;
+    border-radius: 9999px;
+    /* Pill shape */
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    transition: var(--transition);
+    backdrop-filter: blur(4px);
 }
 
 a:hover {
-    background-color: #0056b3;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, var(--accent-hover), #6366f1);
 }
 
+/* Galerie dessins – moderne & responsive */
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
 }
 
 .gallery img {
-    width: 200px;
+    width: 100%;
     height: auto;
-    margin: 10px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 1rem;
+    object-fit: cover;
+    transition: var(--transition);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+.gallery img:hover {
+    transform: scale(1.06) translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Tableau musculation – style glass + moderne */
 table {
-    margin: 20px auto;
-    border-collapse: collapse;
-    width: 80%;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.75rem;
 }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+th,
+td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    background: rgba(30, 41, 59, 0.3);
+    border: none;
 }
 
 th {
-    background-color: #007bff;
-    color: white;
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.25), rgba(79, 70, 229, 0.15));
+    color: #c4b5fd;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+tr {
+    transition: var(--transition);
+}
+
+tr:hover {
+    transform: translateX(6px);
+    background: rgba(99, 102, 241, 0.12);
+}
+
+/* Retour au menu – style cohérent */
+a[href="index.html"],
+a[href="../index.html"] {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+a[href="index.html"]:hover,
+a[href="../index.html"]:hover {
+    background: rgba(99, 102, 241, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Responsive – mobile first */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0.8rem;
+    }
+
+    main,
+    .gallery,
+    table {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    a {
+        padding: 0.75rem 1.5rem;
+        margin: 0.5rem;
+    }
 }
