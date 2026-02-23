@@ -1,39 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <title>Mes Performances de Musculation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Musculation</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Enregistrement de mes performances</h1>
-    <p>Voici un suivi de mes entraînements. Je mets à jour manuellement.</p>
-    
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Exercice</th>
-            <th>Poids (kg)</th>
-            <th>Répétitions</th>
-            <th>Notes</th>
-        </tr>
-        <tr>
-            <td>2023-01-01</td>
-            <td>Bench Press</td>
-            <td>80</td>
-            <td>10</td>
-            <td>Bonne forme</td>
-        </tr>
-        <tr>
-            <td>2023-01-15</td>
-            <td>Squats</td>
-            <td>100</td>
-            <td>8</td>
-            <td>Amélioration</td>
-        </tr>
-        <!-- Ajoute plus de lignes ici pour tes records -->
-    </table>
-    
-    <a href="index.html">Retour au menu</a>
+    <div class="mesh-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo"
+            style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.05em; color: var(--text-primary);">
+            PORTFOLIO.</div>
+        <div class="nav-links">
+            <a href="index.html">Accueil</a>
+            <a href="collection.html">Dessins</a>
+            <a href="gym.html" class="active">Musculation</a>
+        </div>
+    </nav>
+
+    <main>
+        <header style="margin-bottom: 3rem;" class="animate-in">
+            <h1>Suivi de Performance</h1>
+            <p>Journal de progression et records personnels en musculation. Discipline et régularité.</p>
+        </header>
+
+        <div class="table-container animate-in delay-1">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Exercice</th>
+                        <th>Poids (kg)</th>
+                        <th>Reps</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2023-01-01</td>
+                        <td style="color: var(--text-primary); font-weight: 500;">Bench Press</td>
+                        <td>80</td>
+                        <td>10</td>
+                        <td>Bonne forme</td>
+                    </tr>
+                    <tr>
+                        <td>2023-01-15</td>
+                        <td style="color: var(--text-primary); font-weight: 500;">Squats</td>
+                        <td>100</td>
+                        <td>8</td>
+                        <td>Amélioration</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="index.html" class="animate-in delay-2"
+            style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; margin-top: 3rem; transition: var(--transition);"
+            onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+            ← Retour à l'accueil
+        </a>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Portfolio Personnel. Tous droits réservés.</p>
+        <p style="font-size: 0.8rem; opacity: 0.6;">Conçu avec passion</p>
+    </footer>
 </body>
+
 </html>
