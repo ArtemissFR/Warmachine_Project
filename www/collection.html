@@ -47,24 +47,32 @@
             </p>
         </header>
 
-        <div class="gallery animate-in delay-1">
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art1/800/800" alt="Dessin 1">
+        <!-- Filtres -->
+        <div class="filter-container animate-in delay-1">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="digital">Illustration</button>
+            <button class="filter-btn" data-filter="croquis">Croquis</button>
+            <button class="filter-btn" data-filter="concept">Concept Art</button>
+        </div>
+
+        <div class="gallery animate-in delay-2">
+            <div class="gallery-item" data-category="digital">
+                <img src="https://picsum.photos/seed/art1/800/800" alt="Illustration 1">
             </div>
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art2/800/1000" alt="Dessin 2">
+            <div class="gallery-item" data-category="croquis">
+                <img src="https://picsum.photos/seed/art2/800/1000" alt="Croquis 1">
             </div>
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art3/800/600" alt="Dessin 3">
+            <div class="gallery-item" data-category="concept">
+                <img src="https://picsum.photos/seed/art3/800/600" alt="Concept 1">
             </div>
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art4/800/1200" alt="Dessin 4">
+            <div class="gallery-item" data-category="digital">
+                <img src="https://picsum.photos/seed/art4/800/1200" alt="Illustration 2">
             </div>
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art5/800/800" alt="Dessin 5">
+            <div class="gallery-item" data-category="croquis">
+                <img src="https://picsum.photos/seed/art5/800/800" alt="Croquis 2">
             </div>
-            <div class="gallery-item">
-                <img src="https://picsum.photos/seed/art6/800/900" alt="Dessin 6">
+            <div class="gallery-item" data-category="concept">
+                <img src="https://picsum.photos/seed/art6/800/900" alt="Concept 2">
             </div>
         </div>
 
