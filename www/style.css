@@ -34,6 +34,7 @@ body {
     overflow-x: hidden;
     position: relative;
     /* Cursor handled via JS for robustness */
+    scroll-behavior: smooth;
 }
 
 body.custom-cursor-active {
@@ -259,6 +260,108 @@ nav {
     justify-content: space-between;
     align-items: center;
     transition: var(--transition);
+}
+
+.logo {
+    font-family: 'Outfit';
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.05em;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+#live-clock {
+    font-family: 'Outfit';
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--glass);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    border: 1px solid var(--glass-border);
+}
+
+/* Service Cards */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.service-card {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.service-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.service-card span {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Section Spacing */
+.section-spacer {
+    margin-top: 8rem;
+}
+
+.section-title-large {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Links */
+.external-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.link-underline {
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 4px;
+    transition: var(--transition);
+}
+
+.link-underline:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-top: 3rem;
+    transition: var(--transition);
+}
+
+.back-link:hover {
+    color: var(--text-primary);
 }
 
 .nav-links {
@@ -642,6 +745,38 @@ tr:hover td {
 
 .gallery-item.show {
     animation: fadeIn 0.4s ease forwards;
+}
+
+/* Back to Top Button */
+#back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: none;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#back-to-top:hover {
+    background: var(--accent);
+    transform: translateY(-5px);
 }
 
 /* Footer */

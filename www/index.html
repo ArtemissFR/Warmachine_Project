@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Accueil</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Meta SEO -->
+    <meta name="description" content="Portfolio personnel de créativité et performance.">
+    <meta property="og:title" content="Portfolio | Accueil">
+    <meta property="og:description"
+        content="Bienvenue sur mon espace personnel numérique. Un univers où l'expression artistique rencontre la discipline physique.">
+    <meta property="og:type" content="website">
 </head>
 
 <body>
@@ -28,13 +34,9 @@
     </div>
 
     <nav>
-        <a href="index.html" class="logo"
-            style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.05em; color: var(--text-primary); text-decoration: none;">
-            PORTFOLIO.</a>
+        <a href="index.html" class="logo">PORTFOLIO.</a>
         <div style="display: flex; align-items: center; gap: 2rem;">
-            <div id="live-clock"
-                style="font-family: 'Outfit'; font-size: 0.85rem; color: var(--text-secondary); background: var(--glass); padding: 0.4rem 0.8rem; border-radius: 99px; border: 1px solid var(--glass-border);">
-                00:00:00</div>
+            <div id="live-clock">00:00:00</div>
             <div class="nav-links">
                 <a href="index.html" class="active">Accueil</a>
                 <a href="collection.html">Dessins</a>
@@ -51,34 +53,32 @@
         </section>
 
         <!-- Nouveau: Accès Services -->
-        <section class="services animate-in delay-1" style="margin-bottom: 4rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                <a href="#" class="btn-card"
-                    style="padding: 1.5rem; display: flex; align-items: center; gap: 1rem; border-color: rgba(99, 102, 241, 0.5); background: rgba(99, 102, 241, 0.05);">
-                    <div
-                        style="background: var(--accent); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <section class="services animate-in delay-1">
+            <div class="services-grid">
+                <a href="#" class="btn-card service-card"
+                    style="border-color: rgba(99, 102, 241, 0.5); background: rgba(99, 102, 241, 0.05);">
+                    <div class="service-icon" style="background: var(--accent);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                     </div>
                     <div>
-                        <h3 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Films & Séries</h3>
+                        <h3>Films & Séries</h3>
                         <span style="font-size: 0.8rem; opacity: 0.7;">Serveur Local</span>
                     </div>
                 </a>
-                <a href="#" class="btn-card"
-                    style="padding: 1.5rem; display: flex; align-items: center; gap: 1rem; border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.05);">
-                    <div
-                        style="background: #a855f7; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <a href="#" class="btn-card service-card"
+                    style="border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.05);">
+                    <div class="service-icon" style="background: #a855f7;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                         </svg>
                     </div>
                     <div>
-                        <h3 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Supervision</h3>
-                        <span style="font-size: 0.8rem; opacity: 0.7;">Uptime Kuma</span>
+                        <h3>Supervision</h3>
+                        <span>Uptime Kuma</span>
                     </div>
                 </a>
             </div>
@@ -96,19 +96,31 @@
             </a>
         </div>
 
-        <section style="margin-top: 8rem;" class="animate-in delay-4">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem;">Ressources externes</h2>
-            <div style="display: flex; gap: 2rem;">
-                <a href="https://www.google.com" target="_blank"
-                    style="color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid var(--glass-border); padding-bottom: 4px; transition: var(--transition);"
-                    onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--accent)'"
-                    onmouseout="this.style.color='var(--text-secondary)'; this.style.borderColor='var(--glass-border)'">Google
-                    Search</a>
-                <a href="https://www.youtube.com" target="_blank"
-                    style="color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid var(--glass-border); padding-bottom: 4px; transition: var(--transition);"
-                    onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--accent)'"
-                    onmouseout="this.style.color='var(--text-secondary)'; this.style.borderColor='var(--glass-border)'">YouTube
-                    Channel</a>
+        <section class="section-spacer animate-in delay-4">
+            <h2 class="section-title-large">Ressources externes</h2>
+            <div class="external-links">
+                <a href="https://www.google.com" target="_blank" class="link-underline">Google Search</a>
+                <a href="https://www.youtube.com" target="_blank" class="link-underline">YouTube Channel</a>
+            </div>
+        </section>
+
+        <!-- Nouveau: Contact -->
+        <section class="section-spacer animate-in" style="margin-bottom: 8rem;">
+            <h2 class="section-title-large">Contact & Réseaux</h2>
+            <p>Un projet en tête ou simplement envie d'échanger ? N'hésitez pas à me contacter.</p>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                <a href="mailto:contact@example.com" class="btn-card"
+                    style="padding: 1.5rem 2.5rem; border-radius: 99px; text-align: center; font-weight: 600;">
+                    Envoyer un Email
+                </a>
+                <a href="https://github.com" target="_blank" class="btn-card"
+                    style="padding: 1.5rem 2.5rem; border-radius: 99px; text-align: center; font-weight: 600;">
+                    GitHub
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="btn-card"
+                    style="padding: 1.5rem 2.5rem; border-radius: 99px; text-align: center; font-weight: 600;">
+                    LinkedIn
+                </a>
             </div>
         </section>
     </main>

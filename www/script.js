@@ -81,15 +81,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Lightbox Logic
     if (galleryItems.length > 0 && lightbox && lightboxImg && lightboxClose) {
-        galleryItems.forEach(img => {
+        let currentIndex = 0;
+        const itemsArray = Array.from(galleryItems);
+
+        galleryItems.forEach((img, index) => {
             img.addEventListener('click', () => {
-                lightboxImg.src = img.src;
-                lightbox.classList.add('active');
+                currentIndex = index;
+                showLightbox(img.src);
             });
         });
-        lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
+
+        const showLightbox = (src) => {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        const nextImage = () => {
+            currentIndex = (currentIndex + 1) % itemsArray.length;
+            lightboxImg.src = itemsArray[currentIndex].src;
+        };
+
+        const prevImage = () => {
+            currentIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
+            lightboxImg.src = itemsArray[currentIndex].src;
+        };
+
+        lightboxClose.addEventListener('click', closeLightbox);
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) lightbox.classList.remove('active');
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Keyboard Navigation
+        window.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
         });
     }
 
@@ -147,5 +180,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // 8. Back to Top Logic
+    const backToTopBtn = document.createElement('div');
+    backToTopBtn.id = 'back-to-top';
+    backToTopBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
+    document.body.appendChild(backToTopBtn);
+
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    backToTopBtn.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    backToTopBtn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
 });
 

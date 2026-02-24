@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Dessins</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Meta SEO -->
+    <meta name="description" content="Découvrez ma collection artistique de dessins et illustrations numériques.">
+    <meta property="og:title" content="Portfolio | Dessins">
+    <meta property="og:description"
+        content="Une immersion dans mon univers créatif à travers une sélection de dessins et d'illustrations numériques.">
+    <meta property="og:type" content="website">
 </head>
 
 <body>
@@ -28,13 +34,9 @@
     </div>
 
     <nav>
-        <a href="index.html" class="logo"
-            style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.05em; color: var(--text-primary); text-decoration: none;">
-            PORTFOLIO.</a>
+        <a href="index.html" class="logo">PORTFOLIO.</a>
         <div style="display: flex; align-items: center; gap: 2rem;">
-            <div id="live-clock"
-                style="font-family: 'Outfit'; font-size: 0.85rem; color: var(--text-secondary); background: var(--glass); padding: 0.4rem 0.8rem; border-radius: 99px; border: 1px solid var(--glass-border);">
-                00:00:00</div>
+            <div id="live-clock">00:00:00</div>
             <div class="nav-links">
                 <a href="index.html">Accueil</a>
                 <a href="collection.html" class="active">Dessins</a>
@@ -44,7 +46,7 @@
     </nav>
 
     <main>
-        <header style="margin-bottom: 3rem;" class="animate-in">
+        <header class="animate-in section-spacer" style="margin-bottom: 3rem;">
             <h1>Collection Artistique</h1>
             <p>Une immersion dans mon univers créatif à travers une sélection de dessins et d'illustrations numériques.
             </p>
@@ -60,28 +62,26 @@
 
         <div class="gallery animate-in delay-2">
             <div class="gallery-item" data-category="digital">
-                <img src="https://picsum.photos/seed/art1/800/800" alt="Illustration 1">
+                <img src="https://picsum.photos/seed/art1/800/800" alt="Illustration 1" loading="lazy">
             </div>
             <div class="gallery-item" data-category="croquis">
-                <img src="https://picsum.photos/seed/art2/800/1000" alt="Croquis 1">
+                <img src="https://picsum.photos/seed/art2/800/1000" alt="Croquis 1" loading="lazy">
             </div>
             <div class="gallery-item" data-category="concept">
-                <img src="https://picsum.photos/seed/art3/800/600" alt="Concept 1">
+                <img src="https://picsum.photos/seed/art3/800/600" alt="Concept 1" loading="lazy">
             </div>
             <div class="gallery-item" data-category="digital">
-                <img src="https://picsum.photos/seed/art4/800/1200" alt="Illustration 2">
+                <img src="https://picsum.photos/seed/art4/800/1200" alt="Illustration 2" loading="lazy">
             </div>
             <div class="gallery-item" data-category="croquis">
-                <img src="https://picsum.photos/seed/art5/800/800" alt="Croquis 2">
+                <img src="https://picsum.photos/seed/art5/800/800" alt="Croquis 2" loading="lazy">
             </div>
             <div class="gallery-item" data-category="concept">
-                <img src="https://picsum.photos/seed/art6/800/900" alt="Concept 2">
+                <img src="https://picsum.photos/seed/art6/800/900" alt="Concept 2" loading="lazy">
             </div>
         </div>
 
-        <a href="index.html" class="animate-in delay-2"
-            style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; margin-top: 3rem; transition: var(--transition);"
-            onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+        <a href="index.html" class="animate-in delay-2 back-link">
             ← Retour à l'accueil
         </a>
     </main>
