@@ -137,12 +137,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gymForm || progressionCanvas || gymTableBody) {
             let myChart = null;
             let muscleChart = null;
+            let weightChart = null;
 
             const calculateOneRM = (w, r) => (r <= 0) ? 0 : (r === 1 ? w : Math.round(w * (1 + r / 30)));
-            const getGymData = () => JSON.parse(localStorage.getItem('gym_data') || '[]');
 
-            const renderGymData = () => {
-                const data = getGymData();
+            const getGymData = async () => {
+                try {
+                    const response = await fetch('/api/gym');
+                    if (!response.ok) throw new Error('Fetch failed');
+                    return await response.json();
+                } catch (err) {
+                    console.error("API error:", err);
+                    return [];
+                }
+            };
+
+            const getWeightData = async () => {
+                try {
+                    const response = await fetch('/api/weight');
+                    if (!response.ok) throw new Error('Fetch failed');
+                    return await response.json();
+                } catch (err) {
+                    console.error("Weight API error:", err);
+                    return [];
+                }
+            };
+
+            const renderGymData = async () => {
+                const data = await getGymData();
 
                 // Stats
                 const updateStat = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -154,6 +176,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateStat('stat-total-volume', vol >= 1000 ? (vol / 1000).toFixed(1) + 't' : vol + 'kg');
                     updateStat('stat-sessions-count', new Set(data.map(d => d.date)).size);
                 }
+
+                // Weight Stats
+                const wData = await getWeightData();
+                if (wData.length > 0) {
+                    const lastW = wData[wData.length - 1];
+                    updateStat('stat-body-weight', `${lastW.weight} kg`);
+                    if (wData.length > 1) {
+                        const diff = (lastW.weight - wData[wData.length - 2].weight).toFixed(1);
+                        const trendEl = document.getElementById('stat-weight-trend');
+                        if (trendEl) {
+                            trendEl.textContent = `${diff > 0 ? '+' : ''}${diff}kg (Dernière)`;
+                            trendEl.className = `stat-trend ${diff > 0 ? 'trend-up' : 'trend-down'}`;
+                        }
+                    }
+                }
+                renderWeightChart(wData);
 
                 // PRs
                 const prGrid = document.getElementById('pr-grid');
@@ -180,12 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         tr.innerHTML = `<td>${i.date}</td><td>${i.exercise}</td><td>${i.weight}</td><td>${i.reps}</td><td><span class="badge badge-delete" data-id="${i.id}">&times;</span></td>`;
                         gymTableBody.appendChild(tr);
                     });
-                    document.querySelectorAll('.badge-delete').forEach(b => b.onclick = () => {
+                    document.querySelectorAll('.badge-delete').forEach(b => b.onclick = async () => {
                         if (confirm('Supprimer cette entrée ?')) {
                             const nid = b.getAttribute('data-id');
-                            localStorage.setItem('gym_data', JSON.stringify(getGymData().filter(x => x.id != nid)));
-                            renderGymData();
-                            showToast('Entrée supprimée', 'info');
+                            try {
+                                const response = await fetch(`/api/gym/${nid}`, { method: 'DELETE' });
+                                if (response.ok) {
+                                    renderGymData();
+                                    showToast('Entrée supprimée', 'info');
+                                }
+                            } catch (err) { showToast('Erreur suppression', 'error'); }
                         }
                     });
                 }
@@ -204,6 +246,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         myChart.data.datasets[0].data = sorted.map(d => calculateOneRM(d.weight, d.reps));
                         myChart.update();
                     }
+                }
+            };
+
+            const renderWeightChart = (wData) => {
+                const canvas = document.getElementById('weightChart');
+                if (!canvas || typeof Chart === 'undefined') return;
+
+                if (!weightChart) {
+                    weightChart = new Chart(canvas, {
+                        type: 'line',
+                        data: {
+                            labels: wData.map(d => d.date),
+                            datasets: [{
+                                label: 'Poids (kg)',
+                                data: wData.map(d => d.weight),
+                                borderColor: '#a855f7',
+                                tension: 0.4,
+                                fill: true,
+                                backgroundColor: 'rgba(168, 85, 247, 0.1)'
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                } else {
+                    weightChart.data.labels = wData.map(d => d.date);
+                    weightChart.data.datasets[0].data = wData.map(d => d.weight);
+                    weightChart.update();
                 }
             };
 
@@ -231,22 +300,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (gymForm) {
-                gymForm.onsubmit = e => {
+                gymForm.onsubmit = async e => {
                     e.preventDefault();
-                    const d = getGymData();
-                    d.push({
-                        id: Date.now(),
+                    const entry = {
                         date: document.getElementById('gym-date').value,
                         exercise: document.getElementById('gym-exercise').value,
                         category: document.getElementById('gym-category').value,
                         weight: parseFloat(document.getElementById('gym-weight').value),
                         reps: parseInt(document.getElementById('gym-reps').value),
-                    });
-                    localStorage.setItem('gym_data', JSON.stringify(d));
-                    renderGymData();
-                    gymForm.reset();
-                    modal.classList.remove('active');
-                    showToast('Séance enregistrée !');
+                    };
+
+                    try {
+                        const response = await fetch('/api/gym', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(entry)
+                        });
+                        if (response.ok) {
+                            renderGymData();
+                            gymForm.reset();
+                            modal.classList.remove('active');
+                            showToast('Séance enregistrée !');
+                        }
+                    } catch (err) { showToast('Erreur sauvegarde', 'error'); }
+                };
+            }
+
+            // Weight Modal & Form
+            const openWeightBtn = document.getElementById('open-weight-modal');
+            const weightModal = document.getElementById('weight-modal');
+            const weightModalClose = document.getElementById('weight-modal-close');
+            const weightForm = document.getElementById('weight-form');
+
+            if (openWeightBtn && weightModal) {
+                openWeightBtn.onclick = () => {
+                    weightModal.classList.add('active');
+                    document.getElementById('body-date').valueAsDate = new Date();
+                };
+                if (weightModalClose) weightModalClose.onclick = () => weightModal.classList.remove('active');
+            }
+
+            if (weightForm) {
+                weightForm.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const entry = {
+                        date: document.getElementById('body-date').value,
+                        weight: parseFloat(document.getElementById('body-weight').value)
+                    };
+                    try {
+                        const response = await fetch('/api/weight', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(entry)
+                        });
+                        if (response.ok) {
+                            renderGymData();
+                            weightForm.reset();
+                            weightModal.classList.remove('active');
+                            showToast('Poids enregistré !');
+                        }
+                    } catch (err) { showToast('Erreur sauvegarde poids', 'error'); }
                 };
             }
 
@@ -255,8 +368,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const imBtn = document.getElementById('import-btn');
             const imFl = document.getElementById('import-file');
             if (exBtn) {
-                exBtn.onclick = () => {
-                    const blob = new Blob([JSON.stringify({ gym: getGymData() }, null, 2)], { type: 'application/json' });
+                exBtn.onclick = async () => {
+                    const data = await getGymData();
+                    const blob = new Blob([JSON.stringify({ gym: data }, null, 2)], { type: 'application/json' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
@@ -271,12 +385,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const file = e.target.files[0];
                     if (!file) return;
                     const r = new FileReader();
-                    r.onload = (ev) => {
+                    r.onload = async (ev) => {
                         try {
                             const data = JSON.parse(ev.target.result);
-                            if (data.gym) localStorage.setItem('gym_data', JSON.stringify(data.gym));
-                            renderGymData();
-                            showToast('Données importées', 'success');
+                            if (data.gym) {
+                                const response = await fetch('/api/gym/import', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ entries: data.gym })
+                                });
+                                if (response.ok) {
+                                    renderGymData();
+                                    showToast('Données importées', 'success');
+                                }
+                            }
                         } catch (err) { showToast('Import échoué', 'error'); }
                     };
                     r.readAsText(file);
