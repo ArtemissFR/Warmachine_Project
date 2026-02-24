@@ -3,9 +3,11 @@ services:
     build:
       context: .
       network: host
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     container_name: warmachine-dashboard
-    ports:
-      - "3000:3000"
+    network_mode: host
     volumes:
       - ./data:/usr/src/app/data
     environment:
