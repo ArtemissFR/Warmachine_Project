@@ -1,0 +1,17 @@
+# Dépendances
+node_modules/
+
+# Données (SQLite — ne pas versionner)
+data/
+
+# Logs PM2
+logs/
+
+# Environnement
+.env
+.env.*
+
+# OS / Éditeurs
+.DS_Store
+Thumbs.db
+*.log
