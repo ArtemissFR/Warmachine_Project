@@ -1,13 +1,56 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Warmachine Portfolio — Docker Compose
+# ─────────────────────────────────────────────────────────────────────────────
+
 services:
-  warmachine-portfolio:
+
+  warmachine:
     build:
       context: .
-      network: host
+      dockerfile: Dockerfile
     container_name: warmachine-dashboard
-    network_mode: host
+
+    # ── Réseau ───────────────────────────────────────────────────────────────
+    ports:
+      - "3000:3000"        # Accès depuis l'hôte sur http://localhost:3000
+
+    # ── Données persistantes ─────────────────────────────────────────────────
     volumes:
-      - ./data:/usr/src/app/data
+      - warmachine_data:/usr/src/app/data   # SQLite persiste entre les redémarrages
+
+    # ── Variables d'environnement ────────────────────────────────────────────
     environment:
-      - NODE_ENV=production
-      - PORT=3000
-    restart: always
+      NODE_ENV: production
+      PORT: 3000
+      DB_PATH: /usr/src/app/data/database.sqlite
+
+    # ── Politique de redémarrage ─────────────────────────────────────────────
+    restart: unless-stopped
+
+    # ── Healthcheck ──────────────────────────────────────────────────────────
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    # ── Logs détaillés ───────────────────────────────────────────────────────
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"    # Rotation à 10 Mo
+        max-file: "5"      # Garde les 5 derniers fichiers de log
+        labels: "service=warmachine"
+
+    # ── Limites de ressources ─────────────────────────────────────────────────
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+
+# ── Volumes nommés ────────────────────────────────────────────────────────────
+volumes:
+  warmachine_data:
+    driver: local
