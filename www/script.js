@@ -12,6 +12,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const filterItems = document.querySelectorAll('.gallery-item');
     const tiltElements = document.querySelectorAll('.btn-card, .gallery-item');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+
+    // 0. Theme Management
+    const initTheme = () => {
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    };
+    initTheme();
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateChartColors(newTheme);
+        });
+
+        themeToggleBtn.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        themeToggleBtn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    }
+
+    // 0.1 Chart Management
+    let myChart = null;
+    const chartCanvas = document.getElementById('progressionChart');
+
+    const updateChartColors = (theme) => {
+        if (!myChart) return;
+        const textColor = theme === 'light' ? '#475569' : '#94a3b8';
+        const gridColor = theme === 'light' ? 'rgba(15, 23, 42, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+
+        myChart.options.scales.x.ticks.color = textColor;
+        myChart.options.scales.y.ticks.color = textColor;
+        myChart.options.scales.x.grid.color = gridColor;
+        myChart.options.scales.y.grid.color = gridColor;
+        myChart.update();
+    };
+
+    if (chartCanvas && typeof Chart !== 'undefined') {
+        const ctx = chartCanvas.getContext('2d');
+        const theme = document.documentElement.getAttribute('data-theme');
+        const textColor = theme === 'light' ? '#475569' : '#94a3b8';
+        const gridColor = theme === 'light' ? 'rgba(15, 23, 42, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                datasets: [{
+                    label: 'Volume Total (kg)',
+                    data: [3200, 3500, 3400, 3800, 4000, 4200],
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#6366f1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: textColor },
+                        grid: { color: gridColor }
+                    },
+                    y: {
+                        ticks: { color: textColor },
+                        grid: { color: gridColor }
+                    }
+                }
+            }
+        });
+    }
 
     // 0 & 1. Page Transition (Entry) & Splash Screen
     // Ensure we clear the overlays even if something fails

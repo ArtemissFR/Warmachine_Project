@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Musculation</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Meta SEO -->
+    <meta name="description" content="Suivi de performance et progression en musculation.">
+    <meta property="og:title" content="Portfolio | Musculation">
+    <meta property="og:description"
+        content="Journal de progression et records personnels en musculation. Discipline et régularité.">
+    <meta property="og:type" content="website">
 </head>
 
 <body>
@@ -28,23 +34,37 @@
     </div>
 
     <nav>
-        <a href="index.html" class="logo"
-            style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.05em; color: var(--text-primary); text-decoration: none;">
-            PORTFOLIO.</a>
+        <a href="index.html" class="logo">PORTFOLIO.</a>
         <div style="display: flex; align-items: center; gap: 2rem;">
-            <div id="live-clock"
-                style="font-family: 'Outfit'; font-size: 0.85rem; color: var(--text-secondary); background: var(--glass); padding: 0.4rem 0.8rem; border-radius: 99px; border: 1px solid var(--glass-border);">
-                00:00:00</div>
+            <div id="live-clock">00:00:00</div>
             <div class="nav-links">
                 <a href="index.html">Accueil</a>
                 <a href="collection.html">Dessins</a>
                 <a href="gym.html" class="active">Musculation</a>
             </div>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Changer de thème">
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
         </div>
     </nav>
 
     <main>
-        <header style="margin-bottom: 3rem;" class="animate-in">
+        <header class="animate-in section-spacer" style="margin-bottom: 3rem;">
             <h1>Suivi de Performance</h1>
             <p>Journal de progression et records personnels en musculation. Discipline et régularité.</p>
         </header>
@@ -72,6 +92,13 @@
                 <div class="stat-trend trend-up">En progression constante</div>
             </div>
         </div>
+        <!-- Chart Section -->
+        <section class="section-spacer animate-in delay-1" style="margin-bottom: 4rem;">
+            <h2 class="section-title-large">Progression du Volume</h2>
+            <div class="chart-container">
+                <canvas id="progressionChart"></canvas>
+            </div>
+        </section>
 
         <div class="table-container animate-in delay-2">
             <table>
@@ -87,7 +114,7 @@
                 <tbody>
                     <tr>
                         <td>2023-01-01</td>
-                        <td style="color: var(--text-primary); font-weight: 500;">
+                        <td class="table-exercise-col">
                             Bench Press <span class="badge badge-new">Nouveau</span>
                         </td>
                         <td>80</td>
@@ -96,7 +123,7 @@
                     </tr>
                     <tr>
                         <td>2023-01-15</td>
-                        <td style="color: var(--text-primary); font-weight: 500;">
+                        <td class="table-exercise-col">
                             Squats <span class="badge badge-pb">Record !</span>
                         </td>
                         <td>100</td>
@@ -107,9 +134,7 @@
             </table>
         </div>
 
-        <a href="index.html" class="animate-in delay-2"
-            style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; margin-top: 3rem; transition: var(--transition);"
-            onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+        <a href="index.html" class="animate-in delay-2 back-link">
             ← Retour à l'accueil
         </a>
     </main>
@@ -119,6 +144,7 @@
         <p style="font-size: 0.8rem; opacity: 0.6;">Conçu avec passion</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 

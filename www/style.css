@@ -13,6 +13,22 @@
     --glass-hover: rgba(255, 255, 255, 0.06);
     --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --nav-bg: rgba(9, 9, 11, 0.6);
+}
+
+[data-theme="light"] {
+    --bg-dark: #f8fafc;
+    --navy-900: #f1f5f9;
+    --navy-800: #e2e8f0;
+    --accent: #4f46e5;
+    --accent-glow: rgba(79, 70, 229, 0.2);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --glass: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(15, 23, 42, 0.1);
+    --glass-hover: rgba(255, 255, 255, 0.9);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --nav-bg: rgba(248, 250, 252, 0.8);
 }
 
 * {
@@ -78,6 +94,43 @@ body.custom-cursor-active {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: #fff;
     opacity: 0.2;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    background: var(--glass-hover);
+    border-color: var(--accent);
+    transform: scale(1.1);
+}
+
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+.theme-toggle .moon-icon {
+    display: block;
+}
+
+[data-theme="light"] .theme-toggle .sun-icon {
+    display: block;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+    display: none;
 }
 
 /* Splash Screen */
@@ -252,7 +305,7 @@ nav {
     top: 0;
     z-index: 100;
     padding: 1rem 10%;
-    background: rgba(9, 9, 11, 0.6);
+    background: var(--nav-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--glass-border);
@@ -575,6 +628,11 @@ tr:hover td {
     color: var(--text-primary);
 }
 
+.table-exercise-col {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+}
+
 /* Lightbox */
 .lightbox {
     position: fixed;
@@ -777,6 +835,15 @@ tr:hover td {
 #back-to-top:hover {
     background: var(--accent);
     transform: translateY(-5px);
+}
+
+/* Chart */
+.chart-container {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
 }
 
 /* Footer */
