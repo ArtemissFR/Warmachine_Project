@@ -1,6 +1,8 @@
 services:
   warmachine-portfolio:
-    build: .
+    build:
+      context: .
+      network: host
     container_name: warmachine-dashboard
     ports:
       - "3000:3000"
