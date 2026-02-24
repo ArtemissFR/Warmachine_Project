@@ -3,9 +3,6 @@ services:
     build:
       context: .
       network: host
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     container_name: warmachine-dashboard
     network_mode: host
     volumes:
