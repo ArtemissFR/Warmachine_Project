@@ -1,284 +1,344 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Elements
+// Priority 1: Clear Overlays
+// We do this immediately if the script is at the bottom of the body
+const clearOverlays = () => {
     const transitionOverlay = document.getElementById('page-transition');
     const splashScreen = document.getElementById('splash-screen');
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorOutline = document.querySelector('.cursor-outline');
-    const clockElement = document.getElementById('live-clock');
-    const galleryItems = document.querySelectorAll('.gallery-item img');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxClose = document.querySelector('.lightbox-close');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const filterItems = document.querySelectorAll('.gallery-item');
-    const tiltElements = document.querySelectorAll('.btn-card, .gallery-item');
-    const themeToggleBtn = document.getElementById('theme-toggle');
 
-    // 0. Theme Management
-    const initTheme = () => {
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    };
-    initTheme();
-
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateChartColors(newTheme);
-        });
-
-        themeToggleBtn.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-        themeToggleBtn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    if (transitionOverlay) {
+        transitionOverlay.classList.add('out');
+        setTimeout(() => transitionOverlay.classList.remove('active'), 600);
     }
+    if (splashScreen) {
+        document.body.classList.add('loaded');
+    }
+    console.log("Overlays cleared.");
+};
 
-    // 0.1 Chart Management
-    let myChart = null;
-    const chartCanvas = document.getElementById('progressionChart');
+// Immediate check
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    clearOverlays();
+} else {
+    window.addEventListener('load', clearOverlays);
+    document.addEventListener('DOMContentLoaded', clearOverlays);
+}
+// Safety backup
+setTimeout(clearOverlays, 2000);
 
-    const updateChartColors = (theme) => {
-        if (!myChart) return;
-        const textColor = theme === 'light' ? '#475569' : '#94a3b8';
-        const gridColor = theme === 'light' ? 'rgba(15, 23, 42, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Portfolio script initialized.");
 
-        myChart.options.scales.x.ticks.color = textColor;
-        myChart.options.scales.y.ticks.color = textColor;
-        myChart.options.scales.x.grid.color = gridColor;
-        myChart.options.scales.y.grid.color = gridColor;
-        myChart.update();
+    // Helper for safe element selection
+    const safeAddEvent = (id, event, callback) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(event, callback);
     };
 
-    if (chartCanvas && typeof Chart !== 'undefined') {
-        const ctx = chartCanvas.getContext('2d');
-        const theme = document.documentElement.getAttribute('data-theme');
-        const textColor = theme === 'light' ? '#475569' : '#94a3b8';
-        const gridColor = theme === 'light' ? 'rgba(15, 23, 42, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+    // Helper for Toasts
+    const showToast = (message, type = 'success') => {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || ''}</span> <span>${message}</span>`;
+        container.appendChild(toast);
 
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
-                datasets: [{
-                    label: 'Volume Total (kg)',
-                    data: [3200, 3500, 3400, 3800, 4000, 4200],
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#6366f1'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    x: {
-                        ticks: { color: textColor },
-                        grid: { color: gridColor }
-                    },
-                    y: {
-                        ticks: { color: textColor },
-                        grid: { color: gridColor }
-                    }
-                }
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    };
+
+    // Modal "Esc" support
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+        }
+    });
+
+    // 1. Theme Management
+    try {
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const initTheme = () => {
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        };
+        initTheme();
+
+        // Auto-detect system theme
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                if (typeof updateChartColors === 'function') updateChartColors(newTheme);
             }
         });
-    }
 
-    // 0 & 1. Page Transition (Entry) & Splash Screen
-    // Ensure we clear the overlays even if something fails
-    const clearInitialOverlays = () => {
-        if (transitionOverlay) {
-            transitionOverlay.classList.add('out');
-            setTimeout(() => {
-                transitionOverlay.classList.remove('active');
-            }, 600);
+        if (themeToggleBtn) {
+            themeToggleBtn.onclick = () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                if (typeof updateChartColors === 'function') updateChartColors(newTheme);
+                showToast(`Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé`, 'info');
+            };
         }
-        if (splashScreen) {
-            document.body.classList.add('loaded');
-        }
-    };
-
-    // If script runs very late, clear immediately
-    if (document.readyState === 'complete') {
-        clearInitialOverlays();
-    } else {
-        window.addEventListener('load', clearInitialOverlays);
-        // Safety timeout in case load event is slow
-        setTimeout(clearInitialOverlays, 3000);
-    }
+    } catch (e) { console.error("Theme Error:", e); }
 
     // 2. Custom Cursor
-    if (cursorDot && cursorOutline) {
-        document.body.classList.add('custom-cursor-active');
-
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-
-        const interactiveElements = document.querySelectorAll('a, button, .gallery-item, .btn-card');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-    }
-
-    // 3. 3D Tilt Effect
-    tiltElements.forEach(el => {
-        el.classList.add('tilt-card');
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
-            // Combined with a slight vertical translate to mimic the CSS effect we removed
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px) scale(1.02)`;
-        });
-        el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)`;
-        });
-    });
-
-    // 4. Lightbox Logic
-    if (galleryItems.length > 0 && lightbox && lightboxImg && lightboxClose) {
-        let currentIndex = 0;
-        const itemsArray = Array.from(galleryItems);
-
-        galleryItems.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                currentIndex = index;
-                showLightbox(img.src);
+    try {
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        if (cursorDot && cursorOutline) {
+            document.body.classList.add('custom-cursor-active');
+            window.addEventListener('mousemove', e => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+                cursorOutline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 500, fill: "forwards" });
             });
+        }
+    } catch (e) { console.error("Cursor Error:", e); }
+
+    // 3. 3D Tilt
+    try {
+        const tiltElements = document.querySelectorAll('.btn-card, .gallery-item');
+        tiltElements.forEach(el => {
+            el.onmousemove = e => {
+                const r = el.getBoundingClientRect();
+                const x = e.clientX - r.left - r.width / 2;
+                const y = e.clientY - r.top - r.height / 2;
+                el.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY(${x / 10}deg) scale(1.02)`;
+            };
+            el.onmouseleave = () => el.style.transform = '';
         });
+    } catch (e) { console.error("Tilt Error:", e); }
 
-        const showLightbox = (src) => {
-            lightboxImg.src = src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
+    // 4. Live Clock
+    try {
+        const clockElement = document.getElementById('live-clock');
+        if (clockElement) {
+            const up = () => clockElement.textContent = new Date().toLocaleTimeString('fr-FR');
+            setInterval(up, 1000);
+            up();
+        }
+    } catch (e) { console.error("Clock Error:", e); }
 
-        const closeLightbox = () => {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-        };
+    // 5. Gym App Logic (Specific to gym.html)
+    try {
+        const gymForm = document.getElementById('gym-form');
+        const gymTableBody = document.querySelector('table tbody');
+        const progressionCanvas = document.getElementById('progressionChart');
 
-        const nextImage = () => {
-            currentIndex = (currentIndex + 1) % itemsArray.length;
-            lightboxImg.src = itemsArray[currentIndex].src;
-        };
+        if (gymForm || progressionCanvas || gymTableBody) {
+            let myChart = null;
+            let muscleChart = null;
 
-        const prevImage = () => {
-            currentIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
-            lightboxImg.src = itemsArray[currentIndex].src;
-        };
+            const calculateOneRM = (w, r) => (r <= 0) ? 0 : (r === 1 ? w : Math.round(w * (1 + r / 30)));
+            const getGymData = () => JSON.parse(localStorage.getItem('gym_data') || '[]');
 
-        lightboxClose.addEventListener('click', closeLightbox);
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) closeLightbox();
-        });
+            const renderGymData = () => {
+                const data = getGymData();
 
-        // Keyboard Navigation
-        window.addEventListener('keydown', (e) => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === 'ArrowLeft') prevImage();
-        });
-    }
+                // Stats
+                const updateStat = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+                if (data.length > 0) {
+                    const sorted = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
+                    updateStat('stat-last-session', sorted[0].date);
+                    updateStat('stat-last-exercise', `Focus: ${sorted[0].exercise}`);
+                    const vol = data.reduce((s, i) => s + (i.weight * i.reps), 0);
+                    updateStat('stat-total-volume', vol >= 1000 ? (vol / 1000).toFixed(1) + 't' : vol + 'kg');
+                    updateStat('stat-sessions-count', new Set(data.map(d => d.date)).size);
+                }
 
-    // 5. Live Clock
-    if (clockElement) {
-        const updateClock = () => {
-            const now = new Date();
-            clockElement.textContent = now.toLocaleTimeString('fr-FR');
-        };
-        setInterval(updateClock, 1000);
-        updateClock();
-    }
+                // PRs
+                const prGrid = document.getElementById('pr-grid');
+                if (prGrid) {
+                    prGrid.innerHTML = '';
+                    const prs = {};
+                    data.forEach(i => {
+                        const orm = calculateOneRM(i.weight, i.reps);
+                        if (!prs[i.exercise] || orm > prs[i.exercise].orm) prs[i.exercise] = { ...i, orm };
+                    });
+                    Object.values(prs).forEach(pr => {
+                        const div = document.createElement('div');
+                        div.className = 'stat-card';
+                        div.innerHTML = `<div class="stat-label">${pr.exercise}</div><div class="stat-value">${pr.weight}kg x${pr.reps}</div><div class="stat-trend trend-up">1RM: ${pr.orm}kg</div>`;
+                        prGrid.appendChild(div);
+                    });
+                }
 
-    // 6. Gallery Filter System
-    if (filterBtns.length > 0 && filterItems.length > 0) {
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.getAttribute('data-filter');
-                filterItems.forEach(item => {
-                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                        item.classList.remove('hide');
-                        item.classList.add('show');
+                // Table
+                if (gymTableBody) {
+                    gymTableBody.innerHTML = '';
+                    data.forEach(i => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${i.date}</td><td>${i.exercise}</td><td>${i.weight}</td><td>${i.reps}</td><td><span class="badge badge-delete" data-id="${i.id}">&times;</span></td>`;
+                        gymTableBody.appendChild(tr);
+                    });
+                    document.querySelectorAll('.badge-delete').forEach(b => b.onclick = () => {
+                        if (confirm('Supprimer cette entrée ?')) {
+                            const nid = b.getAttribute('data-id');
+                            localStorage.setItem('gym_data', JSON.stringify(getGymData().filter(x => x.id != nid)));
+                            renderGymData();
+                            showToast('Entrée supprimée', 'info');
+                        }
+                    });
+                }
+
+                // Chart
+                if (progressionCanvas && typeof Chart !== 'undefined') {
+                    const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+                    if (!myChart) {
+                        myChart = new Chart(progressionCanvas, {
+                            type: 'line',
+                            data: { labels: sorted.map(d => d.date), datasets: [{ label: '1RM Est.', data: sorted.map(d => calculateOneRM(d.weight, d.reps)), borderColor: '#6366f1', tension: 0.4 }] },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
                     } else {
-                        item.classList.remove('show');
-                        item.classList.add('hide');
-                    }
-                });
-            });
-        });
-    }
-
-    // 7. Page Transition (Exit)
-    const allLinks = document.querySelectorAll('a');
-    allLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        // Filter for local links only (skip external, mailto, and anchor-only)
-        if (href && !href.startsWith('http') && !href.startsWith('mailto') && !href.startsWith('#') && (href.endsWith('.html') || href === './' || href === 'index.html')) {
-            link.addEventListener('click', (e) => {
-                const target = link.href;
-                const current = window.location.href.split('#')[0].split('?')[0];
-                const targetClean = target.split('#')[0].split('?')[0];
-
-                if (targetClean !== current) {
-                    e.preventDefault();
-                    if (transitionOverlay) {
-                        transitionOverlay.classList.remove('out');
-                        transitionOverlay.classList.add('active');
-                        setTimeout(() => window.location.href = target, 600);
-                    } else {
-                        window.location.href = target;
+                        myChart.data.labels = sorted.map(d => d.date);
+                        myChart.data.datasets[0].data = sorted.map(d => calculateOneRM(d.weight, d.reps));
+                        myChart.update();
                     }
                 }
+            };
+
+            renderGymData();
+
+            // 1RM Preview Logic
+            const gymWeightInput = document.getElementById('gym-weight');
+            const gymRepsInput = document.getElementById('gym-reps');
+            const oneRMPreview = document.getElementById('1rm-preview');
+            if (gymWeightInput && gymRepsInput && oneRMPreview) {
+                const upPrev = () => {
+                    const w = parseFloat(gymWeightInput.value), r = parseInt(gymRepsInput.value);
+                    oneRMPreview.textContent = w && r ? `Estimation 1RM: ${calculateOneRM(w, r)} kg` : 'Estimation 1RM: -- kg';
+                };
+                gymWeightInput.oninput = gymRepsInput.oninput = upPrev;
+            }
+
+            // Modal
+            const openBtn = document.getElementById('open-record-modal');
+            const modal = document.getElementById('record-modal');
+            const closeBtn = document.querySelector('.modal-close');
+            if (openBtn && modal) {
+                openBtn.onclick = () => { modal.classList.add('active'); document.getElementById('gym-date').valueAsDate = new Date(); };
+                if (closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+            }
+
+            if (gymForm) {
+                gymForm.onsubmit = e => {
+                    e.preventDefault();
+                    const d = getGymData();
+                    d.push({
+                        id: Date.now(),
+                        date: document.getElementById('gym-date').value,
+                        exercise: document.getElementById('gym-exercise').value,
+                        category: document.getElementById('gym-category').value,
+                        weight: parseFloat(document.getElementById('gym-weight').value),
+                        reps: parseInt(document.getElementById('gym-reps').value),
+                    });
+                    localStorage.setItem('gym_data', JSON.stringify(d));
+                    renderGymData();
+                    gymForm.reset();
+                    modal.classList.remove('active');
+                    showToast('Séance enregistrée !');
+                };
+            }
+
+            // Export/Import
+            const exBtn = document.getElementById('export-btn');
+            const imBtn = document.getElementById('import-btn');
+            const imFl = document.getElementById('import-file');
+            if (exBtn) {
+                exBtn.onclick = () => {
+                    const blob = new Blob([JSON.stringify({ gym: getGymData() }, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    showToast('Export réussi', 'success');
+                };
+            }
+            if (imBtn && imFl) {
+                imBtn.onclick = () => imFl.click();
+                imFl.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const r = new FileReader();
+                    r.onload = (ev) => {
+                        try {
+                            const data = JSON.parse(ev.target.result);
+                            if (data.gym) localStorage.setItem('gym_data', JSON.stringify(data.gym));
+                            renderGymData();
+                            showToast('Données importées', 'success');
+                        } catch (err) { showToast('Import échoué', 'error'); }
+                    };
+                    r.readAsText(file);
+                };
+            }
+        }
+    } catch (e) { console.error("Gym Error:", e); }
+
+    // 6. Scroll Reveal Logic
+    try {
+        const reveals = document.querySelectorAll('.animate-in, .stat-card, .btn-card, .chart-section');
+        reveals.forEach(el => el.classList.add('reveal'));
+        const revealOnScroll = () => {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) el.classList.add('active');
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+    } catch (e) { console.error("Reveal Error:", e); }
+
+    // 7. Gallery Filters (collection.html)
+    try {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        if (filterBtns.length > 0) {
+            filterBtns.forEach(btn => {
+                btn.onclick = () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filt = btn.getAttribute('data-filter');
+                    galleryItems.forEach(item => {
+                        const cat = item.getAttribute('data-category');
+                        item.style.display = (filt === 'all' || cat === filt) ? 'block' : 'none';
+                    });
+                    showToast(`Filtre : ${btn.textContent}`, 'info');
+                };
             });
         }
-    });
+    } catch (e) { console.error("Gallery Error:", e); }
 
-    // 8. Back to Top Logic
-    const backToTopBtn = document.createElement('div');
-    backToTopBtn.id = 'back-to-top';
-    backToTopBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
-    document.body.appendChild(backToTopBtn);
-
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-    });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    backToTopBtn.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    backToTopBtn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    // 8. Page Transitions
+    try {
+        const transitionOverlay = document.getElementById('page-transition');
+        document.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('http') && !href.startsWith('mailto') && !href.startsWith('#')) {
+                link.onclick = (e) => {
+                    const target = link.href;
+                    if (target.split('#')[0] !== window.location.href.split('#')[0]) {
+                        e.preventDefault();
+                        if (transitionOverlay) {
+                            transitionOverlay.classList.remove('out');
+                            transitionOverlay.classList.add('active');
+                            setTimeout(() => window.location.href = target, 600);
+                        } else window.location.href = target;
+                    }
+                };
+            }
+        });
+    } catch (e) { console.error("Transition Error:", e); }
 });
-
