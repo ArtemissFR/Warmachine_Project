@@ -65,7 +65,7 @@
 
     <main>
         <header class="animate-in section-spacer"
-            style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
+            style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
             <div>
                 <h1>Suivi de Performance</h1>
                 <p>Journal de progression et records personnels en musculation. Discipline et régularité.</p>
@@ -75,6 +75,15 @@
                 + Nouveau Record
             </button>
         </header>
+
+        <!-- Sub-navigation -->
+        <nav class="sub-nav animate-in delay-1">
+            <a href="#section-overview">Vue d'ensemble</a>
+            <a href="#section-pr">Records (PR)</a>
+            <a href="#section-analytics">Analyses</a>
+            <a href="#section-history">Historique</a>
+            <a href="#section-badges">Badges</a>
+        </nav>
 
         <!-- Record Modal -->
         <div id="record-modal" class="modal">
@@ -137,57 +146,33 @@
             </div>
         </div>
 
-        <!-- Mini Stats Dashboard -->
-        <div class="stats-grid animate-in delay-1">
-            <div class="stat-card">
-                <div class="stat-label">Dernière Séance</div>
-                <div id="stat-last-session" class="stat-value">-</div>
-                <div id="stat-last-exercise" class="stat-trend trend-up">Aucune donnée</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Volume Total</div>
-                <div id="stat-total-volume" class="stat-value">0kg</div>
-                <div class="stat-trend trend-up">Cumulatif</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Séances</div>
-                <div id="stat-sessions-count" class="stat-value">0</div>
-                <div class="stat-trend">Total enregistré</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Mon Poids</div>
-                <div id="stat-body-weight" class="stat-value">- kg</div>
-                <div id="stat-weight-trend" class="stat-trend trend-up">Non renseigné</div>
-            </div>
-        </div>
-
-        <!-- Portability Buttons -->
-        <div class="animate-in delay-1"
-            style="display: flex; gap: 1rem; margin-bottom: 3rem; justify-content: flex-end;">
-            <button id="export-btn" class="back-link"
-                style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px;">Exporter
-                JSON</button>
-            <button id="import-btn" class="back-link"
-                style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px;">Importer
-                JSON</button>
-            <input type="file" id="import-file" style="display: none;" accept=".json">
-        </div>
-
-        <!-- PR Dashboard -->
-        <section class="section-spacer animate-in delay-2" style="margin-bottom: 4rem;">
-            <h2 class="section-title-large">Records Personnels (PR)</h2>
-            <div id="pr-grid" class="pr-grid">
-                <!-- Dynamiquement peuplé -->
-                <div class="stat-card" style="opacity: 0.5; border-style: dashed;">
-                    <p style="text-align: center; font-size: 0.9rem;">Tes records s'afficheront ici</p>
+        <div id="section-overview" class="section-container">
+            <!-- Mini Stats Dashboard -->
+            <div class="stats-grid animate-in delay-2">
+                <div class="stat-card">
+                    <div class="stat-label">Dernière Séance</div>
+                    <div id="stat-last-session" class="stat-value">-</div>
+                    <div id="stat-last-exercise" class="stat-trend trend-up">Aucune donnée</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Volume Total</div>
+                    <div id="stat-total-volume" class="stat-value">0kg</div>
+                    <div class="stat-trend trend-up">Cumulatif</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Séances</div>
+                    <div id="stat-sessions-count" class="stat-value">0</div>
+                    <div class="stat-trend">Total enregistré</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mon Poids</div>
+                    <div id="stat-body-weight" class="stat-value">- kg</div>
+                    <div id="stat-weight-trend" class="stat-trend trend-up">Non renseigné</div>
                 </div>
             </div>
-        </section>
 
-        <!-- Charts Grid -->
-        <div class="charts-layout animate-in delay-3">
             <!-- Progression Chart -->
-            <section class="chart-section">
+            <section class="chart-section animate-in delay-3" style="margin-top: 2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h2 class="section-title-large" style="margin-bottom: 0;">Progression</h2>
                     <select id="exercise-filter" class="filter-select">
@@ -198,51 +183,80 @@
                     <canvas id="progressionChart"></canvas>
                 </div>
             </section>
+        </div>
 
-            <!-- Muscle Volume Chart -->
-            <section class="chart-section">
-                <h2 class="section-title-large">Répartition par Muscle</h2>
-                <div class="chart-container">
-                    <canvas id="muscleChart"></canvas>
+        <!-- PR Dashboard -->
+        <section id="section-pr" class="section-container animate-in delay-2">
+            <h2 class="section-title-large">Records Personnels (PR)</h2>
+            <div id="pr-grid" class="pr-grid">
+                <!-- Dynamiquement peuplé -->
+                <div class="stat-card" style="opacity: 0.5; border-style: dashed;">
+                    <p style="text-align: center; font-size: 0.9rem;">Tes records s'afficheront ici</p>
                 </div>
-            </section>
+            </div>
+        </section>
+
+        <!-- Analytics Grid -->
+        <div id="section-analytics" class="section-container">
+            <div class="charts-layout animate-in delay-3">
+                <!-- Muscle Volume Chart -->
+                <section class="chart-section">
+                    <h2 class="section-title-large">Répartition par Muscle</h2>
+                    <div class="chart-container">
+                        <canvas id="muscleChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Body Weight History -->
+                <section class="chart-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2 class="section-title-large" style="margin-bottom: 0;">Suivi du Poids</h2>
+                        <button id="open-weight-modal" class="back-link" style="margin-top: 0;">+ Noter</button>
+                    </div>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                </section>
+            </div>
         </div>
 
         <!-- Achievement Badges -->
-        <section class="section-spacer animate-in delay-4" style="margin-bottom: 4rem;">
+        <section id="section-badges" class="section-container animate-in delay-4">
             <h2 class="section-title-large">Succès & Badges</h2>
             <div id="badge-grid" class="badge-grid">
                 <!-- Dynamiquement peuplé -->
             </div>
         </section>
 
-        <!-- Body Weight History -->
-        <section class="section-spacer animate-in delay-4" style="margin-bottom: 4rem;">
+        <!-- History Table -->
+        <section id="section-history" class="section-container animate-in delay-5">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 class="section-title-large" style="margin-bottom: 0;">Suivi du Poids</h2>
-                <button id="open-weight-modal" class="back-link">+ Noter mon poids</button>
+                <h2 class="section-title-large" style="margin-bottom: 0;">Historique des Séances</h2>
+                <div style="display: flex; gap: 1rem;">
+                    <button id="export-btn" class="back-link"
+                        style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Exporter</button>
+                    <button id="import-btn" class="back-link"
+                        style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Importer</button>
+                    <input type="file" id="import-file" style="display: none;" accept=".json">
+                </div>
             </div>
-            <div class="chart-container" style="height: 250px;">
-                <canvas id="weightChart"></canvas>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Exercice</th>
+                            <th>Poids (kg)</th>
+                            <th>Reps</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamiquement peuplé par script.js -->
+                    </tbody>
+                </table>
             </div>
         </section>
-
-        <div class="table-container animate-in delay-5">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Exercice</th>
-                        <th>Poids (kg)</th>
-                        <th>Reps</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dynamiquement peuplé par script.js -->
-                </tbody>
-            </table>
-        </div>
 
         <!-- Body Weight Modal -->
         <div id="weight-modal" class="modal">

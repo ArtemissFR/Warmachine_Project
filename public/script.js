@@ -423,10 +423,14 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll(); // Initial check
     } catch (e) { console.error("Reveal Error:", e); }
 
-    // 7. Gallery Filters (collection.html)
+    // 7. Gallery & Lightbox (collection.html)
     try {
         const filterBtns = document.querySelectorAll('.filter-btn');
         const galleryItems = document.querySelectorAll('.gallery-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+
         if (filterBtns.length > 0) {
             filterBtns.forEach(btn => {
                 btn.onclick = () => {
@@ -441,9 +445,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
         }
+
+        if (lightbox && lightboxImg && galleryItems.length > 0) {
+            galleryItems.forEach(item => {
+                item.onclick = () => {
+                    const src = item.querySelector('img').src;
+                    lightboxImg.src = src;
+                    lightbox.classList.add('active');
+                };
+            });
+            if (lightboxClose) lightboxClose.onclick = () => lightbox.classList.remove('active');
+            lightbox.onclick = (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); };
+        }
     } catch (e) { console.error("Gallery Error:", e); }
 
-    // 8. Page Transitions
+    // 8. Sub-navigation & Smooth Scroll (gym.html)
+    try {
+        const subNavLinks = document.querySelectorAll('.sub-nav a');
+        const sections = document.querySelectorAll('.section-container');
+
+        if (subNavLinks.length > 0) {
+            subNavLinks.forEach(link => {
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 150,
+                            behavior: 'smooth'
+                        });
+                    }
+                };
+            });
+
+            const highlightSubNav = () => {
+                let current = "";
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                subNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', highlightSubNav);
+            highlightSubNav();
+        }
+    } catch (e) { console.error("SubNav Error:", e); }
+
+    // 9. Page Transitions
     try {
         const transitionOverlay = document.getElementById('page-transition');
         document.querySelectorAll('a').forEach(link => {
