@@ -230,6 +230,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 cursorDot.style.left = e.clientX + 'px';
                 cursorDot.style.top = e.clientY + 'px';
                 cursorOutline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 500, fill: "forwards" });
+
+                // Check if hovering over interactive elements
+                const target = e.target;
+                const isHoverable = target.closest('a, button, .clickable, .user-menu, .target-delete');
+                const isInput = target.closest('input, textarea, select');
+
+                if (isHoverable) {
+                    document.body.classList.add('cursor-hover');
+                } else {
+                    document.body.classList.remove('cursor-hover');
+                }
+
+                if (isInput) {
+                    cursorDot.style.opacity = '0';
+                    cursorOutline.style.opacity = '0.3'; // Slightly more visible for feedback
+                } else {
+                    cursorDot.style.opacity = '1';
+                    cursorOutline.style.opacity = '0.5';
+                }
             });
         }
     } catch (e) { console.error("Cursor Error:", e); }

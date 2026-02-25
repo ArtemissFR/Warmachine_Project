@@ -57,6 +57,20 @@ body.custom-cursor-active {
     cursor: none;
 }
 
+body.custom-cursor-active input,
+body.custom-cursor-active textarea,
+body.custom-cursor-active select,
+.modal input,
+.modal textarea,
+.modal select {
+    cursor: text !important;
+}
+
+body.custom-cursor-active button,
+.modal button {
+    cursor: pointer !important;
+}
+
 /* Custom Cursor */
 .cursor-dot,
 .cursor-outline {
@@ -66,7 +80,7 @@ body.custom-cursor-active {
     left: 0;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    z-index: 9999;
+    z-index: 20000;
     transition: width 0.3s, height 0.3s, background-color 0.3s, opacity 0.3s;
 }
 
@@ -106,7 +120,7 @@ body.custom-cursor-active {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: none;
+    cursor: pointer;
     color: var(--text-primary);
     transition: var(--transition);
 }
@@ -680,7 +694,7 @@ tr:hover td {
 
 .modal-close {
     font-size: 1.5rem;
-    cursor: none;
+    cursor: pointer;
     opacity: 0.6;
     transition: var(--transition);
 }
@@ -1023,7 +1037,7 @@ select:focus {
     right: 2rem;
     color: #fff;
     font-size: 2.5rem;
-    cursor: none;
+    cursor: pointer;
     transition: var(--transition);
 }
 
@@ -1047,7 +1061,7 @@ select:focus {
     border-radius: 99px;
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: none;
+    cursor: pointer;
     transition: var(--transition);
 }
 
@@ -1073,7 +1087,7 @@ select:focus {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     transition: var(--transition);
-    cursor: none;
+    cursor: pointer;
 }
 
 .gallery-item img {
@@ -1230,7 +1244,7 @@ select:focus {
     border: 1px solid var(--glass-border);
     border-radius: 99px;
     position: relative;
-    cursor: none;
+    cursor: pointer;
     transition: var(--transition);
 }
 
@@ -1279,7 +1293,7 @@ select:focus {
     text-align: left;
     border-radius: 0.5rem;
     font-size: 0.85rem;
-    cursor: none;
+    cursor: pointer;
     transition: var(--transition);
 }
 
@@ -1302,7 +1316,7 @@ select:focus {
     padding: 0.8rem 1rem;
     color: var(--text-secondary);
     font-weight: 600;
-    cursor: none;
+    cursor: pointer;
     position: relative;
     transition: var(--transition);
 }
