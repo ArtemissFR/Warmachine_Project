@@ -26,7 +26,7 @@ Warmachine_Project/
 
 ---
 
-## � Déploiement (1 commande)
+## 🚀 Déploiement (1 commande)
 
 ```bash
 # Cloner le projet
@@ -108,13 +108,15 @@ ss -tlnp | grep 3000
 
 ---
 
-## � Base de Données SQLite
+## 📋 Base de Données SQLite
 
 ### Tables
 | Table | Colonnes | Description |
 |---|---|---|
-| `gym_entries` | id, date, exercise, category, weight, reps | Séances de musculation |
-| `body_weight` | id, date, weight | Historique poids corporel |
+| `users` | id, username, password_hash, profile_picture | Comptes utilisateurs |
+| `gym_entries` | id, date, exercise, category, weight, reps, user_id | Séances de musculation |
+| `body_weight` | id, date, weight, user_id | Historique poids corporel |
+| `gym_targets` | id, exercise, target_weight, user_id | Objectifs de records (PR) |
 
 ### Commandes utiles
 ```bash
@@ -151,27 +153,26 @@ pm2 start ecosystem.config.js --env production
 
 ## 🌐 API REST
 
-### Séances de musculation
+### Authentification & Profil
 | Méthode | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/gym` | Lister toutes les séances |
+| `POST` | `/api/auth/register` | Créer un nouveau compte |
+| `POST` | `/api/auth/login` | Se connecter (session 30j) |
+| `POST` | `/api/auth/logout` | Se déconnecter |
+| `GET` | `/api/auth/me` | Vérifier l'état de connexion |
+| `POST` | `/api/user/upload-photo` | Uploader une photo de profil (Multer) |
+
+### Musculation & Suivi (Nécessite Connexion)
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/gym` | Lister les séances de l'utilisateur |
 | `POST` | `/api/gym` | Ajouter une séance |
 | `DELETE` | `/api/gym/:id` | Supprimer une séance |
 | `POST` | `/api/gym/import` | Import en masse (JSON) |
-
-```bash
-# Exemple
-curl -X POST http://localhost:3000/api/gym \
-  -H "Content-Type: application/json" \
-  -d '{"date":"2025-02-24","exercise":"Développé couché","category":"Poitrine","weight":80,"reps":8}'
-```
-
-### Poids corporel
-| Méthode | Endpoint | Description |
-|---|---|---|
 | `GET` | `/api/weight` | Historique du poids |
-| `POST` | `/api/weight` | Ajouter une entrée |
-| `DELETE` | `/api/weight/:id` | Supprimer une entrée |
+| `POST` | `/api/weight` | Ajouter une pesée |
+| `GET` | `/api/targets` | Liste des objectifs (PR) |
+| `POST` | `/api/targets` | Ajouter un objectif |
 
 ---
 

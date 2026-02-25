@@ -53,12 +53,142 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     };
 
-    // Modal "Esc" support
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    // --- AUTHENTICATION & PROFILE LOGIC ---
+    let currentUser = null;
+
+    const updateAuthUI = (user) => {
+        const loginBtn = document.getElementById('login-open-btn');
+        const userMenu = document.getElementById('user-menu');
+        const userName = document.getElementById('user-name');
+        const userAvatar = document.getElementById('user-avatar');
+
+        if (user) {
+            currentUser = user;
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (userMenu) {
+                userMenu.style.display = 'flex';
+                userName.textContent = user.username;
+                userAvatar.src = user.profile_picture || '/uploads/default-profile.png';
+            }
+            if (document.getElementById('guest-view')) document.getElementById('guest-view').style.display = 'none';
+            if (document.getElementById('auth-content')) document.getElementById('auth-content').style.display = 'block';
+            if (typeof renderGymData === 'function') renderGymData();
+        } else {
+            currentUser = null;
+            if (loginBtn) loginBtn.style.display = 'block';
+            if (userMenu) userMenu.style.display = 'none';
+            if (document.getElementById('guest-view')) document.getElementById('guest-view').style.display = 'flex';
+            if (document.getElementById('auth-content')) document.getElementById('auth-content').style.display = 'none';
         }
+    };
+
+    const checkAuth = async () => {
+        try {
+            const res = await fetch('/api/auth/me');
+            const data = await res.json();
+            updateAuthUI(data.loggedIn ? data.user : null);
+        } catch (e) {
+            updateAuthUI(null);
+        }
+    };
+
+    // Auth Modal Handlers
+    const authModal = document.getElementById('auth-modal');
+    const authForm = document.getElementById('auth-form');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const authTitle = document.getElementById('auth-title');
+    let isLoginMode = true;
+
+    if (tabLogin && tabRegister) {
+        tabLogin.onclick = () => {
+            isLoginMode = true;
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            authTitle.textContent = "Connexion";
+        };
+        tabRegister.onclick = () => {
+            isLoginMode = false;
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            authTitle.textContent = "Inscription";
+        };
+    }
+
+    safeAddEvent('login-open-btn', 'click', () => authModal.classList.add('active'));
+    safeAddEvent('auth-modal-close', 'click', () => authModal.classList.remove('active'));
+
+    if (authForm) {
+        authForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('auth-username').value;
+            const password = document.getElementById('auth-password').value;
+            const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/register';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message);
+                    authModal.classList.remove('active');
+                    checkAuth();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (err) {
+                showToast('Erreur serveur', 'error');
+            }
+        };
+    }
+
+    safeAddEvent('logout-btn', 'click', async () => {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        showToast('Déconnecté');
+        window.location.reload();
     });
+
+    // Profile Photo Upload
+    const profileModal = document.getElementById('profile-modal');
+    const profileForm = document.getElementById('profile-photo-form');
+    const avatarClickable = document.getElementById('avatar-clickable');
+
+    if (avatarClickable) {
+        avatarClickable.onclick = () => profileModal.classList.add('active');
+    }
+    safeAddEvent('profile-modal-close', 'click', () => profileModal.classList.remove('active'));
+
+    if (profileForm) {
+        profileForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('profile-photo-input');
+            const formData = new FormData();
+            formData.append('photo', fileInput.files[0]);
+
+            try {
+                const res = await fetch('/api/user/upload-photo', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast('Photo mise à jour');
+                    profileModal.classList.remove('active');
+                    checkAuth();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (err) {
+                showToast('Erreur upload', 'error');
+            }
+        };
+    }
+
+    // Initial Auth Check
+    checkAuth();
 
     // 1. Theme Management
     try {

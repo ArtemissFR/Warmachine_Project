@@ -100,9 +100,11 @@ check_state() {
   # Base de données SQLite
   if [ -f "$PROJECT_DIR/data/database.sqlite" ]; then
     SIZE=$(du -h "$PROJECT_DIR/data/database.sqlite" | awk '{print $1}')
+    USERS=$(sqlite3 "$PROJECT_DIR/data/database.sqlite" "SELECT COUNT(*) FROM users;" 2>/dev/null || echo "?")
     ENTRIES=$(sqlite3 "$PROJECT_DIR/data/database.sqlite" "SELECT COUNT(*) FROM gym_entries;" 2>/dev/null || echo "?")
     WEIGHTS=$(sqlite3 "$PROJECT_DIR/data/database.sqlite" "SELECT COUNT(*) FROM body_weight;" 2>/dev/null || echo "?")
-    found "database.sqlite ($SIZE) — $ENTRIES séances, $WEIGHTS pesées"
+    TARGETS=$(sqlite3 "$PROJECT_DIR/data/database.sqlite" "SELECT COUNT(*) FROM gym_targets;" 2>/dev/null || echo "?")
+    found "database.sqlite ($SIZE) — $USERS inscrits, $ENTRIES séances, $WEIGHTS pesées, $TARGETS objectifs"
   else
     missing "data/database.sqlite"
   fi

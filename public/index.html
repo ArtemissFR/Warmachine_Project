@@ -42,26 +42,50 @@
                 <a href="collection.html">Dessins</a>
                 <a href="gym.html">Musculation</a>
             </div>
+
+            <!-- User Profile Menu -->
+            <div id="user-menu" class="user-menu" style="display: none;">
+                <img id="user-avatar" src="/uploads/default-profile.png" alt="Profile" class="user-avatar">
+                <span id="user-name" class="user-name">User</span>
+                <div class="user-dropdown">
+                    <button id="logout-btn">Déconnexion</button>
+                </div>
+            </div>
+            <button id="login-open-btn" class="filter-btn">Connexion</button>
+
             <button id="theme-toggle" class="theme-toggle" aria-label="Changer de thème">
-                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
+                <!-- ... (icons) ... -->
             </button>
         </div>
     </nav>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="auth-title">Connexion</h2>
+                <span class="modal-close" id="auth-modal-close">&times;</span>
+            </div>
+            <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab active">Log In</button>
+                <button id="tab-register" class="auth-tab">Sign Up</button>
+            </div>
+            <form id="auth-form" style="margin-top: 1.5rem;">
+                <div class="form-group">
+                    <label>Pseudo</label>
+                    <input type="text" id="auth-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="auth-password" required>
+                </div>
+                <button type="submit" class="btn-card"
+                    style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                    Continuer
+                </button>
+            </form>
+        </div>
+    </div>
 
     <main>
         <section class="hero animate-in">

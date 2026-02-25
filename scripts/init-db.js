@@ -27,6 +27,19 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
 });
 
 db.serialize(() => {
+    // Table des utilisateurs
+    db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      username        TEXT UNIQUE,
+      password_hash   TEXT,
+      profile_picture TEXT DEFAULT '/uploads/default-profile.png'
+    )
+  `, (err) => {
+        if (err) console.error('[init-db] ❌ users :', err.message);
+        else console.log('[init-db] ✅ Table users prête');
+    });
+
     // Table des séances de musculation
     db.run(`
     CREATE TABLE IF NOT EXISTS gym_entries (
@@ -35,7 +48,8 @@ db.serialize(() => {
       exercise TEXT    NOT NULL,
       category TEXT,
       weight   REAL,
-      reps     INTEGER
+      reps     INTEGER,
+      user_id  INTEGER
     )
   `, (err) => {
         if (err) console.error('[init-db] ❌ gym_entries :', err.message);
@@ -45,14 +59,31 @@ db.serialize(() => {
     // Table du poids corporel
     db.run(`
     CREATE TABLE IF NOT EXISTS body_weight (
-      id     INTEGER PRIMARY KEY AUTOINCREMENT,
-      date   TEXT  NOT NULL,
-      weight REAL  NOT NULL
+      id      INTEGER PRIMARY KEY AUTOINCREMENT,
+      date    TEXT  NOT NULL,
+      weight  REAL  NOT NULL,
+      user_id INTEGER
     )
   `, (err) => {
         if (err) console.error('[init-db] ❌ body_weight :', err.message);
         else console.log('[init-db] ✅ Table body_weight prête');
     });
+
+    // Table des objectifs (Targets)
+    db.run(`
+    CREATE TABLE IF NOT EXISTS gym_targets (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        exercise      TEXT,
+        target_weight REAL,
+        user_id       INTEGER
+    )
+  `, (err) => {
+        if (err) console.error('[init-db] ❌ gym_targets :', err.message);
+        else console.log('[init-db] ✅ Table gym_targets prête');
+    });
+
+    // Créer un utilisateur par défaut (admin/admin)
+    db.run(`INSERT OR IGNORE INTO users (id, username, password_hash) VALUES (1, 'admin', 'admin')`);
 });
 
 db.close((err) => {

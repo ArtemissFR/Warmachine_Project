@@ -68,8 +68,8 @@ ok "node_modules installés"
 
 # ─── ÉTAPE 5 : Dossiers & structure ──────────────────────────────────────────
 step "5/7 — Création des dossiers"
-mkdir -p "$PROJECT_DIR/data" "$PROJECT_DIR/logs" "$PROJECT_DIR/backups"
-ok "Dossiers créés : data/, logs/, backups/"
+mkdir -p "$PROJECT_DIR/data" "$PROJECT_DIR/logs" "$PROJECT_DIR/backups" "$PROJECT_DIR/public/uploads"
+ok "Dossiers créés : data/, logs/, backups/, public/uploads/"
 
 # ─── ÉTAPE 6 : Base de données ───────────────────────────────────────────────
 step "6/7 — Initialisation de la base de données"
