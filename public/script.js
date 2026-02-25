@@ -56,6 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- AUTHENTICATION & PROFILE LOGIC ---
     let currentUser = null;
 
+    const applyAccentColor = (color) => {
+        if (!color) return;
+        document.documentElement.style.setProperty('--accent', color);
+        // Also update glow for better cohesion
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.2)`);
+
+        // Update selection in UI
+        document.querySelectorAll('.accent-color').forEach(el => {
+            el.classList.toggle('active', el.dataset.color === color);
+        });
+    };
+
     const updateAuthUI = (user) => {
         const loginBtn = document.getElementById('login-open-btn');
         const userMenu = document.getElementById('user-menu');
@@ -70,8 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 userName.textContent = user.username;
                 userAvatar.src = user.profile_picture || '/uploads/default-profile.png';
             }
+            if (user.accent_color) applyAccentColor(user.accent_color);
             if (document.getElementById('guest-view')) document.getElementById('guest-view').style.display = 'none';
             if (document.getElementById('auth-content')) document.getElementById('auth-content').style.display = 'block';
+            if (document.getElementById('user-dashboard')) {
+                document.getElementById('user-dashboard').style.display = 'block';
+                if (document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
+                initDashboard(user);
+            }
             if (typeof renderGymData === 'function') renderGymData();
         } else {
             currentUser = null;
@@ -79,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userMenu) userMenu.style.display = 'none';
             if (document.getElementById('guest-view')) document.getElementById('guest-view').style.display = 'flex';
             if (document.getElementById('auth-content')) document.getElementById('auth-content').style.display = 'none';
+            if (document.getElementById('user-dashboard')) {
+                document.getElementById('user-dashboard').style.display = 'none';
+                if (document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'block';
+            }
         }
     };
 
@@ -151,15 +176,36 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
     });
 
-    // Profile Photo Upload
+    // Profile Photo Modal Handlers
     const profileModal = document.getElementById('profile-modal');
     const profileForm = document.getElementById('profile-photo-form');
     const avatarClickable = document.getElementById('avatar-clickable');
 
-    if (avatarClickable) {
-        avatarClickable.onclick = () => profileModal.classList.add('active');
-    }
+    if (avatarClickable) avatarClickable.onclick = () => profileModal.classList.add('active');
     safeAddEvent('profile-modal-close', 'click', () => profileModal.classList.remove('active'));
+
+    // Accent Color Pickers
+    document.addEventListener('click', async (e) => {
+        const colorEl = e.target.closest('.accent-color');
+        if (colorEl && currentUser) {
+            const newColor = colorEl.dataset.color;
+            applyAccentColor(newColor);
+
+            try {
+                const res = await fetch('/api/user/accent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ color: newColor })
+                });
+                if (res.ok) {
+                    currentUser.accent_color = newColor;
+                    showToast('Style mis à jour');
+                }
+            } catch (err) {
+                console.error("Accent error:", err);
+            }
+        }
+    });
 
     if (profileForm) {
         profileForm.onsubmit = async (e) => {
@@ -186,6 +232,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     }
+
+    // Dashboard Logic
+    const initDashboard = async (user) => {
+        const dashUser = document.getElementById('dash-username');
+        if (dashUser) dashUser.textContent = user.username;
+
+        try {
+            const res = await fetch('/api/dashboard/summary');
+            const data = await res.json();
+
+            const weightEl = document.getElementById('dash-weight');
+            const weightDateEl = document.getElementById('dash-weight-date');
+            const workoutEl = document.getElementById('dash-last-workout');
+            const workoutDateEl = document.getElementById('dash-workout-date');
+            const totalWorkoutsEl = document.getElementById('dash-total-workouts');
+            const bestPrEl = document.getElementById('dash-best-pr');
+
+            if (weightEl) weightEl.textContent = data.lastWeight ? `${data.lastWeight} kg` : '-- kg';
+            if (weightDateEl) weightDateEl.textContent = data.lastWeightDate ? `le ${new Date(data.lastWeightDate).toLocaleDateString()}` : 'Aucune donnée';
+
+            if (workoutEl) workoutEl.textContent = data.lastWorkout ? data.lastWorkout.exercise : 'Aucune séance';
+            if (workoutDateEl) workoutDateEl.textContent = data.lastWorkout ? `le ${new Date(data.lastWorkout.date).toLocaleDateString()} (${data.lastWorkout.weight}kg)` : 'Commencez aujourd\'hui !';
+
+            if (totalWorkoutsEl) totalWorkoutsEl.textContent = data.totalWorkouts;
+            if (bestPrEl) bestPrEl.textContent = `${data.bestTarget} kg`;
+
+        } catch (e) {
+            console.error("Dashboard error:", e);
+        }
+    };
+
+    // Export Logic
+    safeAddEvent('export-csv-btn', 'click', () => {
+        window.location.href = '/api/gym/export';
+        showToast('Préparation du fichier...');
+    });
+
+    // Share Logic
+    safeAddEvent('dash-share-btn', 'click', () => {
+        const weight = document.getElementById('dash-weight')?.textContent || '--';
+        const lastWorkout = document.getElementById('dash-last-workout')?.textContent || '--';
+        const bestPr = document.getElementById('dash-best-pr')?.textContent || '--';
+
+        const text = `🚀 Mon Progrès Warmachine :\n⚖️ Poids : ${weight}\n🏋️ Dernier : ${lastWorkout}\n🏆 Record : ${bestPr}\n\nRejoins-moi sur mon Portfolio !`;
+
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Résumé copié ! Prêt à partager.');
+        }).catch(() => {
+            showToast('Erreur lors de la copie', 'error');
+        });
+    });
 
     // Initial Auth Check
     checkAuth();

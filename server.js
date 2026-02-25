@@ -62,8 +62,17 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
             password_hash TEXT,
-            profile_picture TEXT DEFAULT '/uploads/default-profile.png'
+            profile_picture TEXT DEFAULT '/uploads/default-profile.png',
+            accent_color TEXT DEFAULT '#6366f1'
         )`);
+
+        // Migration: Add accent_color to existing users if missing
+        db.all(`PRAGMA table_info(users)`, (err, columns) => {
+            if (err) return;
+            if (!columns.some(c => c.name === 'accent_color')) {
+                db.run(`ALTER TABLE users ADD COLUMN accent_color TEXT DEFAULT '#6366f1'`);
+            }
+        });
 
         // Migration: Add user_id to existing tables if missing
         const migrate = (table) => {
@@ -185,7 +194,7 @@ app.post('/api/auth/login', (req, res) => {
 
 app.get('/api/auth/me', (req, res) => {
     if (!req.session.userId) return res.json({ loggedIn: false });
-    db.get(`SELECT id, username, profile_picture FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
+    db.get(`SELECT id, username, profile_picture, accent_color FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
         if (err || !user) return res.json({ loggedIn: false });
         res.json({ loggedIn: true, user });
     });
@@ -202,6 +211,15 @@ app.post('/api/user/upload-photo', requireAuth, upload.single('photo'), (req, re
     db.run(`UPDATE users SET profile_picture = ? WHERE id = ?`, [photoUrl, req.session.userId], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'Photo mise à jour', photoUrl });
+    });
+});
+
+app.post('/api/user/accent', requireAuth, (req, res) => {
+    const { color } = req.body;
+    if (!color) return res.status(400).json({ error: 'Couleur manquante' });
+    db.run(`UPDATE users SET accent_color = ? WHERE id = ?`, [color, req.session.userId], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'Couleur mise à jour', color });
     });
 });
 
@@ -300,7 +318,43 @@ app.delete('/api/targets/:id', requireAuth, (req, res) => {
     });
 });
 
-// Serve frontend for any non-API route
+// Dashboard Summary
+app.get('/api/dashboard/summary', requireAuth, (req, res) => {
+    const userId = req.session.userId;
+    const summary = {};
+
+    db.get('SELECT weight, date FROM body_weight WHERE user_id = ? ORDER BY date DESC LIMIT 1', [userId], (err, row) => {
+        summary.lastWeight = row ? row.weight : null;
+        summary.lastWeightDate = row ? row.date : null;
+
+        db.get('SELECT exercise, weight, reps, date FROM gym_entries WHERE user_id = ? ORDER BY date DESC LIMIT 1', [userId], (err, row) => {
+            summary.lastWorkout = row ? row : null;
+
+            db.get('SELECT COUNT(*) as count FROM gym_entries WHERE user_id = ?', [userId], (err, row) => {
+                summary.totalWorkouts = row ? row.count : 0;
+
+                db.get('SELECT MAX(target_weight) as max_target FROM gym_targets WHERE user_id = ?', [userId], (err, row) => {
+                    summary.bestTarget = row ? row.max_target : 0;
+                    res.json(summary);
+                });
+            });
+        });
+    });
+});
+
+// CSV Export
+app.get('/api/gym/export', requireAuth, (req, res) => {
+    db.all('SELECT date, exercise, category, weight, reps FROM gym_entries WHERE user_id = ? ORDER BY date DESC', [req.session.userId], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        const header = 'Date,Exercice,Categorie,Poids,Reps\n';
+        const csv = rows.map(r => `${r.date},"${r.exercise}","${r.category || ''}",${r.weight},${r.reps}`).join('\n');
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=gym_history.csv');
+        res.send(header + csv);
+    });
+});
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

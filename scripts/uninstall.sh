@@ -116,6 +116,14 @@ check_state() {
     missing "Dossier logs/"
   fi
 
+  # Dossier uploads (Images de profil)
+  if [ -d "$PROJECT_DIR/public/uploads" ]; then
+    COUNT=$(ls "$PROJECT_DIR/public/uploads" 2>/dev/null | wc -l)
+    found "Dossier public/uploads/ ($COUNT image(s))"
+  else
+    missing "Dossier public/uploads/"
+  fi
+
   # Dossier backups
   if [ -d "$PROJECT_DIR/backups" ]; then
     COUNT=$(ls "$PROJECT_DIR/backups" 2>/dev/null | wc -l)

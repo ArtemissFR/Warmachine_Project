@@ -113,7 +113,7 @@ ss -tlnp | grep 3000
 ### Tables
 | Table | Colonnes | Description |
 |---|---|---|
-| `users` | id, username, password_hash, profile_picture | Comptes utilisateurs |
+| `users` | id, username, password_hash, profile_picture, accent_color | Comptes utilisateurs & personnalisation |
 | `gym_entries` | id, date, exercise, category, weight, reps, user_id | Séances de musculation |
 | `body_weight` | id, date, weight, user_id | Historique poids corporel |
 | `gym_targets` | id, exercise, target_weight, user_id | Objectifs de records (PR) |
@@ -161,6 +161,8 @@ pm2 start ecosystem.config.js --env production
 | `POST` | `/api/auth/logout` | Se déconnecter |
 | `GET` | `/api/auth/me` | Vérifier l'état de connexion |
 | `POST` | `/api/user/upload-photo` | Uploader une photo de profil (Multer) |
+| `POST` | `/api/user/accent` | Enregistrer la couleur d'accent préférée |
+| `GET` | `/api/dashboard/summary` | Résumé des progrès pour la page d'accueil |
 
 ### Musculation & Suivi (Nécessite Connexion)
 | Méthode | Endpoint | Description |
@@ -169,6 +171,7 @@ pm2 start ecosystem.config.js --env production
 | `POST` | `/api/gym` | Ajouter une séance |
 | `DELETE` | `/api/gym/:id` | Supprimer une séance |
 | `POST` | `/api/gym/import` | Import en masse (JSON) |
+| `GET` | `/api/gym/export` | Exportation complète au format CSV |
 | `GET` | `/api/weight` | Historique du poids |
 | `POST` | `/api/weight` | Ajouter une pesée |
 | `GET` | `/api/targets` | Liste des objectifs (PR) |

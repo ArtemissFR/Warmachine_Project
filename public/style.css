@@ -20,8 +20,6 @@
     --bg-dark: #f8fafc;
     --navy-900: #f1f5f9;
     --navy-800: #e2e8f0;
-    --accent: #4f46e5;
-    --accent-glow: rgba(79, 70, 229, 0.2);
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --glass: rgba(255, 255, 255, 0.7);
@@ -129,6 +127,13 @@ body.custom-cursor-active button,
     background: var(--glass-hover);
     border-color: var(--accent);
     transform: scale(1.1);
+}
+
+.stat-subtitle {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+    font-weight: 400;
 }
 
 .theme-toggle .sun-icon {
@@ -1295,6 +1300,35 @@ select:focus {
     font-size: 0.85rem;
     cursor: pointer;
     transition: var(--transition);
+}
+
+.accent-selector {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 0.5rem;
+}
+
+.accent-colors {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+}
+
+.accent-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.accent-color:hover {
+    transform: scale(1.2);
+}
+
+.accent-color.active {
+    border-color: var(--text-primary);
 }
 
 .user-dropdown button:hover {

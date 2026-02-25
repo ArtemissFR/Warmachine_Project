@@ -49,6 +49,18 @@
                     id="avatar-clickable">
                 <span id="user-name" class="user-name">User</span>
                 <div class="user-dropdown">
+                    <div class="accent-selector">
+                        <span style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.5rem; display: block;">Couleur
+                            d'accent</span>
+                        <div class="accent-colors">
+                            <div class="accent-color" data-color="#6366f1" style="background: #6366f1;"></div>
+                            <div class="accent-color" data-color="#10b981" style="background: #10b981;"></div>
+                            <div class="accent-color" data-color="#f59e0b" style="background: #f59e0b;"></div>
+                            <div class="accent-color" data-color="#f43f5e" style="background: #f43f5e;"></div>
+                            <div class="accent-color" data-color="#0ea5e9" style="background: #0ea5e9;"></div>
+                            <div class="accent-color" data-color="#8b5cf6" style="background: #8b5cf6;"></div>
+                        </div>
+                    </div>
                     <button id="logout-btn">Déconnexion</button>
                 </div>
             </div>
@@ -297,15 +309,20 @@
 
         <!-- History Table -->
         <section id="section-history" class="section-container animate-in delay-5">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 class="section-title-large" style="margin-bottom: 0;">Historique des Séances</h2>
-                <div style="display: flex; gap: 1rem; align-items: center;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 class="section-title-large" style="margin-bottom: 0;">Historique complet</h2>
+                <div style="display: flex; gap: 1rem;">
                     <input type="text" id="history-search" placeholder="Filtrer l'exercice..."
                         style="width: 200px; padding: 0.5rem 1rem; margin-bottom: 0; font-size: 0.8rem;">
-                    <button id="export-btn" class="back-link"
-                        style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Exporter</button>
-                    <button id="import-btn" class="back-link"
-                        style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Importer</button>
+                    <button id="export-csv-btn" class="filter-btn"
+                        style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #4ade80;">
+                        📥 Exporter CSV
+                    </button>
+                    <button onclick="document.getElementById('import-modal').classList.add('active')"
+                        class="filter-btn">
+                        Import JSON
+                    </button>
                 </div>
             </div>
             <div class="table-container">
