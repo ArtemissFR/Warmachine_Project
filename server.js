@@ -39,6 +39,11 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
             date TEXT,
             weight REAL
         )`);
+        db.run(`CREATE TABLE IF NOT EXISTS gym_targets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            exercise TEXT,
+            target_weight REAL
+        )`);
     }
 });
 
@@ -108,6 +113,33 @@ app.post('/api/gym/import', (req, res) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ message: 'Import successful', count: entries.length });
         });
+    });
+});
+
+// Target Routes
+app.get('/api/targets', (req, res) => {
+    db.all('SELECT * FROM gym_targets', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+app.post('/api/targets', (req, res) => {
+    const { exercise, target_weight } = req.body;
+    db.run(
+        `INSERT INTO gym_targets (exercise, target_weight) VALUES (?, ?)`,
+        [exercise, target_weight],
+        function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ id: this.lastID, ...req.body });
+        }
+    );
+});
+
+app.delete('/api/targets/:id', (req, res) => {
+    db.run('DELETE FROM gym_targets WHERE id = ?', req.params.id, function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'Deleted', changes: this.changes });
     });
 });
 

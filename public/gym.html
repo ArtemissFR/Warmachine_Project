@@ -171,6 +171,15 @@
                 </div>
             </div>
 
+            <!-- Heatmap -->
+            <section class="heatmap-section animate-in delay-2" style="margin-top: 2rem;">
+                <h3 class="section-title-small" style="font-size: 1rem; margin-bottom: 1rem; opacity: 0.8;">Fréquence
+                    d'entraînement</h3>
+                <div id="gym-heatmap" class="heatmap-container">
+                    <!-- Peuplit par JS -->
+                </div>
+            </section>
+
             <!-- Progression Chart -->
             <section class="chart-section animate-in delay-3" style="margin-top: 2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -185,18 +194,27 @@
             </section>
         </div>
 
-        <!-- PR Dashboard -->
+        <!-- PR Dashboard & Targets -->
         <section id="section-pr" class="section-container animate-in delay-2">
             <h2 class="section-title-large">Records Personnels (PR)</h2>
             <div id="pr-grid" class="pr-grid">
                 <!-- Dynamiquement peuplé -->
-                <div class="stat-card" style="opacity: 0.5; border-style: dashed;">
-                    <p style="text-align: center; font-size: 0.9rem;">Tes records s'afficheront ici</p>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3 class="section-title-large" style="font-size: 1.5rem; margin-bottom: 0;">Objectifs (Targets)
+                    </h3>
+                    <button id="open-target-modal" class="back-link" style="margin-top: 0;">+ Définir un
+                        objectif</button>
+                </div>
+                <div id="target-grid" class="target-grid">
+                    <!-- Dynamiquement peuplé -->
                 </div>
             </div>
         </section>
 
-        <!-- Analytics Grid -->
+        <!-- Analytics & Tools Grid -->
         <div id="section-analytics" class="section-container">
             <div class="charts-layout animate-in delay-3">
                 <!-- Muscle Volume Chart -->
@@ -209,7 +227,8 @@
 
                 <!-- Body Weight History -->
                 <section class="chart-section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h2 class="section-title-large" style="margin-bottom: 0;">Suivi du Poids</h2>
                         <button id="open-weight-modal" class="back-link" style="margin-top: 0;">+ Noter</button>
                     </div>
@@ -218,6 +237,30 @@
                     </div>
                 </section>
             </div>
+
+            <!-- Advanced 1RM Tool -->
+            <section class="chart-section animate-in delay-4" style="margin-top: 2rem;">
+                <h2 class="section-title-large">Calculateur de 1RM Avancé</h2>
+                <div class="calculator-grid">
+                    <div class="form-group">
+                        <label>Charge (kg)</label>
+                        <input type="number" id="calc-weight" placeholder="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Répétitions</label>
+                        <input type="number" id="calc-reps" placeholder="5">
+                    </div>
+                    <div class="calc-result">
+                        <div class="stat-label">1RM Estimé</div>
+                        <div id="calc-1rm-result" class="stat-value">-- kg</div>
+                    </div>
+                </div>
+                <div class="calc-table-container">
+                    <table id="calc-percentages-table">
+                        <!-- Peuplit par JS -->
+                    </table>
+                </div>
+            </section>
         </div>
 
         <!-- Achievement Badges -->
@@ -232,23 +275,25 @@
         <section id="section-history" class="section-container animate-in delay-5">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h2 class="section-title-large" style="margin-bottom: 0;">Historique des Séances</h2>
-                <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="text" id="history-search" placeholder="Filtrer l'exercice..."
+                        style="width: 200px; padding: 0.5rem 1rem; margin-bottom: 0; font-size: 0.8rem;">
                     <button id="export-btn" class="back-link"
                         style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Exporter</button>
                     <button id="import-btn" class="back-link"
                         style="font-size: 0.8rem; background: var(--glass); padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0;">Importer</button>
-                    <input type="file" id="import-file" style="display: none;" accept=".json">
                 </div>
             </div>
             <div class="table-container">
-                <table>
+                <table id="gym-history-table">
                     <thead>
                         <tr>
                             <th>Date</th>
                             <th>Exercice</th>
                             <th>Poids (kg)</th>
                             <th>Reps</th>
-                            <th>Notes</th>
+                            <th>Delta</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -257,6 +302,31 @@
                 </table>
             </div>
         </section>
+
+        <!-- Target Modal -->
+        <div id="target-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Définir un Objectif</h2>
+                    <span class="modal-close" id="target-modal-close">&times;</span>
+                </div>
+                <form id="target-form">
+                    <div class="form-group">
+                        <label for="target-exercise">Exercice</label>
+                        <input type="text" id="target-exercise" list="exercise-list" placeholder="ex: Deadlift"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="target-weight">Objectif de Poids (kg)</label>
+                        <input type="number" id="target-weight" placeholder="100" required>
+                    </div>
+                    <button type="submit" class="btn-card"
+                        style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                        Enregistrer
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <!-- Body Weight Modal -->
         <div id="weight-modal" class="modal">

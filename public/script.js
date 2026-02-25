@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const renderGymData = async () => {
                 const data = await getGymData();
+                const targets = await getTargets();
 
                 // Stats
                 const updateStat = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -176,6 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateStat('stat-total-volume', vol >= 1000 ? (vol / 1000).toFixed(1) + 't' : vol + 'kg');
                     updateStat('stat-sessions-count', new Set(data.map(d => d.date)).size);
                 }
+
+                // Heatmap
+                renderHeatmap(data);
 
                 // Weight Stats
                 const wData = await getWeightData();
@@ -193,15 +197,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 renderWeightChart(wData);
 
-                // PRs
+                // PRs & Targets
+                const prs = {};
+                data.forEach(i => {
+                    const orm = calculateOneRM(i.weight, i.reps);
+                    if (!prs[i.exercise] || orm > prs[i.exercise].orm) prs[i.exercise] = { ...i, orm };
+                });
+
                 const prGrid = document.getElementById('pr-grid');
                 if (prGrid) {
                     prGrid.innerHTML = '';
-                    const prs = {};
-                    data.forEach(i => {
-                        const orm = calculateOneRM(i.weight, i.reps);
-                        if (!prs[i.exercise] || orm > prs[i.exercise].orm) prs[i.exercise] = { ...i, orm };
-                    });
                     Object.values(prs).forEach(pr => {
                         const div = document.createElement('div');
                         div.className = 'stat-card';
@@ -210,26 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                // Table
+                renderTargets(targets, prs);
+
+                // Table with Delta
                 if (gymTableBody) {
-                    gymTableBody.innerHTML = '';
-                    data.forEach(i => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${i.date}</td><td>${i.exercise}</td><td>${i.weight}</td><td>${i.reps}</td><td><span class="badge badge-delete" data-id="${i.id}">&times;</span></td>`;
-                        gymTableBody.appendChild(tr);
-                    });
-                    document.querySelectorAll('.badge-delete').forEach(b => b.onclick = async () => {
-                        if (confirm('Supprimer cette entrée ?')) {
-                            const nid = b.getAttribute('data-id');
-                            try {
-                                const response = await fetch(`/api/gym/${nid}`, { method: 'DELETE' });
-                                if (response.ok) {
-                                    renderGymData();
-                                    showToast('Entrée supprimée', 'info');
-                                }
-                            } catch (err) { showToast('Erreur suppression', 'error'); }
-                        }
-                    });
+                    renderHistoryTable(data);
                 }
 
                 // Chart
@@ -247,6 +237,116 @@ document.addEventListener('DOMContentLoaded', () => {
                         myChart.update();
                     }
                 }
+            };
+
+            const renderHeatmap = (data) => {
+                const container = document.getElementById('gym-heatmap');
+                if (!container) return;
+                container.innerHTML = '';
+
+                const dates = data.reduce((acc, curr) => {
+                    acc[curr.date] = (acc[curr.date] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const today = new Date();
+                const yearAgo = new Date();
+                yearAgo.setFullYear(today.getFullYear() - 1);
+
+                for (let i = 0; i < 365; i++) {
+                    const d = new Date(yearAgo);
+                    d.setDate(d.getDate() + i);
+                    const dateStr = d.toISOString().split('T')[0];
+                    const count = dates[dateStr] || 0;
+
+                    const day = document.createElement('div');
+                    day.className = `heatmap-day ${count > 0 ? (count > 2 ? 'level-3' : (count > 1 ? 'level-2' : 'level-1')) : ''}`;
+                    day.title = `${dateStr}: ${count} série(s)`;
+                    container.appendChild(day);
+                }
+            };
+
+            const renderHistoryTable = (data, filter = "") => {
+                if (!gymTableBody) return;
+                gymTableBody.innerHTML = '';
+                const sorted = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                sorted.filter(i => i.exercise.toLowerCase().includes(filter.toLowerCase())).forEach((item, index, list) => {
+                    const tr = document.createElement('tr');
+
+                    // Delta Calculation
+                    let deltaHtml = '--';
+                    const prev = list.slice(index + 1).find(p => p.exercise === item.exercise);
+                    if (prev) {
+                        const diff = (item.weight - prev.weight).toFixed(1);
+                        deltaHtml = `<span class="delta-tag ${diff > 0 ? 'delta-pos' : (diff < 0 ? 'delta-neg' : '')}">${diff > 0 ? '+' : ''}${diff}kg</span>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td>${item.date}</td>
+                        <td class="table-exercise-col">${item.exercise}</td>
+                        <td>${item.weight}kg</td>
+                        <td>${item.reps}</td>
+                        <td>${deltaHtml}</td>
+                        <td><span class="badge badge-delete" data-id="${item.id}">&times;</span></td>
+                    `;
+                    gymTableBody.appendChild(tr);
+                });
+
+                // Attach delete logic again
+                document.querySelectorAll('.badge-delete').forEach(b => b.onclick = async () => {
+                    if (confirm('Supprimer cette entrée ?')) {
+                        const nid = b.getAttribute('data-id');
+                        try {
+                            const response = await fetch(`/api/gym/${nid}`, { method: 'DELETE' });
+                            if (response.ok) {
+                                renderGymData();
+                                showToast('Entrée supprimée', 'info');
+                            }
+                        } catch (err) { showToast('Erreur suppression', 'error'); }
+                    }
+                });
+            };
+
+            const getTargets = async () => {
+                try {
+                    const response = await fetch('/api/targets');
+                    return await response.json();
+                } catch (err) { return []; }
+            };
+
+            const renderTargets = (targets, prs) => {
+                const grid = document.getElementById('target-grid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                targets.forEach(t => {
+                    const pr = prs[t.exercise] ? prs[t.exercise].weight : 0;
+                    const progress = Math.min(Math.round((pr / t.target_weight) * 100), 100);
+
+                    const div = document.createElement('div');
+                    div.className = 'target-card animate-in';
+                    div.innerHTML = `
+                        <div class="target-delete" data-id="${t.id}">&times;</div>
+                        <div class="stat-label">${t.exercise}</div>
+                        <div class="stat-value" style="font-size: 1.2rem;">${pr} / ${t.target_weight}kg</div>
+                        <div class="target-progress-bg">
+                            <div class="target-progress-bar" style="width: ${progress}%"></div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${progress}% complété</div>
+                    `;
+                    grid.appendChild(div);
+                });
+
+                document.querySelectorAll('.target-delete').forEach(btn => {
+                    btn.onclick = async () => {
+                        const id = btn.getAttribute('data-id');
+                        if (confirm('Supprimer cet objectif ?')) {
+                            const res = await fetch(`/api/targets/${id}`, { method: 'DELETE' });
+                            if (res.ok) renderGymData();
+                        }
+                    };
+                });
             };
 
             const renderWeightChart = (wData) => {
@@ -323,6 +423,78 @@ document.addEventListener('DOMContentLoaded', () => {
                             showToast('Séance enregistrée !');
                         }
                     } catch (err) { showToast('Erreur sauvegarde', 'error'); }
+                };
+            }
+
+            // Advanced 1RM Tool Logic
+            const calcWeight = document.getElementById('calc-weight');
+            const calcReps = document.getElementById('calc-reps');
+            const calcResult = document.getElementById('calc-1rm-result');
+            const calcTable = document.getElementById('calc-percentages-table');
+
+            if (calcWeight && calcReps && calcResult && calcTable) {
+                const updateCalc = () => {
+                    const w = parseFloat(calcWeight.value);
+                    const r = parseInt(calcReps.value);
+                    if (!w || !r) {
+                        calcResult.textContent = '-- kg';
+                        calcTable.innerHTML = '';
+                        return;
+                    }
+
+                    const orm = calculateOneRM(w, r);
+                    calcResult.textContent = `${orm} kg`;
+
+                    let tableHtml = '<tr><th>Pourcentage</th><th>Poids</th><th>Reps Est.</th></tr>';
+                    const percs = [100, 95, 90, 85, 80, 75, 70, 65, 60];
+                    const repsEst = [1, 2, 4, 6, 8, 10, 12, 16, 20];
+
+                    percs.forEach((p, idx) => {
+                        tableHtml += `<tr><td>${p}%</td><td>${Math.round(orm * (p / 100))}kg</td><td>${repsEst[idx]}</td></tr>`;
+                    });
+                    calcTable.innerHTML = tableHtml;
+                };
+                calcWeight.oninput = calcReps.oninput = updateCalc;
+            }
+
+            // History Search
+            const historySearch = document.getElementById('history-search');
+            if (historySearch) {
+                historySearch.oninput = async () => {
+                    const data = await getGymData();
+                    renderHistoryTable(data, historySearch.value);
+                };
+            }
+
+            // Target Modal
+            const openTargetBtn = document.getElementById('open-target-modal');
+            const targetModal = document.getElementById('target-modal');
+            const targetModalClose = document.getElementById('target-modal-close');
+            const targetForm = document.getElementById('target-form');
+
+            if (openTargetBtn && targetModal) {
+                openTargetBtn.onclick = () => targetModal.classList.add('active');
+                if (targetModalClose) targetModalClose.onclick = () => targetModal.classList.remove('active');
+            }
+
+            if (targetForm) {
+                targetForm.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const entry = {
+                        exercise: document.getElementById('target-exercise').value,
+                        target_weight: parseFloat(document.getElementById('target-weight').value)
+                    };
+                    const res = await fetch('/api/targets', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(entry)
+                    });
+                    if (res.ok) {
+                        renderGymData();
+                        targetForm.reset();
+                        targetModal.classList.remove('active');
+                        showToast('Objectif ajouté !');
+                    }
                 };
             }
 

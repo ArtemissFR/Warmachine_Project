@@ -1090,6 +1090,136 @@ select:focus {
     transform: scale(1.05);
 }
 
+/* Heatmap Regularity */
+.heatmap-container {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 4px;
+    padding: 1rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    overflow-x: auto;
+}
+
+.heatmap-day {
+    width: 12px;
+    height: 12px;
+    background: var(--glass-border);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+.heatmap-day.level-1 {
+    background: rgba(99, 102, 241, 0.3);
+}
+
+.heatmap-day.level-2 {
+    background: rgba(99, 102, 241, 0.6);
+}
+
+.heatmap-day.level-3 {
+    background: var(--accent);
+}
+
+/* Target Cards */
+.target-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.target-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    position: relative;
+    transition: var(--transition);
+}
+
+.target-card:hover {
+    border-color: var(--accent);
+}
+
+.target-progress-bg {
+    height: 8px;
+    background: var(--glass-border);
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.target-progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 1s ease;
+}
+
+.target-delete {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+/* 1RM Calculator */
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.calc-result {
+    padding: 1.5rem;
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.calc-table-container {
+    margin-top: 2rem;
+}
+
+.calc-table-container table {
+    width: 100%;
+    font-size: 0.85rem;
+}
+
+.calc-table-container td {
+    padding: 0.75rem 1rem;
+}
+
+/* Delta Highlight */
+.delta-tag {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.delta-pos {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.delta-neg {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+@media (max-width: 768px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Footer Section */
 footer {
     margin-top: 10rem;
