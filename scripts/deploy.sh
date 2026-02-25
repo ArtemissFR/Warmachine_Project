@@ -76,7 +76,7 @@ step "6/7 — Initialisation de la base de données"
 if [ -f "$PROJECT_DIR/data/database.sqlite" ]; then
   ok "Base de données existante conservée : data/database.sqlite"
 else
-  node "$PROJECT_DIR/scripts/init-db.js"
+  node "$PROJECT_DIR/scripts/init-database.js"
   ok "Base de données initialisée"
 fi
 

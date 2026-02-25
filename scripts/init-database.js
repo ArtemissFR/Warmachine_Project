@@ -34,7 +34,13 @@ db.serialize(() => {
       username        TEXT UNIQUE,
       password_hash   TEXT,
       profile_picture TEXT DEFAULT '/uploads/default-profile.png',
-      accent_color    TEXT DEFAULT '#6366f1'
+      accent_color    TEXT DEFAULT '#6366f1',
+      first_name      TEXT DEFAULT '',
+      last_name       TEXT DEFAULT '',
+      email           TEXT DEFAULT '',
+      gender          TEXT DEFAULT '',
+      height          INTEGER DEFAULT 0,
+      age             INTEGER DEFAULT 0
     )
   `, (err) => {
     if (err) console.error('[init-db] ❌ users :', err.message);

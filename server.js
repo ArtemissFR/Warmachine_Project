@@ -63,15 +63,32 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
             username TEXT UNIQUE,
             password_hash TEXT,
             profile_picture TEXT DEFAULT '/uploads/default-profile.png',
-            accent_color TEXT DEFAULT '#6366f1'
+            accent_color TEXT DEFAULT '#6366f1',
+            first_name TEXT DEFAULT '',
+            last_name TEXT DEFAULT '',
+            gender TEXT DEFAULT '',
+            height INTEGER DEFAULT 0,
+            age INTEGER DEFAULT 0
         )`);
 
-        // Migration: Add accent_color to existing users if missing
+        // Migration: Add new columns to existing users if missing
         db.all(`PRAGMA table_info(users)`, (err, columns) => {
             if (err) return;
-            if (!columns.some(c => c.name === 'accent_color')) {
-                db.run(`ALTER TABLE users ADD COLUMN accent_color TEXT DEFAULT '#6366f1'`);
-            }
+            const existing = columns.map(c => c.name);
+            const needed = [
+                { name: 'accent_color', type: 'TEXT DEFAULT "#6366f1"' },
+                { name: 'first_name', type: 'TEXT DEFAULT ""' },
+                { name: 'last_name', type: 'TEXT DEFAULT ""' },
+                { name: 'email', type: 'TEXT DEFAULT ""' },
+                { name: 'gender', type: 'TEXT DEFAULT ""' },
+                { name: 'height', type: 'INTEGER DEFAULT 0' },
+                { name: 'age', type: 'INTEGER DEFAULT 0' }
+            ];
+            needed.forEach(col => {
+                if (!existing.includes(col.name)) {
+                    db.run(`ALTER TABLE users ADD COLUMN ${col.name} ${col.type}`);
+                }
+            });
         });
 
         // Migration: Add user_id to existing tables if missing
@@ -194,7 +211,7 @@ app.post('/api/auth/login', (req, res) => {
 
 app.get('/api/auth/me', (req, res) => {
     if (!req.session.userId) return res.json({ loggedIn: false });
-    db.get(`SELECT id, username, profile_picture, accent_color FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
+    db.get(`SELECT id, username, profile_picture, accent_color, first_name, last_name, email, gender, height, age FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
         if (err || !user) return res.json({ loggedIn: false });
         res.json({ loggedIn: true, user });
     });
@@ -221,6 +238,18 @@ app.post('/api/user/accent', requireAuth, (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'Couleur mise à jour', color });
     });
+});
+
+app.post('/api/user/profile', requireAuth, (req, res) => {
+    const { first_name, last_name, email, gender, height, age } = req.body;
+    db.run(
+        `UPDATE users SET first_name = ?, last_name = ?, email = ?, gender = ?, height = ?, age = ? WHERE id = ?`,
+        [first_name, last_name, email, gender, height, age, req.session.userId],
+        (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: 'Profil mis à jour' });
+        }
+    );
 });
 
 // API Routes (Scoped to User)

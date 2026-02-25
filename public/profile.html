@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil | Warmachine</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body class="gym-page"> <!-- Reuse gym-page class for glassmorphism theme -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🦾</span>
+                <span class="logo-text">Warmachine</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Accueil</a>
+                <a href="gallery.html">Dessins</a>
+                <a href="workout.html">Musculation</a>
+            </div>
+
+            <div id="user-menu" class="user-menu" style="display: none;">
+                <div class="avatar-wrapper" id="avatar-clickable" style="cursor: pointer;">
+                    <img id="user-avatar" src="/uploads/default-profile.png" alt="Profile" class="user-avatar">
+                </div>
+                <span id="user-name" class="user-name">User</span>
+                <div class="user-dropdown">
+                    <div class="accent-selector">
+                        <span style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.5rem; display: block;">Couleur
+                            d'accent</span>
+                        <div class="accent-colors">
+                            <div class="accent-color" data-color="#6366f1" style="background: #6366f1;"></div>
+                            <div class="accent-color" data-color="#10b981" style="background: #10b981;"></div>
+                            <div class="accent-color" data-color="#f59e0b" style="background: #f59e0b;"></div>
+                            <div class="accent-color" data-color="#f43f5e" style="background: #f43f5e;"></div>
+                            <div class="accent-color" data-color="#0ea5e9" style="background: #0ea5e9;"></div>
+                            <div class="accent-color" data-color="#8b5cf6" style="background: #8b5cf6;"></div>
+                        </div>
+                    </div>
+                    <a href="profile.html" class="dropdown-link active">👤 Mon Profil</a>
+                    <button id="logout-btn">Déconnexion</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container animate-in" style="margin-top: 8rem;">
+        <div class="section-header">
+            <h1 class="section-title-large">Personnalisation du Profil</h1>
+            <p class="section-subtitle">Gérez vos informations personnelles et votre apparence sur la plateforme.</p>
+        </div>
+
+        <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <!-- Section Apparence -->
+            <div class="btn-card" style="padding: 2rem;">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✨ Apparence</h2>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <div class="profile-photo-big" id="profile-photo-trigger"
+                        style="position: relative; cursor: pointer;">
+                        <img id="profile-display-img" src="/uploads/default-profile.png" alt="Profile"
+                            style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent);">
+                        <div
+                            style="position: absolute; bottom: 0; right: 0; background: var(--accent); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                            📷</div>
+                    </div>
+                    <p style="font-size: 0.9rem; text-align: center; color: var(--text-secondary);">Cliquez sur l'image
+                        pour changer votre photo de profil.</p>
+
+                    <div style="width: 100%; border-top: 1px solid var(--glass-border); padding-top: 1.5rem;">
+                        <span style="display: block; margin-bottom: 1rem; font-weight: 600;">Couleur
+                            d'accentuation</span>
+                        <div class="accent-colors" style="grid-template-columns: repeat(6, 1fr); gap: 0.8rem;">
+                            <div class="accent-color" data-color="#6366f1"
+                                style="background: #6366f1; width: 30px; height: 30px;"></div>
+                            <div class="accent-color" data-color="#10b981"
+                                style="background: #10b981; width: 30px; height: 30px;"></div>
+                            <div class="accent-color" data-color="#f59e0b"
+                                style="background: #f59e0b; width: 30px; height: 30px;"></div>
+                            <div class="accent-color" data-color="#f43f5e"
+                                style="background: #f43f5e; width: 30px; height: 30px;"></div>
+                            <div class="accent-color" data-color="#0ea5e9"
+                                style="background: #0ea5e9; width: 30px; height: 30px;"></div>
+                            <div class="accent-color" data-color="#8b5cf6"
+                                style="background: #8b5cf6; width: 30px; height: 30px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Infos Personnelles -->
+            <div class="btn-card" style="padding: 2rem;">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">👤 Informations</h2>
+                <form id="profile-info-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Prénom</label>
+                            <input type="text" id="first-name" class="modal-input" placeholder="Ex: Jean">
+                        </div>
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Nom</label>
+                            <input type="text" id="last-name" class="modal-input" placeholder="Ex: Dupont">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Adresse
+                            Email</label>
+                        <input type="email" id="email" class="modal-input" placeholder="Ex: jean.dupont@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Sexe</label>
+                        <select id="gender" class="modal-input" style="appearance: auto; background: var(--navy-800);">
+                            <option value="">Non précisé</option>
+                            <option value="H">Homme</option>
+                            <option value="F">Femme</option>
+                            <option value="A">Autre</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Taille
+                                (cm)</label>
+                            <input type="number" id="height" class="modal-input" placeholder="Ex: 180">
+                        </div>
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Âge</label>
+                            <input type="number" id="age" class="modal-input" placeholder="Ex: 25">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="filter-btn"
+                        style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--accent); border-color: var(--accent); color: white;">
+                        Sauvegarder les modifications </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Upload (Réutilisé) -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content animate-in">
+            <h2 class="modal-title">Changer ma photo</h2>
+            <form id="profile-photo-form" enctype="multipart/form-data">
+                <div class="upload-zone" style="margin-bottom: 1.5rem; padding: 2.5rem;">
+                    <input type="file" id="profile-photo-input" name="photo" accept="image/*" required>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">Format : JPG, PNG, WebP (Max 5Mo)</p>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" id="profile-modal-close" class="filter-btn">Annuler</button>
+                    <button type="submit" class="filter-btn"
+                        style="background: var(--accent); border-color: var(--accent); color: white;">Uploader</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Warmachine. Tous droits réservés.</p>
+        <p style="font-size: 0.8rem; opacity: 0.6;">Conçu par Louis Provost</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

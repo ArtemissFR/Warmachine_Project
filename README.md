@@ -8,10 +8,16 @@ Portfolio personnel avec suivi de **musculation** — Node.js/Express, SQLite, g
 ```
 Warmachine_Project/
 ├── public/                  # Frontend (HTML, CSS, JS)
+│   ├── main.css              # Design System (Glassmorphism & Neon)
+│   ├── main.js               # Logique Frontend (Auth, Charts, UI)
+│   ├── index.html            # Landing Page & Dashboard summary
+│   ├── workout.html          # Page Musculation
+│   ├── gallery.html          # Page Portfolio Dessin
+│   └── profile.html          # Paramètres du profil
 ├── scripts/
 │   ├── deploy.sh            # Déploiement complet automatisé
 │   ├── uninstall.sh         # Vérification & désinstallation
-│   ├── init-db.js           # Initialisation de la base de données
+│   ├── init-database.js     # Initialisation de la base de données
 │   └── backup-db.sh         # Sauvegarde horodatée
 ├── data/
 │   └── database.sqlite      # Base de données (créée automatiquement)
@@ -46,6 +52,15 @@ Le script effectue automatiquement :
 6. Démarre l'application avec **PM2** (ou redémarre si déjà actif)
 
 > ✅ Le script est **idempotent** : peut être relancé sans risque de perte de données.
+
+---
+
+## ✨ Fonctionnalités Clés
+
+- **Authentification Sécurisée** : Système complet d'inscription/connexion avec sessions HTTP-only.
+- **Profil Utilisateur** : Personnalisation (photo, couleur d'accent), informations personnelles.
+- **Musculation** (`workout.html`) : Journal de bord avec graphiques de progression (Chart.js), calcul de 1RM, et heatmap de régularité.
+- **Galerie d'Art** (`gallery.html`) : Portfolio artistique avec filtres par catégorie et lightbox immersive.
 
 ---
 
@@ -113,7 +128,7 @@ ss -tlnp | grep 3000
 ### Tables
 | Table | Colonnes | Description |
 |---|---|---|
-| `users` | id, username, password_hash, profile_picture, accent_color | Comptes utilisateurs & personnalisation |
+| `users` | id, username, password_hash, profile_picture, accent_color, first_name, last_name, email, gender, height, age | Profil complet & personnalisation |
 | `gym_entries` | id, date, exercise, category, weight, reps, user_id | Séances de musculation |
 | `body_weight` | id, date, weight, user_id | Historique poids corporel |
 | `gym_targets` | id, exercise, target_weight, user_id | Objectifs de records (PR) |
@@ -161,6 +176,7 @@ pm2 start ecosystem.config.js --env production
 | `POST` | `/api/auth/logout` | Se déconnecter |
 | `GET` | `/api/auth/me` | Vérifier l'état de connexion |
 | `POST` | `/api/user/upload-photo` | Uploader une photo de profil (Multer) |
+| `POST` | `/api/user/profile` | Mettre à jour les informations personnelles |
 | `POST` | `/api/user/accent` | Enregistrer la couleur d'accent préférée |
 | `GET` | `/api/dashboard/summary` | Résumé des progrès pour la page d'accueil |
 

@@ -1290,6 +1290,27 @@ select:focus {
     display: flex;
 }
 
+.dropdown-link {
+    display: block;
+    padding: 0.8rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.dropdown-link:hover {
+    background: var(--glass-hover);
+    color: var(--accent);
+}
+
+.dropdown-link.active {
+    background: var(--glass-hover);
+    border-left: 3px solid var(--accent);
+    padding-left: calc(1rem - 3px);
+}
+
 .user-dropdown button {
     background: transparent;
     border: none;

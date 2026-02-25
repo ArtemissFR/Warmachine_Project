@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/api/auth/me');
             const data = await res.json();
             updateAuthUI(data.loggedIn ? data.user : null);
+            if (data.loggedIn && window.location.pathname.includes('profile.html')) {
+                initProfilePage(data.user);
+            }
         } catch (e) {
             updateAuthUI(null);
         }
@@ -283,6 +286,57 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Erreur lors de la copie', 'error');
         });
     });
+
+    // Profile Page Logic
+    const initProfilePage = (user) => {
+        const form = document.getElementById('profile-info-form');
+        if (!form) return;
+
+        // Populate fields
+        document.getElementById('first-name').value = user.first_name || '';
+        document.getElementById('last-name').value = user.last_name || '';
+        document.getElementById('email').value = user.email || '';
+        document.getElementById('gender').value = user.gender || '';
+        document.getElementById('height').value = user.height || 0;
+        document.getElementById('age').value = user.age || 0;
+
+        const displayImg = document.getElementById('profile-display-img');
+        if (displayImg) displayImg.src = user.profile_picture || '/uploads/default-profile.png';
+
+        // Photo Trigger
+        const trigger = document.getElementById('profile-photo-trigger');
+        if (trigger) trigger.onclick = () => profileModal.classList.add('active');
+
+        // Form Submit
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const first_name = document.getElementById('first-name').value;
+            const last_name = document.getElementById('last-name').value;
+            const email = document.getElementById('email').value;
+            const gender = document.getElementById('gender').value;
+            const height = parseInt(document.getElementById('height').value) || 0;
+            const age = parseInt(document.getElementById('age').value) || 0;
+
+            const payload = { first_name, last_name, email, gender, height, age };
+
+            try {
+                const res = await fetch('/api/user/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    showToast('Profil mis à jour');
+                    // Update current user locally
+                    Object.assign(currentUser, payload);
+                } else {
+                    showToast('Erreur lors de la sauvegarde', 'error');
+                }
+            } catch (err) {
+                showToast('Erreur serveur', 'error');
+            }
+        };
+    };
 
     // Initial Auth Check
     checkAuth();
@@ -841,7 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll(); // Initial check
     } catch (e) { console.error("Reveal Error:", e); }
 
-    // 7. Gallery & Lightbox (collection.html)
+    // 7. Gallery & Lightbox (gallery.html)
     try {
         const filterBtns = document.querySelectorAll('.filter-btn');
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -877,7 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (e) { console.error("Gallery Error:", e); }
 
-    // 8. Sub-navigation & Smooth Scroll (gym.html)
+    // 8. Sub-navigation & Smooth Scroll (workout.html)
     try {
         const subNavLinks = document.querySelectorAll('.sub-nav a');
         const sections = document.querySelectorAll('.section-container');
