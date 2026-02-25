@@ -38,30 +38,101 @@
         <div style="display: flex; align-items: center; gap: 2rem;">
             <div id="live-clock">00:00:00</div>
             <div class="nav-links">
-                <a href="index.html">Accueil</a>
-                <a href="gallery.html" class="active">Dessins</a>
-                <a href="workout.html">Musculation</a>
+                <a href="index.html">🏠 Accueil</a>
+                <a href="gallery.html" class="active">🎨 Dessins</a>
+                <a href="workout.html">🏋️ Musculation</a>
             </div>
+            <!-- User Profile Menu -->
+            <div id="user-menu" class="user-menu" style="display: none;">
+                <img id="user-avatar" src="/uploads/default-profile.png" alt="Profile" class="user-avatar">
+                <span id="user-name" class="user-name">User</span>
+                <div class="user-dropdown">
+                    <div class="accent-selector">
+                        <span style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.5rem; display: block;">Couleur
+                            d'accent</span>
+                        <div class="accent-colors">
+                            <div class="accent-color" data-color="#6366f1" style="background: #6366f1;"></div>
+                            <div class="accent-color" data-color="#10b981" style="background: #10b981;"></div>
+                            <div class="accent-color" data-color="#f59e0b" style="background: #f59e0b;"></div>
+                            <div class="accent-color" data-color="#f43f5e" style="background: #f43f5e;"></div>
+                            <div class="accent-color" data-color="#0ea5e9" style="background: #0ea5e9;"></div>
+                            <div class="accent-color" data-color="#8b5cf6" style="background: #8b5cf6;"></div>
+                        </div>
+                    </div>
+                    <a href="profile.html" class="dropdown-link">👤 Mon Profil</a>
+                    <button id="logout-btn">Déconnexion</button>
+                </div>
+            </div>
+            <button id="login-open-btn" class="filter-btn">Connexion</button>
+
             <button id="theme-toggle" class="theme-toggle" aria-label="Changer de thème">
-                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
-                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
             </button>
         </div>
     </nav>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="auth-title">Connexion</h2>
+                <span class="modal-close" id="auth-modal-close">&times;</span>
+            </div>
+            <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab active">Log In</button>
+                <button id="tab-register" class="auth-tab">Sign Up</button>
+            </div>
+            <form id="auth-form" style="margin-top: 1.5rem;">
+                <div class="form-group">
+                    <label>Pseudo</label>
+                    <input type="text" id="auth-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="auth-password" required>
+                </div>
+                <button type="submit" class="btn-card"
+                    style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                    Continuer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Photo Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Changer la photo</h2>
+                <span class="modal-close" id="profile-modal-close">&times;</span>
+            </div>
+            <form id="profile-photo-form" style="margin-top: 1.5rem;">
+                <div class="form-group">
+                    <label>Choisir une image</label>
+                    <input type="file" id="profile-photo-input" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-card"
+                    style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                    Mettre à jour
+                </button>
+            </form>
+        </div>
+    </div>
 
     <main>
         <header class="animate-in section-spacer" style="margin-bottom: 3rem;">

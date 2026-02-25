@@ -38,9 +38,9 @@
         <div style="display: flex; align-items: center; gap: 2rem;">
             <div id="live-clock">00:00:00</div>
             <div class="nav-links">
-                <a href="index.html">Accueil</a>
-                <a href="gallery.html">Dessins</a>
-                <a href="workout.html" class="active">Musculation</a>
+                <a href="index.html">🏠 Accueil</a>
+                <a href="gallery.html">🎨 Dessins</a>
+                <a href="workout.html" class="active">🏋️ Musculation</a>
             </div>
 
             <!-- User Profile Menu -->
@@ -146,12 +146,16 @@
 
             <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <!-- Bloc: Nouvelle Séance -->
-                <div class="btn-card" style="padding: 2rem;">
+                <div class="btn-card no-tilt" style="padding: 2rem;">
                     <h3
                         style="margin-bottom: 1.5rem; font-size: 1.4rem; display: flex; align-items: center; gap: 0.8rem;">
                         <span>🏋️</span> Nouvelle Séance
                     </h3>
                     <form id="gym-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                        <div class="form-group">
+                            <label for="gym-date">Date</label>
+                            <input type="date" id="gym-date" class="modal-input" required>
+                        </div>
                         <div class="form-group">
                             <label for="gym-exercise">Exercice</label>
                             <input type="text" id="gym-exercise" list="exercise-list" class="modal-input"
@@ -203,7 +207,7 @@
                 </div>
 
                 <!-- Bloc: Santé & Poids -->
-                <div class="btn-card"
+                <div class="btn-card no-tilt"
                     style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <h3
@@ -369,8 +373,8 @@
                         style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #4ade80;">
                         📥 Exporter CSV
                     </button>
-                    <button onclick="document.getElementById('import-modal').classList.add('active')"
-                        class="filter-btn">
+                    <button id="import-modal-open-btn"
+                        onclick="document.getElementById('import-modal').classList.add('active')" class="filter-btn">
                         Import JSON
                     </button>
                 </div>
@@ -440,6 +444,27 @@
                         Enregistrer
                     </button>
                 </form>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div id="import-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Importer des données</h2>
+                    <span class="modal-close"
+                        onclick="document.getElementById('import-modal').classList.remove('active')">&times;</span>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        Sélectionnez un fichier JSON exporté par l'application pour restaurer vos séances.
+                    </p>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button id="import-btn" class="btn-card"
+                        style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none;">
+                        Choisir le fichier JSON
+                    </button>
+                </div>
             </div>
         </div>
 

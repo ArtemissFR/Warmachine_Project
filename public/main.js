@@ -408,6 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         const tiltElements = document.querySelectorAll('.btn-card, .gallery-item');
         tiltElements.forEach(el => {
+            // Disable tilt for panels containing forms or marked with .no-tilt to ensure stability
+            if (el.classList.contains('no-tilt') || el.querySelector('form, input, textarea, select')) return;
+
             el.onmousemove = e => {
                 const r = el.getBoundingClientRect();
                 const x = e.clientX - r.left - r.width / 2;
@@ -699,6 +702,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
             }
 
+            // Also pre-fill the inline gym-form date
+            const inlineDate = document.getElementById('gym-date');
+            if (inlineDate && !inlineDate.value) inlineDate.valueAsDate = new Date();
+
             if (gymForm) {
                 gymForm.onsubmit = async e => {
                     e.preventDefault();
@@ -869,6 +876,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (response.ok) {
                                     renderGymData();
                                     showToast('Données importées', 'success');
+                                    const modal = document.getElementById('import-modal');
+                                    if (modal) modal.classList.remove('active');
                                 }
                             }
                         } catch (err) { showToast('Import échoué', 'error'); }

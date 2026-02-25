@@ -1272,10 +1272,10 @@ select:focus {
 
 .user-dropdown {
     position: absolute;
-    top: calc(100% + 1rem);
+    top: 100%;
     right: 0;
-    min-width: 150px;
-    background: var(--glass);
+    min-width: 200px;
+    background: var(--navy-800);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 1rem;
@@ -1283,7 +1283,19 @@ select:focus {
     display: none;
     flex-direction: column;
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    margin-top: 5px;
+}
+
+/* Pseudo-element to bridge the gap between trigger and menu */
+.user-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: transparent;
 }
 
 .user-menu:hover .user-dropdown {
