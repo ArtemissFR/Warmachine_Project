@@ -906,38 +906,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. Gallery & Lightbox (gallery.html)
     try {
+        const galleryContainer = document.querySelector('.gallery');
         const filterBtns = document.querySelectorAll('.filter-btn');
-        const galleryItems = document.querySelectorAll('.gallery-item');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxClose = document.querySelector('.lightbox-close');
 
+        // Drawing Upload Elements
+        const uploadOpenBtn = document.getElementById('upload-drawing-open-btn');
+        const uploadModal = document.getElementById('drawing-upload-modal');
+        const uploadCloseBtn = document.getElementById('drawing-upload-close');
+        const uploadForm = document.getElementById('drawing-upload-form');
+
+        const renderGallery = async (filter = 'all') => {
+            if (!galleryContainer) return;
+            try {
+                const response = await fetch('/api/gallery');
+                const drawings = await response.json();
+
+                galleryContainer.innerHTML = '';
+                drawings.forEach(drawing => {
+                    if (filter !== 'all' && drawing.category !== filter) return;
+
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item animate-in';
+                    item.dataset.category = drawing.category;
+                    item.innerHTML = `
+                        <img src="${drawing.filename}" alt="${drawing.name}" loading="lazy">
+                        <div class="gallery-item-info" style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; opacity: 0; transition: 0.3s; pointer-events: none;">
+                            <div style="font-weight: bold;">${drawing.name}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.8;">${drawing.category} • ${drawing.date}</div>
+                        </div>
+                    `;
+
+                    item.onclick = () => {
+                        lightboxImg.src = drawing.filename;
+                        lightbox.classList.add('active');
+                    };
+
+                    item.onmouseenter = () => {
+                        const info = item.querySelector('.gallery-item-info');
+                        if (info) info.style.opacity = '1';
+                    };
+                    item.onmouseleave = () => {
+                        const info = item.querySelector('.gallery-item-info');
+                        if (info) info.style.opacity = '0';
+                    };
+
+                    galleryContainer.appendChild(item);
+                });
+            } catch (err) { console.error("Gallery Render Error:", err); }
+        };
+
+
         if (filterBtns.length > 0) {
             filterBtns.forEach(btn => {
                 btn.onclick = () => {
+                    const filt = btn.getAttribute('data-filter');
+                    if (filt === null) return; // For the upload button which doesn't have data-filter
+
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    const filt = btn.getAttribute('data-filter');
-                    galleryItems.forEach(item => {
-                        const cat = item.getAttribute('data-category');
-                        item.style.display = (filt === 'all' || cat === filt) ? 'block' : 'none';
-                    });
+                    renderGallery(filt);
                     showToast(`Filtre : ${btn.textContent}`, 'info');
                 };
             });
         }
 
-        if (lightbox && lightboxImg && galleryItems.length > 0) {
-            galleryItems.forEach(item => {
-                item.onclick = () => {
-                    const src = item.querySelector('img').src;
-                    lightboxImg.src = src;
-                    lightbox.classList.add('active');
-                };
-            });
+        if (uploadOpenBtn && uploadModal) {
+            uploadOpenBtn.onclick = () => uploadModal.classList.add('active');
+            if (uploadCloseBtn) uploadCloseBtn.onclick = () => uploadModal.classList.remove('active');
+
+            uploadForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append('drawing', document.getElementById('drawing-file').files[0]);
+                formData.append('name', document.getElementById('drawing-name').value);
+                formData.append('category', document.getElementById('drawing-category').value);
+                formData.append('date', document.getElementById('drawing-date').value);
+
+                try {
+                    const response = await fetch('/api/gallery/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (response.ok) {
+                        showToast('Dessin enregistré !', 'success');
+                        uploadModal.classList.remove('active');
+                        uploadForm.reset();
+                        renderGallery();
+                    } else {
+                        showToast('Erreur lors de l\'envoi', 'error');
+                    }
+                } catch (err) {
+                    showToast('Erreur serveur', 'error');
+                }
+            };
+        }
+
+        if (lightbox && lightboxImg) {
             if (lightboxClose) lightboxClose.onclick = () => lightbox.classList.remove('active');
             lightbox.onclick = (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); };
         }
+
+        // Initial render
+        if (galleryContainer) renderGallery();
     } catch (e) { console.error("Gallery Error:", e); }
 
     // 8. Sub-navigation & Smooth Scroll (workout.html)

@@ -134,6 +134,43 @@
         </div>
     </div>
 
+    <!-- Drawing Upload Modal -->
+    <div id="drawing-upload-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Ajouter un Dessin</h2>
+                <span class="modal-close" id="drawing-upload-close">&times;</span>
+            </div>
+            <form id="drawing-upload-form" style="margin-top: 1.5rem;">
+                <div class="form-group">
+                    <label>Fichier de l'image (obligatoire)</label>
+                    <input type="file" id="drawing-file" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>Nom du dessin (optionnel)</label>
+                    <input type="text" id="drawing-name" placeholder="Ex: Guerrier Solaire">
+                </div>
+                <div class="form-group">
+                    <label>Catégorie (optionnelle)</label>
+                    <select id="drawing-category" class="modal-input">
+                        <option value="all">Filtre Global</option>
+                        <option value="digital">Illustration</option>
+                        <option value="croquis">Croquis</option>
+                        <option value="concept">Concept Art</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date de création (optionnelle)</label>
+                    <input type="date" id="drawing-date">
+                </div>
+                <button type="submit" class="btn-card"
+                    style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                    Enregistrer le dessin
+                </button>
+            </form>
+        </div>
+    </div>
+
     <main>
         <header class="animate-in section-spacer" style="margin-bottom: 3rem;">
             <h1>Collection Artistique</h1>
@@ -147,6 +184,8 @@
             <button class="filter-btn" data-filter="digital">Illustration</button>
             <button class="filter-btn" data-filter="croquis">Croquis</button>
             <button class="filter-btn" data-filter="concept">Concept Art</button>
+            <button id="upload-drawing-open-btn" class="filter-btn"
+                style="background: var(--accent); color: white; margin-left: auto;">+ Ajouter un Dessin</button>
         </div>
 
         <div class="gallery animate-in delay-2">

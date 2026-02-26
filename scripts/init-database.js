@@ -89,6 +89,22 @@ db.serialize(() => {
     else console.log('[init-db] ✅ Table gym_targets prête');
   });
 
+  // Table des dessins (Gallery)
+  db.run(`
+    CREATE TABLE IF NOT EXISTS drawings (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id       INTEGER,
+      filename      TEXT,
+      name          TEXT,
+      category      TEXT,
+      date          TEXT,
+      upload_date   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `, (err) => {
+    if (err) console.error('[init-db] ❌ drawings :', err.message);
+    else console.log('[init-db] ✅ Table drawings prête');
+  });
+
   // Créer un utilisateur par défaut (admin/admin)
   db.run(`INSERT OR IGNORE INTO users (id, username, password_hash) VALUES (1, 'admin', 'admin')`);
 });

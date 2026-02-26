@@ -50,6 +50,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Multer Storage for Drawings
+const drawingStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, uploadsDir),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `drawing_${req.session.userId}_${Date.now()}${ext}`);
+    }
+});
+const uploadDrawing = multer({ storage: drawingStorage });
+
 // Database Initialization
 const db = new sqlite3.Database(DB_PATH, (err) => {
     if (err) {
@@ -69,6 +79,17 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
             gender TEXT DEFAULT '',
             height INTEGER DEFAULT 0,
             age INTEGER DEFAULT 0
+        )`);
+
+        // Create Drawings Table
+        db.run(`CREATE TABLE IF NOT EXISTS drawings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            filename TEXT,
+            name TEXT,
+            category TEXT,
+            date TEXT,
+            upload_date DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
 
         // Migration: Add new columns to existing users if missing
@@ -345,6 +366,30 @@ app.delete('/api/targets/:id', requireAuth, (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'Deleted', changes: this.changes });
     });
+});
+
+// Gallery Routes
+app.get('/api/gallery', (req, res) => {
+    db.all('SELECT * FROM drawings ORDER BY upload_date DESC', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+app.post('/api/gallery/upload', requireAuth, uploadDrawing.single('drawing'), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'Aucun fichier uploadé' });
+
+    const { name, category, date } = req.body;
+    const filename = `/uploads/${req.file.filename}`;
+
+    db.run(
+        `INSERT INTO drawings (user_id, filename, name, category, date) VALUES (?, ?, ?, ?, ?)`,
+        [req.session.userId, filename, name || 'Sans titre', category || 'all', date || new Date().toISOString().split('T')[0]],
+        function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ id: this.lastID, filename, name, category, date });
+        }
+    );
 });
 
 // Dashboard Summary
