@@ -137,336 +137,356 @@
     </div>
 
     <main class="container">
-        <!-- Section: Actions Rapides & Saisie -->
-        <section id="section-input" class="section-container animate-in delay-1">
-            <div class="section-header" style="margin-bottom: 2rem;">
-                <h2 class="section-title-large">Saisie des Données</h2>
-                <p class="section-subtitle">Enregistrez vos performances et suivez votre évolution corporelle.</p>
+        <!-- Guest View -->
+        <section id="guest-view" class="section-container animate-in"
+            style="display: none; text-align: center; padding: 4rem 2rem;">
+            <div class="btn-card" style="max-width: 600px; margin: 0 auto; padding: 3rem;">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">🏋️ Suivi Musculation</h2>
+                <p style="margin-bottom: 2rem;">Connectez-vous pour enregistrer vos séances, suivre votre progression et
+                    définir vos objectifs personnels.</p>
+                <button onclick="document.getElementById('auth-modal').classList.add('active')" class="filter-btn"
+                    style="background: var(--accent); color: white; border-color: var(--accent);">Se connecter /
+                    S'inscrire</button>
             </div>
+        </section>
 
-            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Bloc: Nouvelle Séance -->
-                <div class="btn-card no-tilt" style="padding: 2rem;">
-                    <h3
-                        style="margin-bottom: 1.5rem; font-size: 1.4rem; display: flex; align-items: center; gap: 0.8rem;">
-                        <span>🏋️</span> Nouvelle Séance
-                    </h3>
-                    <form id="gym-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
-                        <div class="form-group">
-                            <label for="gym-date">Date</label>
-                            <input type="date" id="gym-date" class="modal-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="gym-exercise">Exercice</label>
-                            <input type="text" id="gym-exercise" list="exercise-list" class="modal-input"
-                                placeholder="ex: Bench Press" required>
-                            <datalist id="exercise-list">
-                                <option value="Bench Press">
-                                <option value="Squats">
-                                <option value="Deadlift">
-                                <option value="Overhead Press">
-                                <option value="Pull-ups">
-                            </datalist>
-                        </div>
-                        <div class="form-group">
-                            <label for="gym-category">Groupe Musculaire</label>
-                            <select id="gym-category" class="modal-input"
-                                style="appearance: auto; background: var(--navy-800);" required>
-                                <option value="Pectoraux">Pectoraux</option>
-                                <option value="Dos">Dos</option>
-                                <option value="Jambes">Jambes</option>
-                                <option value="Épaules">Épaules</option>
-                                <option value="Bras">Bras</option>
-                                <option value="Abdos">Abdos</option>
-                            </select>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label for="gym-weight">Poids (kg)</label>
-                                <input type="number" id="gym-weight" class="modal-input" placeholder="0" step="0.5"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label for="gym-reps">Reps</label>
-                                <input type="number" id="gym-reps" class="modal-input" placeholder="0" required>
-                            </div>
-                        </div>
-                        <div id="1rm-preview" style="font-size: 0.8rem; color: var(--accent); opacity: 0.8;">
-                            Estimation 1RM: -- kg
-                        </div>
-                        <div class="form-group">
-                            <label for="gym-notes">Notes</label>
-                            <textarea id="gym-notes" class="modal-input" placeholder="Optionnel..."
-                                style="min-height: 80px;"></textarea>
-                        </div>
-                        <button type="submit" class="filter-btn"
-                            style="width: 100%; justify-content: center; background: var(--accent); border-color: var(--accent); color: white; margin-top: 0.5rem;">
-                            Enregistrer la séance
-                        </button>
-                    </form>
+        <!-- Auth Content -->
+        <div id="auth-content" style="display: none;">
+            <!-- Section: Actions Rapides & Saisie -->
+            <section id="section-input" class="section-container animate-in delay-1">
+                <div class="section-header" style="margin-bottom: 2rem;">
+                    <h2 class="section-title-large">Saisie des Données</h2>
+                    <p class="section-subtitle">Enregistrez vos performances et suivez votre évolution corporelle.</p>
                 </div>
 
-                <!-- Bloc: Santé & Poids -->
-                <div class="btn-card no-tilt"
-                    style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between;">
-                    <div>
+                <div class="services-grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <!-- Bloc: Nouvelle Séance -->
+                    <div class="btn-card no-tilt" style="padding: 2rem;">
                         <h3
                             style="margin-bottom: 1.5rem; font-size: 1.4rem; display: flex; align-items: center; gap: 0.8rem;">
-                            <span>⚖️</span> État Corporel
+                            <span>🏋️</span> Nouvelle Séance
                         </h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
-                            Gardez un œil sur votre évolution physique. Une pesée régulière permet d'ajuster votre
-                            nutrition et votre entraînement.
-                        </p>
+                        <form id="gym-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                            <div class="form-group">
+                                <label for="gym-date">Date</label>
+                                <input type="date" id="gym-date" class="modal-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gym-exercise">Exercice</label>
+                                <input type="text" id="gym-exercise" list="exercise-list" class="modal-input"
+                                    placeholder="ex: Bench Press" required>
+                                <datalist id="exercise-list">
+                                    <option value="Bench Press">
+                                    <option value="Squats">
+                                    <option value="Deadlift">
+                                    <option value="Overhead Press">
+                                    <option value="Pull-ups">
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="gym-category">Groupe Musculaire</label>
+                                <select id="gym-category" class="modal-input"
+                                    style="appearance: auto; background: var(--navy-800);" required>
+                                    <option value="Pectoraux">Pectoraux</option>
+                                    <option value="Dos">Dos</option>
+                                    <option value="Jambes">Jambes</option>
+                                    <option value="Épaules">Épaules</option>
+                                    <option value="Bras">Bras</option>
+                                    <option value="Abdos">Abdos</option>
+                                </select>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label for="gym-weight">Poids (kg)</label>
+                                    <input type="number" id="gym-weight" class="modal-input" placeholder="0" step="0.5"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gym-reps">Reps</label>
+                                    <input type="number" id="gym-reps" class="modal-input" placeholder="0" required>
+                                </div>
+                            </div>
+                            <div id="1rm-preview" style="font-size: 0.8rem; color: var(--accent); opacity: 0.8;">
+                                Estimation 1RM: -- kg
+                            </div>
+                            <div class="form-group">
+                                <label for="gym-notes">Notes</label>
+                                <textarea id="gym-notes" class="modal-input" placeholder="Optionnel..."
+                                    style="min-height: 80px;"></textarea>
+                            </div>
+                            <button type="submit" class="filter-btn"
+                                style="width: 100%; justify-content: center; background: var(--accent); border-color: var(--accent); color: white; margin-top: 0.5rem;">
+                                Enregistrer la séance
+                            </button>
+                        </form>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <button id="open-weight-modal" class="filter-btn"
-                            style="width: 100%; justify-content: center; padding: 1.2rem;">
-                            ⚖️ Noter mon poids
-                        </button>
-                        <button id="export-csv-btn" class="filter-btn"
-                            style="width: 100%; justify-content: center; padding: 1.2rem; background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); color: #a855f7;">
-                            📥 Exporter mes données
-                        </button>
+                    <!-- Bloc: Santé & Poids -->
+                    <div class="btn-card no-tilt"
+                        style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3
+                                style="margin-bottom: 1.5rem; font-size: 1.4rem; display: flex; align-items: center; gap: 0.8rem;">
+                                <span>⚖️</span> État Corporel
+                            </h3>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                                Gardez un œil sur votre évolution physique. Une pesée régulière permet d'ajuster votre
+                                nutrition et votre entraînement.
+                            </p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <button id="open-weight-modal" class="filter-btn"
+                                style="width: 100%; justify-content: center; padding: 1.2rem;">
+                                ⚖️ Noter mon poids
+                            </button>
+                            <button id="export-csv-btn" class="filter-btn"
+                                style="width: 100%; justify-content: center; padding: 1.2rem; background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); color: #a855f7;">
+                                📥 Exporter mes données
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider" style="height: 1px; background: var(--glass-border); margin: 4rem 0;"></div>
-
-        <div id="section-overview" class="section-container">
-            <!-- Mini Stats Dashboard -->
-            <div class="stats-grid animate-in delay-2">
-                <div class="stat-card">
-                    <div class="stat-label">Dernière Séance</div>
-                    <div id="stat-last-session" class="stat-value">-</div>
-                    <div id="stat-last-exercise" class="stat-trend trend-up">Aucune donnée</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Volume Total</div>
-                    <div id="stat-total-volume" class="stat-value">0kg</div>
-                    <div class="stat-trend trend-up">Cumulatif</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Séances</div>
-                    <div id="stat-sessions-count" class="stat-value">0</div>
-                    <div class="stat-trend">Total enregistré</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Mon Poids</div>
-                    <div id="stat-body-weight" class="stat-value">- kg</div>
-                    <div id="stat-weight-trend" class="stat-trend trend-up">Non renseigné</div>
-                </div>
-            </div>
-
-            <!-- Heatmap -->
-            <section class="heatmap-section animate-in delay-2" style="margin-top: 2rem;">
-                <h3 class="section-title-small" style="font-size: 1rem; margin-bottom: 1rem; opacity: 0.8;">Fréquence
-                    d'entraînement</h3>
-                <div id="gym-heatmap" class="heatmap-container">
-                    <!-- Peuplit par JS -->
                 </div>
             </section>
 
-            <!-- Progression Chart -->
-            <section class="chart-section animate-in delay-3" style="margin-top: 2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h2 class="section-title-large" style="margin-bottom: 0;">Progression</h2>
-                    <select id="exercise-filter" class="filter-select">
-                        <option value="all">Tous les exercices</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    <canvas id="progressionChart"></canvas>
-                </div>
-            </section>
-        </div>
+            <div class="section-divider" style="height: 1px; background: var(--glass-border); margin: 4rem 0;"></div>
 
-        <!-- PR Dashboard & Targets -->
-        <section id="section-pr" class="section-container animate-in delay-2">
-            <h2 class="section-title-large">Records Personnels (PR)</h2>
-            <div id="pr-grid" class="pr-grid">
-                <!-- Dynamiquement peuplé -->
-            </div>
-
-            <div style="margin-top: 3rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 class="section-title-large" style="font-size: 1.5rem; margin-bottom: 0;">Objectifs (Targets)
-                    </h3>
-                    <button id="open-target-modal" class="back-link" style="margin-top: 0;">+ Définir un
-                        objectif</button>
+            <div id="section-overview" class="section-container">
+                <!-- Mini Stats Dashboard -->
+                <div class="stats-grid animate-in delay-2">
+                    <div class="stat-card">
+                        <div class="stat-label">Dernière Séance</div>
+                        <div id="stat-last-session" class="stat-value">-</div>
+                        <div id="stat-last-exercise" class="stat-trend trend-up">Aucune donnée</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Volume Total</div>
+                        <div id="stat-total-volume" class="stat-value">0kg</div>
+                        <div class="stat-trend trend-up">Cumulatif</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Séances</div>
+                        <div id="stat-sessions-count" class="stat-value">0</div>
+                        <div class="stat-trend">Total enregistré</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Mon Poids</div>
+                        <div id="stat-body-weight" class="stat-value">- kg</div>
+                        <div id="stat-weight-trend" class="stat-trend trend-up">Non renseigné</div>
+                    </div>
                 </div>
-                <div id="target-grid" class="target-grid">
-                    <!-- Dynamiquement peuplé -->
-                </div>
-            </div>
-        </section>
 
-        <!-- Analytics & Tools Grid -->
-        <div id="section-analytics" class="section-container">
-            <div class="charts-layout animate-in delay-3">
-                <!-- Muscle Volume Chart -->
-                <section class="chart-section">
-                    <h2 class="section-title-large">Répartition par Muscle</h2>
-                    <div class="chart-container">
-                        <canvas id="muscleChart"></canvas>
+                <!-- Heatmap -->
+                <section class="heatmap-section animate-in delay-2" style="margin-top: 2rem;">
+                    <h3 class="section-title-small" style="font-size: 1rem; margin-bottom: 1rem; opacity: 0.8;">
+                        Fréquence
+                        d'entraînement</h3>
+                    <div id="gym-heatmap" class="heatmap-container">
+                        <!-- Peuplit par JS -->
                     </div>
                 </section>
 
-                <!-- Body Weight History -->
-                <section class="chart-section">
+                <!-- Progression Chart -->
+                <section class="chart-section animate-in delay-3" style="margin-top: 2rem;">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2 class="section-title-large" style="margin-bottom: 0;">Suivi du Poids</h2>
-                        <button id="open-weight-modal" class="back-link" style="margin-top: 0;">+ Noter</button>
+                        <h2 class="section-title-large" style="margin-bottom: 0;">Progression</h2>
+                        <select id="exercise-filter" class="filter-select">
+                            <option value="all">Tous les exercices</option>
+                        </select>
                     </div>
-                    <div class="chart-container" style="height: 250px;">
-                        <canvas id="weightChart"></canvas>
+                    <div class="chart-container">
+                        <canvas id="progressionChart"></canvas>
                     </div>
                 </section>
             </div>
 
-            <!-- Advanced 1RM Tool -->
-            <section class="chart-section animate-in delay-4" style="margin-top: 2rem;">
-                <h2 class="section-title-large">Calculateur de 1RM Avancé</h2>
-                <div class="calculator-grid">
-                    <div class="form-group">
-                        <label>Charge (kg)</label>
-                        <input type="number" id="calc-weight" placeholder="100">
+            <!-- PR Dashboard & Targets -->
+            <section id="section-pr" class="section-container animate-in delay-2">
+                <h2 class="section-title-large">Records Personnels (PR)</h2>
+                <div id="pr-grid" class="pr-grid">
+                    <!-- Dynamiquement peuplé -->
+                </div>
+
+                <div style="margin-top: 3rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 class="section-title-large" style="font-size: 1.5rem; margin-bottom: 0;">Objectifs (Targets)
+                        </h3>
+                        <button id="open-target-modal" class="back-link" style="margin-top: 0;">+ Définir un
+                            objectif</button>
                     </div>
-                    <div class="form-group">
-                        <label>Répétitions</label>
-                        <input type="number" id="calc-reps" placeholder="5">
-                    </div>
-                    <div class="calc-result">
-                        <div class="stat-label">1RM Estimé</div>
-                        <div id="calc-1rm-result" class="stat-value">-- kg</div>
+                    <div id="target-grid" class="target-grid">
+                        <!-- Dynamiquement peuplé -->
                     </div>
                 </div>
-                <div class="calc-table-container">
-                    <table id="calc-percentages-table">
-                        <!-- Peuplit par JS -->
+            </section>
+
+            <!-- Analytics & Tools Grid -->
+            <div id="section-analytics" class="section-container">
+                <div class="charts-layout animate-in delay-3">
+                    <!-- Muscle Volume Chart -->
+                    <section class="chart-section">
+                        <h2 class="section-title-large">Répartition par Muscle</h2>
+                        <div class="chart-container">
+                            <canvas id="muscleChart"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Body Weight History -->
+                    <section class="chart-section">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 class="section-title-large" style="margin-bottom: 0;">Suivi du Poids</h2>
+                            <button id="open-weight-modal" class="back-link" style="margin-top: 0;">+ Noter</button>
+                        </div>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="weightChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Advanced 1RM Tool -->
+                <section class="chart-section animate-in delay-4" style="margin-top: 2rem;">
+                    <h2 class="section-title-large">Calculateur de 1RM Avancé</h2>
+                    <div class="calculator-grid">
+                        <div class="form-group">
+                            <label>Charge (kg)</label>
+                            <input type="number" id="calc-weight" placeholder="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Répétitions</label>
+                            <input type="number" id="calc-reps" placeholder="5">
+                        </div>
+                        <div class="calc-result">
+                            <div class="stat-label">1RM Estimé</div>
+                            <div id="calc-1rm-result" class="stat-value">-- kg</div>
+                        </div>
+                    </div>
+                    <div class="calc-table-container">
+                        <table id="calc-percentages-table">
+                            <!-- Peuplit par JS -->
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Achievement Badges -->
+            <section id="section-badges" class="section-container animate-in delay-4">
+                <h2 class="section-title-large">Succès & Badges</h2>
+                <div id="badge-grid" class="badge-grid">
+                    <!-- Dynamiquement peuplé -->
+                </div>
+            </section>
+
+            <!-- History Table -->
+            <section id="section-history" class="section-container animate-in delay-5">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                    <h2 class="section-title-large" style="margin-bottom: 0;">Historique complet</h2>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" id="history-search" placeholder="Filtrer l'exercice..."
+                            style="width: 200px; padding: 0.5rem 1rem; margin-bottom: 0; font-size: 0.8rem;">
+                        <button id="export-csv-btn" class="filter-btn"
+                            style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #4ade80;">
+                            📥 Exporter CSV
+                        </button>
+                        <button id="import-modal-open-btn"
+                            onclick="document.getElementById('import-modal').classList.add('active')"
+                            class="filter-btn">
+                            Import JSON
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="gym-history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Exercice</th>
+                                <th>Poids (kg)</th>
+                                <th>Reps</th>
+                                <th>Delta</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamiquement peuplé par script.js -->
+                        </tbody>
                     </table>
                 </div>
             </section>
-        </div>
 
-        <!-- Achievement Badges -->
-        <section id="section-badges" class="section-container animate-in delay-4">
-            <h2 class="section-title-large">Succès & Badges</h2>
-            <div id="badge-grid" class="badge-grid">
-                <!-- Dynamiquement peuplé -->
-            </div>
-        </section>
-
-        <!-- History Table -->
-        <section id="section-history" class="section-container animate-in delay-5">
-            <div
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 class="section-title-large" style="margin-bottom: 0;">Historique complet</h2>
-                <div style="display: flex; gap: 1rem;">
-                    <input type="text" id="history-search" placeholder="Filtrer l'exercice..."
-                        style="width: 200px; padding: 0.5rem 1rem; margin-bottom: 0; font-size: 0.8rem;">
-                    <button id="export-csv-btn" class="filter-btn"
-                        style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #4ade80;">
-                        📥 Exporter CSV
-                    </button>
-                    <button id="import-modal-open-btn"
-                        onclick="document.getElementById('import-modal').classList.add('active')" class="filter-btn">
-                        Import JSON
-                    </button>
-                </div>
-            </div>
-            <div class="table-container">
-                <table id="gym-history-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Exercice</th>
-                            <th>Poids (kg)</th>
-                            <th>Reps</th>
-                            <th>Delta</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Dynamiquement peuplé par script.js -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Target Modal -->
-        <div id="target-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Définir un Objectif</h2>
-                    <span class="modal-close" id="target-modal-close">&times;</span>
-                </div>
-                <form id="target-form">
-                    <div class="form-group">
-                        <label for="target-exercise">Exercice</label>
-                        <input type="text" id="target-exercise" list="exercise-list" placeholder="ex: Deadlift"
-                            required>
+            <!-- Target Modal -->
+            <div id="target-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Définir un Objectif</h2>
+                        <span class="modal-close" id="target-modal-close">&times;</span>
                     </div>
-                    <div class="form-group">
-                        <label for="target-weight">Objectif de Poids (kg)</label>
-                        <input type="number" id="target-weight" placeholder="100" required>
-                    </div>
-                    <button type="submit" class="btn-card"
-                        style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
-                        Enregistrer
-                    </button>
-                </form>
+                    <form id="target-form">
+                        <div class="form-group">
+                            <label for="target-exercise">Exercice</label>
+                            <input type="text" id="target-exercise" list="exercise-list" placeholder="ex: Deadlift"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="target-weight">Objectif de Poids (kg)</label>
+                            <input type="number" id="target-weight" placeholder="100" required>
+                        </div>
+                        <button type="submit" class="btn-card"
+                            style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <!-- Body Weight Modal -->
-        <div id="weight-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Noter mon poids</h2>
-                    <span class="modal-close" id="weight-modal-close">&times;</span>
+            <!-- Body Weight Modal -->
+            <div id="weight-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Noter mon poids</h2>
+                        <span class="modal-close" id="weight-modal-close">&times;</span>
+                    </div>
+                    <form id="weight-form">
+                        <div class="form-group">
+                            <label for="body-date">Date</label>
+                            <input type="date" id="body-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="body-weight">Poids (kg)</label>
+                            <input type="number" id="body-weight" step="0.1" placeholder="75.0" required>
+                        </div>
+                        <button type="submit" class="btn-card"
+                            style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
+                            Enregistrer
+                        </button>
+                    </form>
                 </div>
-                <form id="weight-form">
-                    <div class="form-group">
-                        <label for="body-date">Date</label>
-                        <input type="date" id="body-date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="body-weight">Poids (kg)</label>
-                        <input type="number" id="body-weight" step="0.1" placeholder="75.0" required>
-                    </div>
-                    <button type="submit" class="btn-card"
-                        style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; margin-top: 1rem;">
-                        Enregistrer
-                    </button>
-                </form>
             </div>
-        </div>
 
-        <!-- Import Modal -->
-        <div id="import-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Importer des données</h2>
-                    <span class="modal-close"
-                        onclick="document.getElementById('import-modal').classList.remove('active')">&times;</span>
-                </div>
-                <div style="text-align: center; padding: 1rem;">
-                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
-                        Sélectionnez un fichier JSON exporté par l'application pour restaurer vos séances.
-                    </p>
-                    <input type="file" id="import-file" accept=".json" style="display: none;">
-                    <button id="import-btn" class="btn-card"
-                        style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none;">
-                        Choisir le fichier JSON
-                    </button>
+            <!-- Import Modal -->
+            <div id="import-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Importer des données</h2>
+                        <span class="modal-close"
+                            onclick="document.getElementById('import-modal').classList.remove('active')">&times;</span>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                            Sélectionnez un fichier JSON exporté par l'application pour restaurer vos séances.
+                        </p>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                        <button id="import-btn" class="btn-card"
+                            style="width: 100%; padding: 1rem; background: var(--accent); color: white; border: none;">
+                            Choisir le fichier JSON
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </div> <!-- End auth-content -->
 

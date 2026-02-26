@@ -565,6 +565,11 @@ p {
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
 }
 
+.btn-card.no-tilt:hover {
+    transform: none !important;
+    box-shadow: var(--card-shadow);
+}
+
 .btn-card h3 {
     color: var(--text-primary);
     margin-bottom: 1rem;

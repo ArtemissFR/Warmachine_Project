@@ -47,101 +47,122 @@
     </nav>
 
     <main class="container animate-in" style="margin-top: 8rem;">
-        <div class="section-header">
-            <h1 class="section-title-large">Personnalisation du Profil</h1>
-            <p class="section-subtitle">Gérez vos informations personnelles et votre apparence sur la plateforme.</p>
-        </div>
+        <!-- Guest View -->
+        <section id="guest-view" class="section-container animate-in"
+            style="display: none; text-align: center; padding: 4rem 2rem;">
+            <div class="btn-card" style="max-width: 600px; margin: 0 auto; padding: 3rem;">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">👤 Mon Profil</h2>
+                <p style="margin-bottom: 2rem;">Veuillez vous connecter pour accéder à la personnalisation de votre
+                    profil et de votre style.</p>
+                <button onclick="document.getElementById('auth-modal').classList.add('active')" class="filter-btn"
+                    style="background: var(--accent); color: white; border-color: var(--accent);">Se connecter</button>
+            </div>
+        </section>
 
-        <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-            <!-- Section Apparence -->
-            <div class="btn-card" style="padding: 2rem;">
-                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✨ Apparence</h2>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-                    <div class="profile-photo-big" id="profile-photo-trigger"
-                        style="position: relative; cursor: pointer;">
-                        <img id="profile-display-img" src="/uploads/default-profile.png" alt="Profile"
-                            style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent);">
-                        <div
-                            style="position: absolute; bottom: 0; right: 0; background: var(--accent); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                            📷</div>
-                    </div>
-                    <p style="font-size: 0.9rem; text-align: center; color: var(--text-secondary);">Cliquez sur l'image
-                        pour changer votre photo de profil.</p>
+        <!-- Auth Content -->
+        <div id="auth-content" style="display: none;">
+            <div class="section-header">
+                <h1 class="section-title-large">Personnalisation du Profil</h1>
+                <p class="section-subtitle">Gérez vos informations personnelles et votre apparence sur la plateforme.
+                </p>
+            </div>
 
-                    <div style="width: 100%; border-top: 1px solid var(--glass-border); padding-top: 1.5rem;">
-                        <span style="display: block; margin-bottom: 1rem; font-weight: 600;">Couleur
-                            d'accentuation</span>
-                        <div class="accent-colors" style="grid-template-columns: repeat(6, 1fr); gap: 0.8rem;">
-                            <div class="accent-color" data-color="#6366f1"
-                                style="background: #6366f1; width: 30px; height: 30px;"></div>
-                            <div class="accent-color" data-color="#10b981"
-                                style="background: #10b981; width: 30px; height: 30px;"></div>
-                            <div class="accent-color" data-color="#f59e0b"
-                                style="background: #f59e0b; width: 30px; height: 30px;"></div>
-                            <div class="accent-color" data-color="#f43f5e"
-                                style="background: #f43f5e; width: 30px; height: 30px;"></div>
-                            <div class="accent-color" data-color="#0ea5e9"
-                                style="background: #0ea5e9; width: 30px; height: 30px;"></div>
-                            <div class="accent-color" data-color="#8b5cf6"
-                                style="background: #8b5cf6; width: 30px; height: 30px;"></div>
+            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <!-- Section Apparence -->
+                <div class="btn-card no-tilt" style="padding: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✨ Apparence</h2>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                        <div class="profile-photo-big" id="profile-photo-trigger"
+                            style="position: relative; cursor: pointer;">
+                            <img id="profile-display-img" src="/uploads/default-profile.png" alt="Profile"
+                                style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent);">
+                            <div
+                                style="position: absolute; bottom: 0; right: 0; background: var(--accent); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                📷</div>
+                        </div>
+                        <p style="font-size: 0.9rem; text-align: center; color: var(--text-secondary);">Cliquez sur
+                            l'image
+                            pour changer votre photo de profil.</p>
+
+                        <div style="width: 100%; border-top: 1px solid var(--glass-border); padding-top: 1.5rem;">
+                            <span style="display: block; margin-bottom: 1rem; font-weight: 600;">Couleur
+                                d'accentuation</span>
+                            <div class="accent-colors" style="grid-template-columns: repeat(6, 1fr); gap: 0.8rem;">
+                                <div class="accent-color" data-color="#6366f1"
+                                    style="background: #6366f1; width: 30px; height: 30px;"></div>
+                                <div class="accent-color" data-color="#10b981"
+                                    style="background: #10b981; width: 30px; height: 30px;"></div>
+                                <div class="accent-color" data-color="#f59e0b"
+                                    style="background: #f59e0b; width: 30px; height: 30px;"></div>
+                                <div class="accent-color" data-color="#f43f5e"
+                                    style="background: #f43f5e; width: 30px; height: 30px;"></div>
+                                <div class="accent-color" data-color="#0ea5e9"
+                                    style="background: #0ea5e9; width: 30px; height: 30px;"></div>
+                                <div class="accent-color" data-color="#8b5cf6"
+                                    style="background: #8b5cf6; width: 30px; height: 30px;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Section Infos Personnelles -->
+                <div class="btn-card no-tilt" style="padding: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">👤 Informations</h2>
+                    <form id="profile-info-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Prénom</label>
+                                <input type="text" id="first-name" class="modal-input" placeholder="Ex: Jean">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Nom</label>
+                                <input type="text" id="last-name" class="modal-input" placeholder="Ex: Dupont">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Adresse
+                                Email</label>
+                            <input type="email" id="email" class="modal-input"
+                                placeholder="Ex: jean.dupont@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Sexe</label>
+                            <select id="gender" class="modal-input"
+                                style="appearance: auto; background: var(--navy-800);">
+                                <option value="">Non précisé</option>
+                                <option value="H">Homme</option>
+                                <option value="F">Femme</option>
+                                <option value="A">Autre</option>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Taille
+                                    (cm)</label>
+                                <input type="number" id="height" class="modal-input" placeholder="Ex: 180">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Âge</label>
+                                <input type="number" id="age" class="modal-input" placeholder="Ex: 25">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="filter-btn"
+                            style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--accent); border-color: var(--accent); color: white;">
+                            Sauvegarder les modifications </button>
+                    </form>
+                </div>
             </div>
-
-            <!-- Section Infos Personnelles -->
-            <div class="btn-card" style="padding: 2rem;">
-                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">👤 Informations</h2>
-                <form id="profile-info-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Prénom</label>
-                            <input type="text" id="first-name" class="modal-input" placeholder="Ex: Jean">
-                        </div>
-                        <div class="form-group">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Nom</label>
-                            <input type="text" id="last-name" class="modal-input" placeholder="Ex: Dupont">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Adresse
-                            Email</label>
-                        <input type="email" id="email" class="modal-input" placeholder="Ex: jean.dupont@example.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label
-                            style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Sexe</label>
-                        <select id="gender" class="modal-input" style="appearance: auto; background: var(--navy-800);">
-                            <option value="">Non précisé</option>
-                            <option value="H">Homme</option>
-                            <option value="F">Femme</option>
-                            <option value="A">Autre</option>
-                        </select>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Taille
-                                (cm)</label>
-                            <input type="number" id="height" class="modal-input" placeholder="Ex: 180">
-                        </div>
-                        <div class="form-group">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Âge</label>
-                            <input type="number" id="age" class="modal-input" placeholder="Ex: 25">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="filter-btn"
-                        style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--accent); border-color: var(--accent); color: white;">
-                        Sauvegarder les modifications </button>
-                </form>
-            </div>
+        </div>
         </div>
     </main>
 
