@@ -132,6 +132,7 @@ ss -tlnp | grep 3000
 | `gym_entries` | id, date, exercise, category, weight, reps, user_id | Séances de musculation |
 | `body_weight` | id, date, weight, user_id | Historique poids corporel |
 | `gym_targets` | id, exercise, target_weight, user_id | Objectifs de records (PR) |
+| `drawings` | id, user_id, filename, name, category, date, upload_date | Collection artistique (Galerie) |
 
 ### Commandes utiles
 ```bash
@@ -192,6 +193,12 @@ pm2 start ecosystem.config.js --env production
 | `POST` | `/api/weight` | Ajouter une pesée |
 | `GET` | `/api/targets` | Liste des objectifs (PR) |
 | `POST` | `/api/targets` | Ajouter un objectif |
+
+### Galerie d'Art (Dessins)
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/gallery` | Liste tous les dessins enregistrés |
+| `POST` | `/api/gallery/upload` | Ajouter un nouveau dessin (Multer) |
 
 ---
 
