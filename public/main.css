@@ -566,6 +566,11 @@ p {
     opacity: 1;
 }
 
+.btn-card::before,
+.btn-card::after {
+    pointer-events: none !important;
+}
+
 .btn-card:hover {
     background: var(--glass-hover);
     border-color: rgba(99, 102, 241, 0.3);
@@ -762,6 +767,17 @@ select:focus {
     border-color: var(--accent);
     background: var(--glass-hover);
     z-index: 10;
+    pointer-events: auto !important;
+}
+
+/* Global Interactivity Guarantee */
+input,
+textarea,
+select,
+button,
+a,
+.filter-btn {
+    pointer-events: auto !important;
 }
 
 textarea {
