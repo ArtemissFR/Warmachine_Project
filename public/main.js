@@ -10,6 +10,10 @@ const clearOverlays = () => {
     }
     if (splashScreen) {
         document.body.classList.add('loaded');
+        setTimeout(() => {
+            splashScreen.style.display = 'none';
+            splashScreen.style.pointerEvents = 'none';
+        }, 800);
     }
     console.log("Overlays cleared.");
 };
@@ -93,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
                 initDashboard(user);
             }
-            if (typeof renderGymData === 'function') renderGymData();
+            // Call rendering functions if they exist in scope
+            if (typeof window.renderGymData === 'function') window.renderGymData();
         } else {
             currentUser = null;
             if (loginBtn) loginBtn.style.display = 'block';
@@ -466,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const renderGymData = async () => {
+            window.renderGymData = async () => {
                 const data = await getGymData();
                 const targets = await getTargets();
 
