@@ -811,18 +811,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Weight Modal & Form
-            const openWeightBtn = document.getElementById('open-weight-modal');
             const weightModal = document.getElementById('weight-modal');
             const weightModalClose = document.getElementById('weight-modal-close');
             const weightForm = document.getElementById('weight-form');
 
-            if (openWeightBtn && weightModal) {
-                openWeightBtn.onclick = () => {
+            const openWeight = () => {
+                if (weightModal) {
                     weightModal.classList.add('active');
-                    document.getElementById('body-date').valueAsDate = new Date();
-                };
-                if (weightModalClose) weightModalClose.onclick = () => weightModal.classList.remove('active');
-            }
+                    const dateInput = document.getElementById('body-date');
+                    if (dateInput) dateInput.valueAsDate = new Date();
+                }
+            };
+
+            document.querySelectorAll('.btn-weight-trigger').forEach(btn => {
+                btn.onclick = openWeight;
+            });
+
+            if (weightModalClose) weightModalClose.onclick = () => weightModal.classList.remove('active');
 
             if (weightForm) {
                 weightForm.onsubmit = async (e) => {
@@ -912,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. Gallery & Lightbox (gallery.html)
     try {
         const galleryContainer = document.querySelector('.gallery');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        const filterBtns = document.querySelectorAll('.filter-container .filter-btn');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxClose = document.querySelector('.lightbox-close');
