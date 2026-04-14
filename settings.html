@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE OPS — Sys-Config</title>
+<meta name="description" content="CORE OPS SYS-CONFIG — Configuration du système, personnalisation de l'interface et gestion du profil utilisateur.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+<nexus-background></nexus-background>
+<nexus-navbar active="settings"></nexus-navbar>
+
+<header class="page-header">
+  <div class="page-label">MODULE — SYSTEM CONFIGURATION</div>
+  <h1 class="page-title neon-text">SYS-CON<span>FIG</span></h1>
+  <div class="page-divider"></div>
+</header>
+
+<main class="page-content">
+  <div class="training-grid">
+    
+    <!-- CARTE 1: PROFIL BIO-DATA -->
+    <div class="training-card">
+      <div class="tc-icon">🧬</div>
+      <div class="tc-label">IDENTITÉ</div>
+      <div class="tc-title">PROFIL : BIO-DATA</div>
+      <div class="tc-text">Informations physiologiques de base.</div>
+      <div style="margin-top:1.5rem;">
+        <div class="modal-field">
+          <label>NOM / PSEUDO</label>
+          <input type="text" id="setName" placeholder="votre nom..."/>
+        </div>
+        <div class="modal-field">
+          <label>GENRE</label>
+          <select id="setGender">
+            <option value="M">Homme</option>
+            <option value="F">Femme</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div class="modal-field" style="flex:1;">
+            <label>ÂGE</label>
+            <input type="number" id="setAge" placeholder="ex: 25"/>
+          </div>
+          <div class="modal-field" style="flex:1;">
+            <label>TAILLE (CM)</label>
+            <input type="number" id="setHeight" placeholder="ex: 180"/>
+          </div>
+        </div>
+        <button class="btn-confirm" id="saveBioData" style="width:100%; margin-top:1rem;">SAUVEGARDER BIO-DATA</button>
+      </div>
+    </div>
+
+    <!-- CARTE 2: PROFIL OBJECTIFS -->
+    <div class="training-card">
+      <div class="tc-icon">🎯</div>
+      <div class="tc-label">PROGRESSION</div>
+      <div class="tc-title">PROFIL : OBJECTIFS</div>
+      <div class="tc-text">Cibles physiques et poids actuel.</div>
+      <div style="margin-top:1.5rem;">
+        <div class="modal-field">
+          <label>TYPE D'OBJECTIF</label>
+          <select id="setGoal">
+            <option value="bulking">Prise de masse (Bulk)</option>
+            <option value="cutting">Sèche (Cut)</option>
+            <option value="maintenance">Maintenance</option>
+            <option value="strength">Force pure</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>POIDS ACTUEL (KG)</label>
+          <input type="number" step="0.1" id="setWeightCurrent" placeholder="votre poids..."/>
+        </div>
+        <div class="modal-field">
+          <label>POIDS CIBLE (KG)</label>
+          <input type="number" step="0.1" id="setWeightGoal" placeholder="votre objectif..."/>
+        </div>
+        <button class="btn-confirm" id="saveGoalData" style="width:100%; margin-top:1rem;">SAUVEGARDER OBJECTIFS</button>
+      </div>
+    </div>
+
+    <!-- CARTE 3: APPARENCE VISUELLE -->
+    <div class="training-card">
+      <div class="tc-icon">🎨</div>
+      <div class="tc-label">VISUEL</div>
+      <div class="tc-title">INTERFACE : DESIGN</div>
+      <div class="tc-text">Thème et identité visuelle du portail.</div>
+      <div style="margin-top:1.5rem;">
+        <div style="margin-bottom:1.5rem;">
+          <label style="font-family:var(--font-display); font-size:0.65rem; color:var(--text-dim); letter-spacing:0.1em; display:block; margin-bottom:10px;">MULTIVERS : CHOIX DU VARIANT</label>
+          <div class="variant-picker">
+             <button class="variant-head" data-variant="allen" title="Allen the Alien" style="background-image: url('assets/images/icon%20person/Allen.png');"></button>
+             <button class="variant-head" data-variant="eve" title="Atom Eve" style="background-image: url('assets/images/icon%20person/Eve.png');"></button>
+             <button class="variant-head" data-variant="robot" title="Robot" style="background-image: url('assets/images/icon%20person/Robot.png');"></button>
+             <button class="variant-head" data-variant="zack" title="Zack" style="background-image: url('assets/images/icon%20person/Zack.png');"></button>
+             <button class="variant-head" data-variant="invincible_classic" title="Classic Invincible" style="background-image: url('assets/images/icon%20person/Invincible.jpg');"></button>
+             <button class="variant-head" data-variant="invincible_blue" title="Blue Suit Invincible" style="background-image: url('assets/images/icon%20person/Invincible%20Blue.jpg');"></button>
+             <button class="variant-head" data-variant="omniman" title="Omni-Man" style="background-image: url('assets/images/icon%20person/Omniman.jpg');"></button>
+             <button class="variant-head" data-variant="conquest" title="Conquest" style="background-image: url('assets/images/icon%20person/Conquest.jpg');"></button>
+             <button class="variant-head" data-variant="thragg" title="Grand Regent Thragg" style="background-image: url('assets/images/icon%20person/Thragg.jpg');"></button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span>Mode Visuel</span>
+          <button class="theme-btn" id="page-theme-toggle">🌙 Sombre</button>
+        </div>
+        <div class="settings-row">
+          <span>Couleur d'Accent</span>
+          <input type="color" id="page-accent-picker" style="width:40px;height:40px;padding:0;border:none;background:none;cursor:pointer;">
+        </div>
+        <div class="modal-field" style="margin-top:1rem;">
+          <label>INTENSITÉ DU SCAN (%)</label>
+          <input type="range" id="scanIntensity" min="0" max="100" value="100" style="width:100%; height:8px; cursor:pointer;">
+        </div>
+      </div>
+    </div>
+
+    <!-- CARTE 4: SYSTÈME & ASSISTANT -->
+    <div class="training-card">
+      <div class="tc-icon">⚙️</div>
+      <div class="tc-label">CONFIG</div>
+      <div class="tc-title">SYSTÈME : HUB</div>
+      <div class="tc-text">Paramètres techniques et assistant CORE.</div>
+      <div style="margin-top:1.5rem;">
+        <div class="settings-row">
+          <span>Sons du site</span>
+          <button class="theme-btn" id="sound-toggle">🔊 Activé</button>
+        </div>
+        <div class="settings-row">
+          <span>Mode Vidéo Fond</span>
+          <select id="bgVideoMode" style="background:rgba(255,255,255,0.05); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px;">
+            <option value="playlist">🔄 Playlist Aléatoire</option>
+            <option value="fixed">📌 Vidéo Fixe</option>
+          </select>
+        </div>
+        <div class="settings-row" id="fixedVideoRow" style="display:none;">
+          <span>Sélection Vidéo</span>
+          <select id="bgVideoSelect" style="background:rgba(255,255,255,0.05); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px;">
+            <option value="0">Tech-Jacket</option>
+            <option value="1">Invincible Variants</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Mode Performance (Effets)</span>
+          <button class="theme-btn" id="perf-mode-toggle">🚀 Épic</button>
+        </div>
+        <div class="settings-row">
+          <span>Personnalité de l'Assistant</span>
+          <select id="assistantPersonality" style="background:rgba(255,255,255,0.05); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px;">
+            <option value="encouraging">😊 Encourageant</option>
+            <option value="military">🎖️ Instructeur</option>
+            <option value="sarcastic">😏 Cynique</option>
+          </select>
+        </div>
+        <p style="font-size: 0.65rem; color: var(--text-dim); margin-top: 2rem; font-style: italic; text-align: center;">
+             CORE OPS v3.2 ELITE — SYSTÈME OPÉRATIONNEL
+        </p>
+      </div>
+    </div>
+
+
+
+  </div>
+</main>
+
+<nexus-footer page="settings"></nexus-footer>
+<nexus-assistant></nexus-assistant>
+
+<script src="js/core.js"></script>
+<script src="js/components.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/stars.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>

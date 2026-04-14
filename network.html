@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE OPS — Nebula Link</title>
+<meta name="description" content="CORE OPS NEBULA LINK — Votre centre de commandement pour les connexions sociales et les flux de données.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<nexus-background></nexus-background>
+<nexus-navbar active="network"></nexus-navbar>
+
+<header class="page-header">
+  <div class="page-label">MODULE 02 — NEBULA LINK</div>
+  <h1 class="page-title neon-text">NEBULA<span> LINK</span></h1>
+  <div class="page-divider"></div>
+</header>
+
+<main class="page-content">
+  <!-- Admin Notes Section -->
+  <div id="adminNotesContainer" style="display:none; margin-bottom:2rem; background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:12px; padding:1.5rem;">
+    <div class="section-title">ADMIN MISSION NOTES</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+        <textarea id="adminNotesArea" style="width:100%; height:150px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:var(--text-primary); font-family:monospace; font-size:0.85rem; padding:10px; border-radius:8px; outline:none; resize:none;" placeholder="Tapez vos notes ici (Markdown supporté)..."></textarea>
+        <div id="adminNotesPreview" class="tc-text" style="height:150px; overflow-y:auto; padding:10px; border:1px solid rgba(255,255,255,0.05); border-radius:8px; background:rgba(255,255,255,0.02); line-height:1.6;"></div>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="hub-search">
+    <input type="text" id="hubSearch" placeholder="Rechercher un service..." />
+    <div style="font-family:var(--font-body);font-size:0.7rem;color:var(--text-secondary);white-space:nowrap;" id="hubCount">0 services</div>
+    <button id="adminToggleBtn" class="filter-btn" style="margin-left:auto;white-space:nowrap;">🔒 Mode Admin</button>
+  </div>
+
+  <!-- Hub cards grid -->
+  <div class="hub-grid" id="hubGrid">
+    <!-- Cards rendered by JS -->
+  </div>
+</main>
+
+<!-- Add service modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-box">
+    <div class="modal-title">➕ AJOUTER UN SERVICE</div>
+    <div class="modal-field">
+      <label>NOM DU SERVICE</label>
+      <input type="text" id="svcName" placeholder="ex: Plex, Nextcloud..." />
+    </div>
+    <div class="modal-field">
+      <label>URL / IP:PORT</label>
+      <input type="text" id="svcUrl" placeholder="ex: http://192.168.1.10:8096" />
+    </div>
+    <div class="modal-field">
+      <label>DESCRIPTION</label>
+      <input type="text" id="svcDesc" placeholder="ex: Media server" />
+    </div>
+    <div class="modal-field">
+      <label>ICÔNE (emoji)</label>
+      <input type="text" id="svcIcon" placeholder="🎬" maxlength="4" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('addModal').classList.remove('active')">ANNULER</button>
+      <button class="btn-confirm" id="confirmModal">AJOUTER</button>
+    </div>
+  </div>
+</div>
+
+<nexus-footer page="network"></nexus-footer>
+<nexus-assistant></nexus-assistant>
+
+<script src="js/core.js"></script>
+<script src="js/components.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/stars.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/network.js"></script>
+</body>
+</html>

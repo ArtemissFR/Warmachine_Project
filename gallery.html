@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE OPS — Visual Archive</title>
+<meta name="description" content="CORE OPS VISUAL ARCHIVE — Une collection visuelle de créations, photos et inspirations artistiques dans un univers cyberpunk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+<nexus-background></nexus-background>
+<nexus-navbar active="gallery"></nexus-navbar>
+
+<header class="page-header">
+  <div class="page-label">MODULE 03 — VISUAL ARCHIVE</div>
+  <h1 class="page-title neon-text">VISUAL<span> ARCHIVE</span></h1>
+  <div class="page-divider"></div>
+</header>
+
+<main class="page-content">
+
+  <!-- Filters & Sorting -->
+  <div class="gallery-filters" style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; gap:0.8rem;">
+      <button class="filter-btn active" data-filter="all">TOUT</button>
+      <button class="filter-btn" data-filter="dessin">✒️ DESSINS</button>
+      <button class="filter-btn" data-filter="ia">🤖 ART IA</button>
+    </div>
+    
+    <div style="display:flex; align-items:center; gap:10px;">
+        <label style="font-family:var(--font-display); font-size:0.6rem; color:var(--text-dim); letter-spacing:0.1em;">TRIER PAR</label>
+        <select id="gallerySort" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:var(--text-primary); font-family:var(--font-body); padding:6px 12px; border-radius:4px; outline:none; font-size:0.75rem; cursor:pointer;">
+            <option value="newest">PLUS RÉCENT</option>
+            <option value="oldest">PLUS ANCIEN</option>
+            <option value="az">NOM (A-Z)</option>
+        </select>
+    </div>
+  </div>
+
+  <!-- Gallery -->
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item" data-cat="dessin">
+      <div class="gallery-placeholder">✒️</div>
+      <div class="gallery-info">
+        <div class="gallery-tag">DESSIN</div>
+        <div class="gallery-name">Ajoute ton premier dessin</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-cat="ia">
+      <div class="gallery-placeholder">🤖</div>
+      <div class="gallery-info">
+        <div class="gallery-tag">ART IA</div>
+        <div class="gallery-name">Ajoute ta première image IA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload zone -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
+    <div class="upload-icon">↑</div>
+    <div class="upload-text">DÉPOSER DES IMAGES ICI</div>
+    <div class="upload-sub">ou cliquer pour sélectionner · PNG, JPG, WEBP · max 20 Mo</div>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="filter-btn" onclick="document.getElementById('fileInput').click();">📂 PARCOURIR</button>
+    </div>
+  </div>
+
+  <!-- Add modal -->
+  <div class="modal-overlay" id="addImgModal">
+    <div class="modal-box">
+      <div class="modal-title">🖼️ AJOUTER À LA GALERIE</div>
+      <div id="previewContainer" style="margin-bottom:1.5rem;text-align:center;"></div>
+      <div class="modal-field">
+        <label>TITRE</label>
+        <input type="text" id="imgTitle" placeholder="Nom de l'œuvre..." />
+      </div>
+      <div class="modal-field">
+        <label>CATÉGORIE</label>
+        <select id="imgCat">
+          <option value="dessin">✒️ Dessin</option>
+          <option value="ia">🤖 Art IA</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelImgModal">ANNULER</button>
+        <button class="btn-confirm" id="confirmImgModal">AJOUTER</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lbClose">✖ FERMER</button>
+    <img id="lbImg" src="" alt="Preview" />
+    <div id="lbCaption" style="text-align:center;margin-top:1rem;font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.2em;color:var(--text-secondary);"></div>
+  </div>
+</div>
+
+<nexus-footer page="gallery"></nexus-footer>
+<nexus-assistant></nexus-assistant>
+
+<script src="js/core.js"></script>
+<script src="js/components.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/stars.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/gallery.js"></script>
+</body>
+</html>
