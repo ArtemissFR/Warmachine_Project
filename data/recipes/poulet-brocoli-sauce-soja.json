@@ -1,0 +1,12 @@
+{
+  "id": "poulet-brocoli-sauce-soja",
+  "name": "Poulet & brocoli sauce soja",
+  "emoji": "🥦",
+  "tags": ["proteine", "lowcal", "cutting", "rapide"],
+  "kcal": 310, "prot": 44, "gluc": 12, "lip": 8,
+  "time": "15 min", "portions": 1,
+  "desc": "Combo hardcore de la sèche — poulet maigre, brocoli anti-estrogène, sauce soja sans sucre.",
+  "ingredients": "200g blanc de poulet\n250g brocoli\n2 c.s. sauce soja\n1 c.c. huile de sésame\n2 gousses d'ail\nGingembre frais râpé",
+  "instructions": "1. Coupez le poulet en lanières. Détaillez le brocoli en fleurettes.\n2. Faites chauffer l'huile à feu vif.\n3. Saisissez le poulet 5 min.\n4. Ajoutez le brocoli, l'ail et le gingembre, cuisez 4 min.\n5. Ajoutez la sauce soja, mélangez 1 min et servez.",
+  "source": "builtin"
+}

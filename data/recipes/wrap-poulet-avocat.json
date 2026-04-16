@@ -1,0 +1,12 @@
+{
+  "id": "wrap-poulet-avocat",
+  "name": "Wrap poulet grillé & avocat",
+  "emoji": "🥙",
+  "tags": ["proteine", "rapide"],
+  "kcal": 490, "prot": 40, "gluc": 34, "lip": 18,
+  "time": "12 min", "portions": 1,
+  "desc": "Wrap complet et gourmand, idéal en repas transportable pour les repas entre deux entraînements.",
+  "ingredients": "150g blanc de poulet\n1 tortilla complète\n1/2 avocat\n1 feuille laitue\n1 tomate\n1 c.s. fromage blanc 0%\nJus de citron, sel, poivre, paprika",
+  "instructions": "1. Grillez le poulet assaisonné, coupez en lamelles.\n2. Écrasez l'avocat avec le jus de citron, sel et poivre.\n3. Étalez le fromage blanc sur la tortilla.\n4. Ajoutez l'avocat, la laitue, la tomate et le poulet.\n5. Roulez serré et coupez en deux.",
+  "source": "builtin"
+}

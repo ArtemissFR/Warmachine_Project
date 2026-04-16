@@ -1,0 +1,12 @@
+{
+  "id": "crevettes-wok-riz",
+  "name": "Crevettes sautées wok & riz",
+  "emoji": "🍤",
+  "tags": ["proteine", "rapide", "lowcal"],
+  "kcal": 390, "prot": 34, "gluc": 44, "lip": 7,
+  "time": "15 min", "portions": 1,
+  "desc": "Plat asiatique express — crevettes juteuses, légumes croquants, sauce soja.",
+  "ingredients": "200g crevettes décortiquées\n80g riz basmati cru\n1 poivron\n2 champignons\n1 c.s. sauce soja\n1 c.c. huile de sésame\nGingembre, ail",
+  "instructions": "1. Faites cuire le riz.\n2. Faites sauter les légumes 3 min dans l'huile de sésame.\n3. Ajoutez les crevettes et l'ail, cuire 3 min.\n4. Déglacez avec la sauce soja.\n5. Servez sur le riz.",
+  "source": "builtin"
+}

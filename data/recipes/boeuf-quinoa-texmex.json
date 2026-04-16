@@ -1,0 +1,12 @@
+{
+  "id": "boeuf-quinoa-texmex",
+  "name": "Bowl boeuf haché & quinoa tex-mex",
+  "emoji": "🌮",
+  "tags": ["proteine", "bulking"],
+  "kcal": 480, "prot": 40, "gluc": 48, "lip": 10,
+  "time": "20 min", "portions": 1,
+  "desc": "Bowl tex-mex complet avec boeuf maigre, quinoa et maïs. Idéal pour la prise de masse.",
+  "ingredients": "160g viande hachée 5%\n80g quinoa cru\n50g maïs en boîte\n1 tomate\n1/2 poivron rouge\nCumin, paprika, ail, sel, poivre",
+  "instructions": "1. Faites cuire le quinoa 12 min.\n2. Faites revenir la viande hachée avec cumin et paprika.\n3. Ajoutez le maïs et le poivron en dés, cuire 3 min.\n4. Servez dans un bol : quinoa, viande, tomate fraîche.",
+  "source": "builtin"
+}

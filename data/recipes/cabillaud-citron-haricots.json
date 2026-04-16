@@ -1,0 +1,12 @@
+{
+  "id": "cabillaud-citron-haricots",
+  "name": "Cabillaud citronné & haricots verts",
+  "emoji": "🐠",
+  "tags": ["proteine", "lowcal", "cutting"],
+  "kcal": 230, "prot": 42, "gluc": 9, "lip": 3,
+  "time": "18 min", "portions": 1,
+  "desc": "Poisson blanc très lean, parfait en phase de sèche — riche en protéines, presque 0 lipides.",
+  "ingredients": "220g dos de cabillaud\n200g haricots verts\n1 citron\n2 gousses d'ail\n1 c.c. huile d'olive\nPersil, sel, poivre",
+  "instructions": "1. Faites cuire les haricots verts 8 min à la vapeur.\n2. Poêlez le cabillaud 3-4 min de chaque côté avec l'ail.\n3. Déglacez avec le jus de citron.\n4. Servez avec les haricots verts et le persil haché.",
+  "source": "builtin"
+}

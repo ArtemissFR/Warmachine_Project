@@ -155,6 +155,7 @@
 .badge-vegan   { background:rgba(57,255,20,.08);  color:#7fff7f;          border:1px solid rgba(57,255,20,.2); }
 .badge-cutting { background:rgba(157,80,187,.12); color:#c97de8;          border:1px solid rgba(157,80,187,.3); }
 .badge-rapide  { background:rgba(255,100,50,.12); color:#ff9060;          border:1px solid rgba(255,100,50,.3); }
+.badge-ai      { background:rgba(100,160,255,.10); color:#90b8ff;          border:1px solid rgba(100,160,255,.3); letter-spacing:.06em; }
 
 .recipe-card-body { padding: 1.2rem 1.4rem 1.4rem; }
 .recipe-card-name { font-family:var(--font-display); font-size:.9rem; font-weight:700; letter-spacing:.08em; color:var(--text-primary); margin-bottom:.4rem; }
@@ -188,6 +189,58 @@
 /* ── FAB ─────────────────────────────────────────────── */
 .recipe-add-fab { position:fixed; bottom:2.5rem; right:2rem; z-index:500; width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); border:none; color:white; font-size:1.6rem; cursor:pointer; box-shadow:0 8px 30px rgba(0,212,255,.35); transition:all .3s ease; display:flex; align-items:center; justify-content:center; }
 .recipe-add-fab:hover { transform:scale(1.12) rotate(90deg); box-shadow:0 12px 40px rgba(0,212,255,.5); }
+
+/* ── MINI MEAL PANEL ─────────────────────────────────── */
+.mini-meal-panel {
+  position: fixed; right: 1.2rem; bottom: 6.5rem; z-index: 490;
+  width: 270px; max-height: 420px;
+  background: rgba(12,12,20,.92); border: 1px solid rgba(0,212,255,.2);
+  border-radius: 18px; backdrop-filter: blur(20px);
+  box-shadow: 0 16px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(0,212,255,.08);
+  overflow: hidden; display: flex; flex-direction: column;
+  /* Hidden by default */
+  opacity: 0; transform: translateY(20px) scale(.97);
+  pointer-events: none; transition: opacity .35s cubic-bezier(.16,1,.3,1), transform .35s cubic-bezier(.16,1,.3,1);
+}
+.mini-meal-panel.visible {
+  opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+}
+.mmp-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px 10px; border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0;
+}
+.mmp-title { font-family: var(--font-display); font-size: .65rem; letter-spacing: .18em; color: var(--neon-blue); flex: 1; }
+.mmp-badge { background: var(--neon-blue); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: .55rem; font-weight: 700; color: #000; }
+.mmp-clear { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: .8rem; padding: 2px 6px; border-radius: 4px; transition: all .2s; }
+.mmp-clear:hover { color: #ff4d6d; background: rgba(255,77,109,.1); }
+
+.mmp-items { overflow-y: auto; flex:1; padding: 8px 0; scrollbar-width:thin; scrollbar-color:rgba(0,212,255,.2) transparent; }
+.mmp-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px; transition: background .15s;
+}
+.mmp-item:hover { background: rgba(255,255,255,.03); }
+.mmp-emoji { font-size: 1.1rem; flex-shrink:0; }
+.mmp-info { flex:1; min-width:0; }
+.mmp-name { font-family: var(--font-display); font-size: .63rem; color: var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mmp-macros { font-family: var(--font-body); font-size: .58rem; color: var(--text-dim); margin-top: 1px; }
+.mmp-portions { display: flex; align-items: center; gap: 4px; flex-shrink:0; }
+.mmp-port-btn { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 5px; color: var(--text-secondary); width: 20px; height: 20px; cursor: pointer; font-size: .7rem; display:flex; align-items:center; justify-content:center; transition: all .15s; }
+.mmp-port-btn:hover { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,212,255,.08); }
+.mmp-port-num { font-family: var(--font-display); font-size: .65rem; color: var(--text-primary); min-width: 14px; text-align: center; }
+
+.mmp-footer {
+  border-top: 1px solid rgba(255,255,255,.06); padding: 10px 14px;
+  flex-shrink:0; display:grid; grid-template-columns: repeat(4,1fr); gap:4px;
+}
+.mmp-macro { text-align:center; }
+.mmp-macro .mv { font-family:var(--font-display); font-size:.72rem; font-weight:700; display:block; }
+.mmp-macro .ml { font-family:var(--font-body); font-size:.48rem; color:var(--text-dim); text-transform:uppercase; }
+.mmp-macro.mk .mv { color:var(--neon-gold); }
+.mmp-macro.mp .mv { color:var(--neon-green); }
+.mmp-macro.mg .mv { color:var(--neon-blue); }
+.mmp-macro.ml2 .mv { color:#c97de8; }
 
 /* ── TOAST ───────────────────────────────────────────── */
 .recipe-toast { position:fixed; bottom:6rem; left:50%; transform:translateX(-50%) translateY(30px); background:rgba(15,15,25,.92); border:1px solid var(--neon-blue); border-radius:12px; padding:12px 24px; font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; color:var(--neon-blue); z-index:9999; opacity:0; transition:all .4s cubic-bezier(.16,1,.3,1); pointer-events:none; backdrop-filter:blur(16px); box-shadow:0 0 30px rgba(0,212,255,.2); }
@@ -429,6 +482,22 @@
 
 <!-- Toast -->
 <div class="recipe-toast" id="recipeToast"></div>
+
+<!-- ══ MINI MEAL PANEL ════════════════════════════════════ -->
+<div class="mini-meal-panel" id="miniMealPanel">
+  <div class="mmp-header">
+    <span class="mmp-badge" id="mmpBadge">0</span>
+    <span class="mmp-title">REPAS DU JOUR</span>
+    <button class="mmp-clear" onclick="clearDailyMeals()" title="Vider la journée">🗑</button>
+  </div>
+  <div class="mmp-items" id="mmpItems"></div>
+  <div class="mmp-footer" id="mmpFooter">
+    <div class="mmp-macro mk"><span class="mv" id="mmp-kcal">0</span><span class="ml">kcal</span></div>
+    <div class="mmp-macro mp"><span class="mv" id="mmp-prot">0g</span><span class="ml">prot</span></div>
+    <div class="mmp-macro mg"><span class="mv" id="mmp-gluc">0g</span><span class="ml">gluc</span></div>
+    <div class="mmp-macro ml2"><span class="mv" id="mmp-lip">0g</span><span class="ml">lip</span></div>
+  </div>
+</div>
 
 
 <!-- ══ RECIPE DETAIL MODAL ══════════════════════════════════ -->

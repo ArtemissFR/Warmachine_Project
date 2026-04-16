@@ -1,0 +1,12 @@
+{
+  "id": "pates-thon-tomates",
+  "name": "Pâtes complètes au thon & tomates",
+  "emoji": "🍝",
+  "tags": ["proteine", "rapide", "bulking"],
+  "kcal": 470, "prot": 40, "gluc": 58, "lip": 6,
+  "time": "15 min", "portions": 1,
+  "desc": "Pâtes express équilibrées — protéines du thon et glucides complexes des pâtes complètes.",
+  "ingredients": "100g pâtes complètes\n150g thon au naturel\n200g tomates concassées\n1 oignon\n2 gousses d'ail\nBasilic, origan, sel, poivre\n1 c.c. huile d'olive",
+  "instructions": "1. Faites cuire les pâtes selon les indications.\n2. Faites revenir l'oignon et l'ail dans l'huile 3 min.\n3. Ajoutez les tomates concassées et les épices, laissez réduire 7 min.\n4. Égouttez le thon et incorporez-le à la sauce.\n5. Mélangez avec les pâtes et servez.",
+  "source": "builtin"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "smoothie-bowl-proteines",
+  "name": "Smoothie bowl protéiné fraises & granola",
+  "emoji": "🥣",
+  "tags": ["proteine", "rapide", "bulking"],
+  "kcal": 370, "prot": 38, "gluc": 46, "lip": 5,
+  "time": "5 min", "portions": 1,
+  "desc": "Breakfast gourmand façon bowl — onctueux, frais et boosté en protéines.",
+  "ingredients": "200g yaourt grec\n1 scoop whey fraise (30g)\n100g fraises congelées\n30g flocons d'avoine\n1 banane (pour décorer)\n1 c.c. miel",
+  "instructions": "1. Mixez le yaourt grec, la whey et les fraises congelées jusqu'à obtenir une texture épaisse.\n2. Versez dans un bol.\n3. Disposez les flocons d'avoine, les tranches de banane.\n4. Arrosez de miel.",
+  "source": "builtin"
+}

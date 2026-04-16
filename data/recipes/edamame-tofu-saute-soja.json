@@ -1,0 +1,12 @@
+{
+  "id": "edamame-tofu-saute-soja",
+  "name": "Edamame & tofu sauté sauce soja",
+  "emoji": "🌿",
+  "tags": ["proteine", "vegan", "rapide"],
+  "kcal": 340, "prot": 28, "gluc": 20, "lip": 16,
+  "time": "12 min", "portions": 1,
+  "desc": "Plat vegan complet et riche en protéines végétales — idéal pour les adeptes du sport à base de plantes.",
+  "ingredients": "150g tofu ferme\n100g edamame\n80g riz basmati cuit\n2 c.s. sauce soja\n1 c.c. huile de sésame\nGingembre, ail, graines de sésame",
+  "instructions": "1. Coupez le tofu en cubes, séchez-le bien.\n2. Faites dorer le tofu dans l'huile de sésame 5 min jusqu'à ce qu'il soit croustillant.\n3. Ajoutez l'ail et le gingembre, cuisez 1 min.\n4. Ajoutez l'edamame et la sauce soja, mélangez 2 min.\n5. Servez sur riz, saupoudrez de sésame.",
+  "source": "builtin"
+}

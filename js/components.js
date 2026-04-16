@@ -31,7 +31,9 @@ class NexusNavbar extends HTMLElement {
 
 const NEXUS_PLAYLIST = [
     'assets/videos/Teck-jacket background video.mp4',
-    'assets/videos/Invincible Variants background video.mp4'
+    'assets/videos/Invincible Variants background video.mp4',
+    'assets/videos/Invincible Variants Background video 2.mp4',
+    'assets/videos/Join the Viltrumite background video.mp4',
 ];
 
 class NexusBackground extends HTMLElement {

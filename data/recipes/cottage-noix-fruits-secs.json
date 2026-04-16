@@ -1,0 +1,12 @@
+{
+  "id": "cottage-noix-fruits-secs",
+  "name": "Bowl cottage cheese, noix & fruits",
+  "emoji": "🥜",
+  "tags": ["proteine", "rapide"],
+  "kcal": 300, "prot": 26, "gluc": 18, "lip": 14,
+  "time": "4 min", "portions": 1,
+  "desc": "Collation riche en caséine naturelle — idéale avant de dormir pour la récupération musculaire.",
+  "ingredients": "200g fromage cottage\n20g cerneaux de noix\n1 pomme\n1 c.c. miel\nCannelle",
+  "instructions": "1. Versez le cottage cheese dans un bol.\n2. Coupez la pomme en petits dés.\n3. Ajoutez les noix, la pomme, le miel et saupoudrez de cannelle.",
+  "source": "builtin"
+}

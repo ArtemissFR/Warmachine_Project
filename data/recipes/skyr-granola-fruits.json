@@ -1,0 +1,12 @@
+{
+  "id": "skyr-granola-fruits",
+  "name": "Skyr & granola maison aux fruits",
+  "emoji": "🍓",
+  "tags": ["proteine", "rapide"],
+  "kcal": 310, "prot": 26, "gluc": 40, "lip": 4,
+  "time": "5 min", "portions": 1,
+  "desc": "Petit-déjeuner scandinave — skyr ultra protéiné, granola croquant et fruits frais.",
+  "ingredients": "200g skyr nature\n30g flocons d'avoine (toastés)\n100g fraises\n1 banane\n1 c.c. miel\nQuelques amandes effilées",
+  "instructions": "1. Versez le skyr dans un bol.\n2. Disposez les fruits coupés par-dessus.\n3. Ajoutez les flocons d'avoine et les amandes.\n4. Terminez avec un filet de miel.",
+  "source": "builtin"
+}

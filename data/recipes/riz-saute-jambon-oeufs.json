@@ -1,0 +1,12 @@
+{
+  "id": "riz-saute-jambon-oeufs",
+  "name": "Riz sauté jambon & oeufs",
+  "emoji": "🍚",
+  "tags": ["proteine", "rapide", "bulking"],
+  "kcal": 430, "prot": 34, "gluc": 50, "lip": 9,
+  "time": "10 min", "portions": 1,
+  "desc": "Version fitness du riz cantonais — rapide, économique, et parfait pour finir les restes.",
+  "ingredients": "150g riz blanc cuit (ou restes)\n2 tranches jambon blanc\n2 oeufs\n2 c.s. sauce soja\n1 c.c. huile de sésame\nOignon vert, poivre",
+  "instructions": "1. Faites chauffer l'huile de sésame dans un wok à feu vif.\n2. Battez les oeufs et cuisez-les en omelette brouillée rapide.\n3. Ajoutez le riz et le jambon coupé en dés.\n4. Versez la sauce soja, mélangez vigoureusement 2 min.\n5. Garnissez d'oignon vert.",
+  "source": "builtin"
+}

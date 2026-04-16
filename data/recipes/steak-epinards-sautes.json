@@ -1,0 +1,12 @@
+{
+  "id": "steak-epinards-sautes",
+  "name": "Steak de boeuf & épinards sautés à l'ail",
+  "emoji": "🥩",
+  "tags": ["proteine", "cutting", "lowcal"],
+  "kcal": 320, "prot": 48, "gluc": 4, "lip": 12,
+  "time": "15 min", "portions": 1,
+  "desc": "Combo fer + protéines par excellence — steak maigre et épinards sautés à l'ail.",
+  "ingredients": "180g steak de boeuf maigre\n200g épinards frais\n3 gousses d'ail\n1 c.c. huile d'olive\nSel, poivre, piment d'Espelette",
+  "instructions": "1. Faites chauffer une poêle à feu vif.\n2. Saisissez le steak 2-3 min de chaque côté selon la cuisson. Laissez reposer 3 min.\n3. Dans la même poêle, faites revenir l'ail 1 min puis ajoutez les épinards.\n4. Sautez 2-3 min jusqu'à ce qu'ils soient fondants.\n5. Servez le steak tranché sur les épinards.",
+  "source": "builtin"
+}

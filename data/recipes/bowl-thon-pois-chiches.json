@@ -1,0 +1,12 @@
+{
+  "id": "bowl-thon-pois-chiches",
+  "name": "Bowl thon & pois chiches méditerranéen",
+  "emoji": "🥗",
+  "tags": ["proteine", "lowcal", "rapide"],
+  "kcal": 360, "prot": 38, "gluc": 30, "lip": 8,
+  "time": "8 min", "portions": 1,
+  "desc": "Bowl méditerranéen express — plein de protéines et de fibres, zéro cuisson.",
+  "ingredients": "150g thon au naturel\n100g pois chiches égouttés\n1 tomate\n1/2 concombre\nQuelques olives noires\n1 c.s. huile d'olive\nCitron, origan, sel, poivre",
+  "instructions": "1. Égouttez le thon et les pois chiches.\n2. Coupez tomate et concombre en dés.\n3. Mélangez tous les ingrédients dans un bol.\n4. Assaisonnez avec huile, citron et origan.",
+  "source": "builtin"
+}

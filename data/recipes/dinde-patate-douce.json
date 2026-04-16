@@ -1,0 +1,12 @@
+{
+  "id": "dinde-patate-douce",
+  "name": "Blanc de dinde & patate douce rôtie",
+  "emoji": "🦃",
+  "tags": ["proteine", "cutting"],
+  "kcal": 380, "prot": 42, "gluc": 35, "lip": 4,
+  "time": "25 min", "portions": 1,
+  "desc": "Combo classique prise de masse sèche — protéines maigres et glucides complexes.",
+  "ingredients": "200g blanc de dinde\n150g patate douce\n1 c.s. huile d'olive\nRomarin, ail, sel, poivre",
+  "instructions": "1. Préchauffez le four à 200°C.\n2. Coupez la patate douce en cubes, enduisez d'huile et romarin, enfournez 20 min.\n3. Assaisonnez la dinde avec ail, sel et poivre.\n4. Grillez 5-6 min de chaque côté.\n5. Servez ensemble.",
+  "source": "builtin"
+}

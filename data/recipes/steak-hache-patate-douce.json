@@ -1,0 +1,12 @@
+{
+  "id": "steak-hache-patate-douce",
+  "name": "Steak haché 5% & purée patate douce",
+  "emoji": "🍠",
+  "tags": ["proteine", "bulking"],
+  "kcal": 450, "prot": 40, "gluc": 40, "lip": 8,
+  "time": "20 min", "portions": 1,
+  "desc": "Classique de la prise de masse — steak maigre et purée naturellement sucrée.",
+  "ingredients": "180g steak haché 5%\n250g patate douce\n1 c.c. beurre\nSel, poivre, ail en poudre, piment doux",
+  "instructions": "1. Cuisez la patate douce à la vapeur 15 min, écrasez avec le beurre et du sel.\n2. Assaisonnez le steak haché.\n3. Cuisez le steak à la poêle 4-5 min de chaque côté.\n4. Servez avec la purée.",
+  "source": "builtin"
+}

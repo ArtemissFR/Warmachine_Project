@@ -1,0 +1,12 @@
+{
+  "id": "omelette-epinards-feta",
+  "name": "Omelette épinards & feta",
+  "emoji": "🍳",
+  "tags": ["proteine", "rapide", "lowcal"],
+  "kcal": 290, "prot": 24, "gluc": 3, "lip": 20,
+  "time": "10 min", "portions": 1,
+  "desc": "Omelette moelleuse ultra protéinée, prête en 10 minutes.",
+  "ingredients": "3 oeufs entiers\n80g épinards frais\n30g feta émiettée\n1 c.c. beurre\nSel, poivre, muscade",
+  "instructions": "1. Battez les oeufs, salez et poivrez.\n2. Faites revenir les épinards 2 min dans le beurre.\n3. Versez les oeufs sur les épinards.\n4. Ajoutez la feta. Pliez l'omelette à mi-cuisson.\n5. Servez dès que le centre est pris.",
+  "source": "builtin"
+}

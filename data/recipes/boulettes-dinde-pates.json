@@ -1,0 +1,12 @@
+{
+  "id": "boulettes-dinde-pates",
+  "name": "Boulettes de dinde & pâtes complètes",
+  "emoji": "🍝",
+  "tags": ["proteine", "bulking"],
+  "kcal": 520, "prot": 46, "gluc": 54, "lip": 10,
+  "time": "25 min", "portions": 2,
+  "desc": "Version saine des spaghetti boulettes — protéines maigres et pâtes complètes.",
+  "ingredients": "250g blanc de dinde haché\n120g pâtes complètes\n200g tomates concassées\n1 oignon\n2 gousses d'ail\nOrigan, basilic, sel, poivre\n1 c.s. huile d'olive",
+  "instructions": "1. Mélangez la dinde hachée avec l'ail, l'origan, sel et poivre. Formez des boulettes.\n2. Faites cuire les pâtes selon le paquet.\n3. Dorez les boulettes 8-10 min à la poêle.\n4. Ajoutez l'oignon haché puis les tomates. Laissez mijoter 10 min.\n5. Servez sur les pâtes.",
+  "source": "builtin"
+}

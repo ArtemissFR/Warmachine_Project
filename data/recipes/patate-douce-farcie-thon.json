@@ -1,0 +1,12 @@
+{
+  "id": "patate-douce-farcie-thon",
+  "name": "Patate douce farcie au thon",
+  "emoji": "🍠",
+  "tags": ["proteine", "lowcal", "cutting"],
+  "kcal": 350, "prot": 34, "gluc": 44, "lip": 4,
+  "time": "30 min", "portions": 1,
+  "desc": "Plat simple et original — la patate douce farcie remplace le pain et donne une touche sucrée-salée parfaite.",
+  "ingredients": "1 grosse patate douce (250g)\n150g thon au naturel\n2 c.s. fromage blanc 0%\n1 c.c. moutarde\nCiboulette, sel, poivre, citron",
+  "instructions": "1. Faites cuire la patate douce au four 25 min à 200°C ou 8 min au micro-ondes.\n2. Égouttez le thon, mélangez avec le fromage blanc, la moutarde, le citron et la ciboulette.\n3. Coupez la patate en deux dans la longueur.\n4. Garnissez généreusement avec la préparation au thon.",
+  "source": "builtin"
+}

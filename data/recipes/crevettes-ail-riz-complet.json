@@ -1,0 +1,12 @@
+{
+  "id": "crevettes-ail-riz-complet",
+  "name": "Crevettes à l'ail & riz complet",
+  "emoji": "🦐",
+  "tags": ["proteine", "lowcal"],
+  "kcal": 400, "prot": 36, "gluc": 48, "lip": 6,
+  "time": "18 min", "portions": 1,
+  "desc": "Plat simple et efficace — crevettes maigres sur riz complet pour un apport protéiné et des glucides à IG bas.",
+  "ingredients": "200g crevettes décortiquées\n80g riz complet cru\n4 gousses d'ail\n1 c.s. sauce soja\n1 c.c. huile d'olive\nPersil, piment, poivre",
+  "instructions": "1. Faites cuire le riz complet (environ 25 min).\n2. Faites chauffer l'huile, ajoutez l'ail haché 1 min.\n3. Ajoutez les crevettes et le piment, cuisez 3-4 min.\n4. Déglacez avec la sauce soja.\n5. Servez sur le riz avec le persil.",
+  "source": "builtin"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "sardines-tartines-avocat",
+  "name": "Tartines sardines & avocat",
+  "emoji": "🐟",
+  "tags": ["proteine", "rapide"],
+  "kcal": 410, "prot": 28, "gluc": 26, "lip": 22,
+  "time": "5 min", "portions": 1,
+  "desc": "Snack ou repas léger ultra rapide — combo oméga-3 du saumon et bons gras de l'avocat.",
+  "ingredients": "1 boîte sardines à l'huile (100g égouttée)\n1/2 avocat\n2 tranches de pain complet\n1 tomate\nJus de citron, sel, poivre, herbes",
+  "instructions": "1. Toastez le pain.\n2. Écrasez l'avocat avec le jus de citron, sel et poivre.\n3. Étalez l'avocat sur les tartines.\n4. Ajoutez les sardines émiettées et la tomate en tranches.\n5. Saupoudrez d'herbes aromatiques.",
+  "source": "builtin"
+}

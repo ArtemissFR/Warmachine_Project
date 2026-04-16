@@ -1,0 +1,12 @@
+{
+  "id": "poulet-curry-riz-basmati",
+  "name": "Poulet curry doux & riz basmati",
+  "emoji": "🍛",
+  "tags": ["proteine", "bulking"],
+  "kcal": 460, "prot": 46, "gluc": 42, "lip": 8,
+  "time": "25 min", "portions": 2,
+  "desc": "Curry léger et savoureux — curcuma, gingembre et lait de coco allégé pour des protéines sans culpabilité.",
+  "ingredients": "250g blanc de poulet\n80g riz basmati cru\n100ml lait de coco léger\n1 oignon\n2 gousses d'ail\n1 c.s. curry en poudre\nCurcuma, gingembre, sel\n1 c.c. huile d'olive",
+  "instructions": "1. Faites cuire le riz basmati.\n2. Faites revenir l'oignon et l'ail dans l'huile 3 min.\n3. Ajoutez le poulet en dés et faites dorer 5 min.\n4. Ajoutez curry, curcuma, gingembre, puis le lait de coco.\n5. Laissez mijoter 12 min. Servez sur le riz.",
+  "source": "builtin"
+}

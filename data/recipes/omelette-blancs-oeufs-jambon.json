@@ -1,0 +1,12 @@
+{
+  "id": "omelette-blancs-oeufs-jambon",
+  "name": "Omelette blancs d'oeufs & jambon",
+  "emoji": "🥚",
+  "tags": ["proteine", "lowcal", "cutting", "rapide"],
+  "kcal": 190, "prot": 32, "gluc": 2, "lip": 5,
+  "time": "8 min", "portions": 1,
+  "desc": "Omelette extrême sèche — presque 0 lipide pour maximum de protéines. Idéale en coupe.",
+  "ingredients": "5 blancs d'oeufs\n2 tranches jambon blanc\n30g fromage blanc 0%\nCiboulette, sel, poivre, paprika",
+  "instructions": "1. Battez les blancs d'oeufs avec sel, poivre et paprika.\n2. Coupez le jambon en petits dés.\n3. Versez les blancs dans une poêle anti-adhésive légèrement huilée.\n4. Ajoutez le jambon et le fromage blanc.\n5. Repliez l'omelette et servez.",
+  "source": "builtin"
+}

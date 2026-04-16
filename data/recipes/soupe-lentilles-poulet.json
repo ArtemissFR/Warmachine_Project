@@ -1,0 +1,12 @@
+{
+  "id": "soupe-lentilles-poulet",
+  "name": "Soupe lentilles & poulet",
+  "emoji": "🍲",
+  "tags": ["proteine", "bulking"],
+  "kcal": 420, "prot": 40, "gluc": 42, "lip": 6,
+  "time": "30 min", "portions": 2,
+  "desc": "Soupe réconfortante et ultra nutritive — parfaite pour les journées froides.",
+  "ingredients": "150g blanc de poulet\n120g lentilles vertes\n1 carotte\n1 oignon\n2 gousses d'ail\n1 c.s. huile d'olive\nCumin, curcuma, sel, poivre\n700ml bouillon de poulet",
+  "instructions": "1. Hachez l'oignon et l'ail, faites revenir dans l'huile 3 min.\n2. Ajoutez la carotte en dés, les épices, mélangez 1 min.\n3. Ajoutez le bouillon, les lentilles et le poulet coupé en dés.\n4. Laissez mijoter 25 minutes à couvert.\n5. Vérifiez l'assaisonnement avant de servir.",
+  "source": "builtin"
+}

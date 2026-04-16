@@ -1,100 +1,81 @@
 /**
- * CORE OPS — RECIPES BUNDLE
- * ─────────────────────────────────────────────────────────────
- * Ce fichier est généré automatiquement à partir des fichiers
- * individuels dans data/recipes/*.json
+ * CORE OPS — RECIPES BUNDLE  v2.0
+ * ─────────────────────────────────────────────────────────────────
+ * Généré automatiquement à partir des fichiers data/recipes/*.json
  *
  * Pour ajouter une recette built-in :
  *   1. Créez son fichier JSON dans data/recipes/
- *   2. Ajoutez l'entrée dans l'array BUILTIN_RECIPES ci-dessous
- *   3. Ajoutez le nom du fichier dans data/recipes/index.json
- * ─────────────────────────────────────────────────────────────
+ *   2. Ajoutez l'entrée dans data/recipes/index.json
+ *   3. Ajoutez l'objet dans window.BUILTIN_RECIPES ci-dessous
+ * ─────────────────────────────────────────────────────────────────
  */
 
 window.BUILTIN_RECIPES = [
 
-  // ── poulet-riz-basmati.json ──────────────────────────────
-  {
-    "id": "poulet-riz-basmati",
-    "name": "Poulet grillé & riz basmati",
-    "emoji": "🍗",
-    "tags": ["proteine", "cutting"],
-    "kcal": 420, "prot": 48, "gluc": 38, "lip": 7,
-    "time": "20 min", "portions": 1,
-    "desc": "Repas post-workout classique, ultra protéiné et rassasiant.",
-    "ingredients": "200g blanc de poulet\n80g riz basmati cru\n1 c.s. huile d'olive\nSel, poivre, paprika, ail en poudre",
-    "instructions": "1. Assaisonnez le blanc de poulet avec sel, poivre, paprika et ail.\n2. Faites cuire le riz basmati selon le paquet (env. 12 min).\n3. Grillez le poulet 6 min de chaque côté.\n4. Servez avec la portion de riz.",
-    "source": "builtin"
-  },
+  // ── RECETTES ORIGINALES ──────────────────────────────────────
 
-  // ── oeufs-brouilles-feta.json ────────────────────────────
-  {
-    "id": "oeufs-brouilles-feta",
-    "name": "Oeufs brouillés à la feta",
-    "emoji": "🥚",
-    "tags": ["proteine", "rapide", "lowcal"],
-    "kcal": 260, "prot": 24, "gluc": 3, "lip": 17,
-    "time": "8 min", "portions": 1,
-    "desc": "Petit-déjeuner rapide et riche en protéines pour bien démarrer.",
-    "ingredients": "3 œufs entiers\n30g feta émiettée\n1 c.c. beurre\nCiboulette, sel, poivre",
-    "instructions": "1. Battez les œufs avec sel et poivre.\n2. Faites fondre le beurre à feu doux.\n3. Ajoutez les œufs et remuez lentement.\n4. Incorporez la feta juste avant la fin.\n5. Servez saupoudré de ciboulette.",
-    "source": "builtin"
-  },
+  { "id":"poulet-riz-basmati","name":"Poulet grillé & riz basmati","emoji":"🍗","tags":["proteine","cutting"],"kcal":420,"prot":48,"gluc":38,"lip":7,"time":"20 min","portions":1,"desc":"Repas post-workout classique, ultra protéiné et rassasiant.","ingredients":"200g blanc de poulet\n80g riz basmati cru\n1 c.s. huile d'olive\nSel, poivre, paprika, ail en poudre","instructions":"1. Assaisonnez le blanc de poulet avec sel, poivre, paprika et ail.\n2. Faites cuire le riz basmati selon le paquet (env. 12 min).\n3. Grillez le poulet 6 min de chaque côté.\n4. Servez avec la portion de riz.","source":"builtin"},
 
-  // ── bowl-saumon-avocat.json ──────────────────────────────
-  {
-    "id": "bowl-saumon-avocat",
-    "name": "Bowl Saumon Avocat",
-    "emoji": "🐟",
-    "tags": ["proteine", "lowcal"],
-    "kcal": 510, "prot": 42, "gluc": 28, "lip": 24,
-    "time": "15 min", "portions": 1,
-    "desc": "Bowl frais riche en oméga-3, parfait pour la récupération musculaire.",
-    "ingredients": "150g saumon fumé\n1/2 avocat\n80g riz blanc cuit\n1 c.s. sauce soja\nGraines de sésame, citron",
-    "instructions": "1. Disposez le riz dans un bol.\n2. Tranchez le saumon et l'avocat.\n3. Arrosez de sauce soja et jus de citron.\n4. Parsemez de graines de sésame.",
-    "source": "builtin"
-  },
+  { "id":"oeufs-brouilles-feta","name":"Oeufs brouillés à la feta","emoji":"🥚","tags":["proteine","rapide","lowcal"],"kcal":260,"prot":24,"gluc":3,"lip":17,"time":"8 min","portions":1,"desc":"Petit-déjeuner rapide et riche en protéines pour bien démarrer.","ingredients":"3 œufs entiers\n30g feta émiettée\n1 c.c. beurre\nCiboulette, sel, poivre","instructions":"1. Battez les œufs avec sel et poivre.\n2. Faites fondre le beurre à feu doux.\n3. Ajoutez les œufs et remuez lentement.\n4. Incorporez la feta juste avant la fin.\n5. Servez saupoudré de ciboulette.","source":"builtin"},
 
-  // ── shake-proteine-banane-cacao.json ─────────────────────
-  {
-    "id": "shake-proteine-banane-cacao",
-    "name": "Shake Protéiné Banane Cacao",
-    "emoji": "🥤",
-    "tags": ["proteine", "rapide", "bulking"],
-    "kcal": 380, "prot": 35, "gluc": 50, "lip": 5,
-    "time": "3 min", "portions": 1,
-    "desc": "Shake post-entraînement pour la récupération et la prise de masse.",
-    "ingredients": "1 scoop de whey vanille (30g)\n1 banane mûre\n250ml lait demi-écrémé\n1 c.s. cacao en poudre non sucré\n4 glaçons",
-    "instructions": "1. Mettez tous les ingrédients dans un blender.\n2. Mixez 30 secondes.\n3. Servez immédiatement.",
-    "source": "builtin"
-  },
+  { "id":"bowl-saumon-avocat","name":"Bowl Saumon Avocat","emoji":"🐟","tags":["proteine","lowcal"],"kcal":510,"prot":42,"gluc":28,"lip":24,"time":"15 min","portions":1,"desc":"Bowl frais riche en oméga-3, parfait pour la récupération musculaire.","ingredients":"150g saumon fumé\n1/2 avocat\n80g riz blanc cuit\n1 c.s. sauce soja\nGraines de sésame, citron","instructions":"1. Disposez le riz dans un bol.\n2. Tranchez le saumon et l'avocat.\n3. Arrosez de sauce soja et jus de citron.\n4. Parsemez de graines de sésame.","source":"builtin"},
 
-  // ── salade-thon-express.json ─────────────────────────────
-  {
-    "id": "salade-thon-express",
-    "name": "Salade de thon express",
-    "emoji": "🥗",
-    "tags": ["proteine", "lowcal", "rapide", "cutting"],
-    "kcal": 220, "prot": 30, "gluc": 8, "lip": 7,
-    "time": "5 min", "portions": 1,
-    "desc": "Salade ultra-rapide, idéale pour les journées chargées.",
-    "ingredients": "1 boîte de thon au naturel (150g égouttés)\n1 tomate\n1/2 concombre\nQuelques olives noires\n1 c.s. huile d'olive\nJus de citron, sel, poivre",
-    "instructions": "1. Égouttez le thon.\n2. Coupez la tomate et le concombre en dés.\n3. Mélangez tout dans un bol.\n4. Assaisonnez avec huile, citron, sel et poivre.",
-    "source": "builtin"
-  },
+  { "id":"shake-proteine-banane-cacao","name":"Shake Protéiné Banane Cacao","emoji":"🥤","tags":["proteine","rapide","bulking"],"kcal":380,"prot":35,"gluc":50,"lip":5,"time":"3 min","portions":1,"desc":"Shake post-entraînement pour la récupération et la prise de masse.","ingredients":"1 scoop de whey vanille (30g)\n1 banane mûre\n250ml lait demi-écrémé\n1 c.s. cacao en poudre non sucré\n4 glaçons","instructions":"1. Mettez tous les ingrédients dans un blender.\n2. Mixez 30 secondes.\n3. Servez immédiatement.","source":"builtin"},
 
-  // ── pancakes-proteines-avoine.json ───────────────────────
-  {
-    "id": "pancakes-proteines-avoine",
-    "name": "Pancakes protéinés avoine",
-    "emoji": "🍳",
-    "tags": ["proteine", "bulking"],
-    "kcal": 450, "prot": 32, "gluc": 55, "lip": 9,
-    "time": "12 min", "portions": 2,
-    "desc": "Pancakes moelleux et protéinés pour un breakfast de champion.",
-    "ingredients": "100g flocons d'avoine\n2 œufs\n1 scoop whey (30g)\n150ml lait\n1 c.c. levure chimique\n1 c.c. miel",
-    "instructions": "1. Mixez les flocons d'avoine en farine fine.\n2. Mélangez avec les œufs, la whey, le lait et la levure.\n3. Laissez reposer 5 min.\n4. Faites cuire à la poêle 2 min de chaque côté.\n5. Servez avec le miel.",
-    "source": "builtin"
-  }
+  { "id":"salade-thon-express","name":"Salade de thon express","emoji":"🥗","tags":["proteine","lowcal","rapide","cutting"],"kcal":220,"prot":30,"gluc":8,"lip":7,"time":"5 min","portions":1,"desc":"Salade ultra-rapide, idéale pour les journées chargées.","ingredients":"1 boîte de thon au naturel (150g égouttés)\n1 tomate\n1/2 concombre\nQuelques olives noires\n1 c.s. huile d'olive\nJus de citron, sel, poivre","instructions":"1. Égouttez le thon.\n2. Coupez la tomate et le concombre en dés.\n3. Mélangez tout dans un bol.\n4. Assaisonnez avec huile, citron, sel et poivre.","source":"builtin"},
+
+  { "id":"pancakes-proteines-avoine","name":"Pancakes protéinés avoine","emoji":"🍳","tags":["proteine","bulking"],"kcal":450,"prot":32,"gluc":55,"lip":9,"time":"12 min","portions":2,"desc":"Pancakes moelleux et protéinés pour un breakfast de champion.","ingredients":"100g flocons d'avoine\n2 œufs\n1 scoop whey (30g)\n150ml lait\n1 c.c. levure chimique\n1 c.c. miel","instructions":"1. Mixez les flocons d'avoine en farine fine.\n2. Mélangez avec les œufs, la whey, le lait et la levure.\n3. Laissez reposer 5 min.\n4. Faites cuire à la poêle 2 min de chaque côté.\n5. Servez avec le miel.","source":"builtin"},
+
+  // ── NOUVELLES RECETTES ───────────────────────────────────────
+
+  { "id":"dinde-patate-douce","name":"Blanc de dinde & patate douce rôtie","emoji":"🦃","tags":["proteine","cutting"],"kcal":380,"prot":42,"gluc":35,"lip":4,"time":"25 min","portions":1,"desc":"Combo classique prise de masse sèche — protéines maigres et glucides complexes.","ingredients":"200g blanc de dinde\n150g patate douce\n1 c.s. huile d'olive\nRomarin, ail, sel, poivre","instructions":"1. Préchauffez le four à 200°C.\n2. Coupez la patate douce en cubes, enduisez d'huile et romarin, enfournez 20 min.\n3. Assaisonnez la dinde avec ail, sel et poivre.\n4. Grillez 5-6 min de chaque côté.\n5. Servez ensemble.","source":"builtin"},
+
+  { "id":"omelette-epinards-feta","name":"Omelette épinards & feta","emoji":"🍳","tags":["proteine","rapide","lowcal"],"kcal":290,"prot":24,"gluc":3,"lip":20,"time":"10 min","portions":1,"desc":"Omelette moelleuse ultra protéinée, prête en 10 minutes.","ingredients":"3 oeufs entiers\n80g épinards frais\n30g feta émiettée\n1 c.c. beurre\nSel, poivre, muscade","instructions":"1. Battez les oeufs, salez et poivrez.\n2. Faites revenir les épinards 2 min dans le beurre.\n3. Versez les oeufs sur les épinards.\n4. Ajoutez la feta. Pliez l'omelette à mi-cuisson.\n5. Servez dès que le centre est pris.","source":"builtin"},
+
+  { "id":"boeuf-quinoa-texmex","name":"Bowl boeuf haché & quinoa tex-mex","emoji":"🌮","tags":["proteine","bulking"],"kcal":480,"prot":40,"gluc":48,"lip":10,"time":"20 min","portions":1,"desc":"Bowl tex-mex complet avec boeuf maigre, quinoa et maïs.","ingredients":"160g viande hachée 5%\n80g quinoa cru\n50g maïs en boîte\n1 tomate\n1/2 poivron rouge\nCumin, paprika, ail, sel, poivre","instructions":"1. Faites cuire le quinoa 12 min.\n2. Faites revenir la viande hachée avec cumin et paprika.\n3. Ajoutez le maïs et le poivron en dés, cuire 3 min.\n4. Servez dans un bol : quinoa, viande, tomate fraîche.","source":"builtin"},
+
+  { "id":"crevettes-wok-riz","name":"Crevettes sautées wok & riz","emoji":"🍤","tags":["proteine","rapide","lowcal"],"kcal":390,"prot":34,"gluc":44,"lip":7,"time":"15 min","portions":1,"desc":"Plat asiatique express — crevettes juteuses, légumes croquants, sauce soja.","ingredients":"200g crevettes décortiquées\n80g riz basmati cru\n1 poivron\n2 champignons\n1 c.s. sauce soja\n1 c.c. huile de sésame\nGingembre, ail","instructions":"1. Faites cuire le riz.\n2. Faites sauter les légumes 3 min dans l'huile de sésame.\n3. Ajoutez les crevettes et l'ail, cuire 3 min.\n4. Déglacez avec la sauce soja.\n5. Servez sur le riz.","source":"builtin"},
+
+  { "id":"fromage-blanc-myrtilles-whey","name":"Bowl fromage blanc 0% myrtilles & whey","emoji":"🫙","tags":["proteine","rapide","lowcal"],"kcal":220,"prot":32,"gluc":18,"lip":1,"time":"3 min","portions":1,"desc":"Collation post-workout ou petit-déjeuner ultra rapide, frais et hautement protéiné.","ingredients":"200g fromage blanc 0%\n1 scoop whey vanille (30g)\n80g myrtilles\n1 c.c. miel","instructions":"1. Mélangez le fromage blanc et la whey jusqu'à obtenir une texture crémeuse.\n2. Ajoutez les myrtilles et le miel.\n3. Servez frais.","source":"builtin"},
+
+  { "id":"saumon-papillote-herbes","name":"Saumon en papillote aux herbes","emoji":"🐟","tags":["proteine","lowcal","cutting"],"kcal":310,"prot":36,"gluc":6,"lip":15,"time":"22 min","portions":1,"desc":"Cuisson en papillote qui préserve les oméga-3 et la tendreté du saumon.","ingredients":"180g filet de saumon\n1 courgette\n1 tomate\n1 citron\nAneth, persil, sel, poivre\n1 c.c. huile d'olive","instructions":"1. Préchauffez le four à 200°C.\n2. Déposez le saumon au centre d'une feuille alu.\n3. Ajoutez les légumes en lamelles, les herbes et les rondelles de citron.\n4. Fermez hermétiquement la papillote.\n5. Enfournez 18 minutes.","source":"builtin"},
+
+  { "id":"wrap-poulet-avocat","name":"Wrap poulet grillé & avocat","emoji":"🥙","tags":["proteine","rapide"],"kcal":490,"prot":40,"gluc":34,"lip":18,"time":"12 min","portions":1,"desc":"Wrap complet et gourmand, idéal en repas transportable.","ingredients":"150g blanc de poulet\n1 tortilla complète\n1/2 avocat\n1 feuille laitue\n1 tomate\n1 c.s. fromage blanc 0%\nJus de citron, sel, poivre, paprika","instructions":"1. Grillez le poulet assaisonné, coupez en lamelles.\n2. Écrasez l'avocat avec le jus de citron, sel et poivre.\n3. Étalez le fromage blanc sur la tortilla.\n4. Ajoutez l'avocat, la laitue, la tomate et le poulet.\n5. Roulez serré et coupez en deux.","source":"builtin"},
+
+  { "id":"soupe-lentilles-poulet","name":"Soupe lentilles & poulet","emoji":"🍲","tags":["proteine","bulking"],"kcal":420,"prot":40,"gluc":42,"lip":6,"time":"30 min","portions":2,"desc":"Soupe réconfortante et ultra nutritive — parfaite pour les journées froides.","ingredients":"150g blanc de poulet\n120g lentilles vertes\n1 carotte\n1 oignon\n2 gousses d'ail\n1 c.s. huile d'olive\nCumin, curcuma, sel, poivre\n700ml bouillon de poulet","instructions":"1. Hachez l'oignon et l'ail, faites revenir dans l'huile 3 min.\n2. Ajoutez la carotte en dés, les épices, mélangez 1 min.\n3. Ajoutez le bouillon, les lentilles et le poulet coupé en dés.\n4. Laissez mijoter 25 minutes à couvert.","source":"builtin"},
+
+  { "id":"cabillaud-citron-haricots","name":"Cabillaud citronné & haricots verts","emoji":"🐠","tags":["proteine","lowcal","cutting"],"kcal":230,"prot":42,"gluc":9,"lip":3,"time":"18 min","portions":1,"desc":"Poisson blanc très lean, parfait en phase de sèche — riche en protéines, presque 0 lipides.","ingredients":"220g dos de cabillaud\n200g haricots verts\n1 citron\n2 gousses d'ail\n1 c.c. huile d'olive\nPersil, sel, poivre","instructions":"1. Faites cuire les haricots verts 8 min à la vapeur.\n2. Poêlez le cabillaud 3-4 min de chaque côté avec l'ail.\n3. Déglacez avec le jus de citron.\n4. Servez avec les haricots verts et le persil haché.","source":"builtin"},
+
+  { "id":"boulettes-dinde-pates","name":"Boulettes de dinde & pâtes complètes","emoji":"🍝","tags":["proteine","bulking"],"kcal":520,"prot":46,"gluc":54,"lip":10,"time":"25 min","portions":2,"desc":"Version saine des spaghetti boulettes — protéines maigres et pâtes complètes.","ingredients":"250g blanc de dinde haché\n120g pâtes complètes\n200g tomates concassées\n1 oignon\n2 gousses d'ail\nOrigan, basilic, sel, poivre\n1 c.s. huile d'olive","instructions":"1. Mélangez la dinde hachée avec l'ail, l'origan, sel et poivre. Formez des boulettes.\n2. Faites cuire les pâtes selon le paquet.\n3. Dorez les boulettes 8-10 min à la poêle.\n4. Ajoutez l'oignon haché puis les tomates. Laissez mijoter 10 min.\n5. Servez sur les pâtes.","source":"builtin"},
+
+  { "id":"bowl-thon-pois-chiches","name":"Bowl thon & pois chiches méditerranéen","emoji":"🥗","tags":["proteine","lowcal","rapide"],"kcal":360,"prot":38,"gluc":30,"lip":8,"time":"8 min","portions":1,"desc":"Bowl méditerranéen express — plein de protéines et de fibres, zéro cuisson.","ingredients":"150g thon au naturel\n100g pois chiches égouttés\n1 tomate\n1/2 concombre\nQuelques olives noires\n1 c.s. huile d'olive\nCitron, origan, sel, poivre","instructions":"1. Égouttez le thon et les pois chiches.\n2. Coupez tomate et concombre en dés.\n3. Mélangez tous les ingrédients dans un bol.\n4. Assaisonnez avec huile, citron et origan.","source":"builtin"},
+
+  { "id":"steak-epinards-sautes","name":"Steak de boeuf & épinards sautés à l'ail","emoji":"🥩","tags":["proteine","cutting","lowcal"],"kcal":320,"prot":48,"gluc":4,"lip":12,"time":"15 min","portions":1,"desc":"Combo fer + protéines par excellence — steak maigre et épinards sautés à l'ail.","ingredients":"180g steak de boeuf maigre\n200g épinards frais\n3 gousses d'ail\n1 c.c. huile d'olive\nSel, poivre, piment d'Espelette","instructions":"1. Faites chauffer une poêle à feu vif.\n2. Saisissez le steak 2-3 min de chaque côté. Laissez reposer 3 min.\n3. Dans la même poêle, faites revenir l'ail 1 min puis ajoutez les épinards.\n4. Sautez 2-3 min.\n5. Servez le steak tranché sur les épinards.","source":"builtin"},
+
+  { "id":"smoothie-bowl-proteines","name":"Smoothie bowl protéiné fraises & granola","emoji":"🥣","tags":["proteine","rapide","bulking"],"kcal":370,"prot":38,"gluc":46,"lip":5,"time":"5 min","portions":1,"desc":"Breakfast gourmand façon bowl — onctueux, frais et boosté en protéines.","ingredients":"200g yaourt grec\n1 scoop whey fraise (30g)\n100g fraises congelées\n30g flocons d'avoine\n1 banane\n1 c.c. miel","instructions":"1. Mixez le yaourt grec, la whey et les fraises congelées.\n2. Versez dans un bol.\n3. Disposez les flocons d'avoine, les tranches de banane.\n4. Arrosez de miel.","source":"builtin"},
+
+  { "id":"pates-thon-tomates","name":"Pâtes complètes au thon & tomates","emoji":"🍝","tags":["proteine","rapide","bulking"],"kcal":470,"prot":40,"gluc":58,"lip":6,"time":"15 min","portions":1,"desc":"Pâtes express équilibrées — protéines du thon et glucides complexes des pâtes complètes.","ingredients":"100g pâtes complètes\n150g thon au naturel\n200g tomates concassées\n1 oignon\n2 gousses d'ail\nBasilic, origan, sel, poivre\n1 c.c. huile d'olive","instructions":"1. Faites cuire les pâtes.\n2. Faites revenir l'oignon et l'ail dans l'huile 3 min.\n3. Ajoutez les tomates concassées et les épices, laissez réduire 7 min.\n4. Incorporez le thon égoutté.\n5. Mélangez avec les pâtes et servez.","source":"builtin"},
+
+  { "id":"steak-hache-patate-douce","name":"Steak haché 5% & purée patate douce","emoji":"🍠","tags":["proteine","bulking"],"kcal":450,"prot":40,"gluc":40,"lip":8,"time":"20 min","portions":1,"desc":"Classique de la prise de masse — steak maigre et purée naturellement sucrée.","ingredients":"180g steak haché 5%\n250g patate douce\n1 c.c. beurre\nSel, poivre, ail en poudre, piment doux","instructions":"1. Cuisez la patate douce à la vapeur 15 min, écrasez avec le beurre et du sel.\n2. Assaisonnez le steak haché.\n3. Cuisez le steak à la poêle 4-5 min de chaque côté.\n4. Servez avec la purée.","source":"builtin"},
+
+  { "id":"cottage-noix-fruits-secs","name":"Bowl cottage cheese, noix & fruits","emoji":"🥜","tags":["proteine","rapide"],"kcal":300,"prot":26,"gluc":18,"lip":14,"time":"4 min","portions":1,"desc":"Collation riche en caséine naturelle — idéale avant de dormir pour la récupération musculaire.","ingredients":"200g fromage cottage\n20g cerneaux de noix\n1 pomme\n1 c.c. miel\nCannelle","instructions":"1. Versez le cottage cheese dans un bol.\n2. Coupez la pomme en petits dés.\n3. Ajoutez les noix, la pomme, le miel et saupoudrez de cannelle.","source":"builtin"},
+
+  { "id":"crevettes-ail-riz-complet","name":"Crevettes à l'ail & riz complet","emoji":"🦐","tags":["proteine","lowcal"],"kcal":400,"prot":36,"gluc":48,"lip":6,"time":"18 min","portions":1,"desc":"Plat simple et efficace — crevettes maigres sur riz complet à IG bas.","ingredients":"200g crevettes décortiquées\n80g riz complet cru\n4 gousses d'ail\n1 c.s. sauce soja\n1 c.c. huile d'olive\nPersil, piment, poivre","instructions":"1. Faites cuire le riz complet (environ 25 min).\n2. Faites chauffer l'huile, ajoutez l'ail haché 1 min.\n3. Ajoutez les crevettes et le piment, cuisez 3-4 min.\n4. Déglacez avec la sauce soja.\n5. Servez sur le riz avec le persil.","source":"builtin"},
+
+  { "id":"skyr-granola-fruits","name":"Skyr & granola maison aux fruits","emoji":"🍓","tags":["proteine","rapide"],"kcal":310,"prot":26,"gluc":40,"lip":4,"time":"5 min","portions":1,"desc":"Petit-déjeuner scandinave — skyr ultra protéiné, granola croquant et fruits frais.","ingredients":"200g skyr nature\n30g flocons d'avoine toastés\n100g fraises\n1 banane\n1 c.c. miel\nQuelques amandes effilées","instructions":"1. Versez le skyr dans un bol.\n2. Disposez les fruits coupés par-dessus.\n3. Ajoutez les flocons d'avoine et les amandes.\n4. Terminez avec un filet de miel.","source":"builtin"},
+
+  { "id":"poulet-brocoli-sauce-soja","name":"Poulet & brocoli sauce soja","emoji":"🥦","tags":["proteine","lowcal","cutting","rapide"],"kcal":310,"prot":44,"gluc":12,"lip":8,"time":"15 min","portions":1,"desc":"Combo hardcore de la sèche — poulet maigre, brocoli anti-estrogène, sauce soja.","ingredients":"200g blanc de poulet\n250g brocoli\n2 c.s. sauce soja\n1 c.c. huile de sésame\n2 gousses d'ail\nGingembre frais râpé","instructions":"1. Coupez le poulet en lanières. Détaillez le brocoli en fleurettes.\n2. Faites chauffer l'huile à feu vif.\n3. Saisissez le poulet 5 min.\n4. Ajoutez le brocoli, l'ail et le gingembre, cuisez 4 min.\n5. Ajoutez la sauce soja, mélangez 1 min et servez.","source":"builtin"},
+
+  { "id":"sardines-tartines-avocat","name":"Tartines sardines & avocat","emoji":"🐟","tags":["proteine","rapide"],"kcal":410,"prot":28,"gluc":26,"lip":22,"time":"5 min","portions":1,"desc":"Snack ou repas léger ultra rapide — combo oméga-3 et bons gras de l'avocat.","ingredients":"1 boîte sardines à l'huile (100g égouttée)\n1/2 avocat\n2 tranches de pain complet\n1 tomate\nJus de citron, sel, poivre, herbes","instructions":"1. Toastez le pain.\n2. Écrasez l'avocat avec le jus de citron, sel et poivre.\n3. Étalez l'avocat sur les tartines.\n4. Ajoutez les sardines émiettées et la tomate en tranches.\n5. Saupoudrez d'herbes aromatiques.","source":"builtin"},
+
+  { "id":"poulet-curry-riz-basmati","name":"Poulet curry doux & riz basmati","emoji":"🍛","tags":["proteine","bulking"],"kcal":460,"prot":46,"gluc":42,"lip":8,"time":"25 min","portions":2,"desc":"Curry léger et savoureux — curcuma, gingembre et lait de coco allégé.","ingredients":"250g blanc de poulet\n80g riz basmati cru\n100ml lait de coco léger\n1 oignon\n2 gousses d'ail\n1 c.s. curry en poudre\nCurcuma, gingembre, sel\n1 c.c. huile d'olive","instructions":"1. Faites cuire le riz basmati.\n2. Faites revenir l'oignon et l'ail dans l'huile 3 min.\n3. Ajoutez le poulet en dés et faites dorer 5 min.\n4. Ajoutez curry, curcuma, gingembre, puis le lait de coco.\n5. Laissez mijoter 12 min. Servez sur le riz.","source":"builtin"},
+
+  { "id":"riz-saute-jambon-oeufs","name":"Riz sauté jambon & oeufs","emoji":"🍚","tags":["proteine","rapide","bulking"],"kcal":430,"prot":34,"gluc":50,"lip":9,"time":"10 min","portions":1,"desc":"Version fitness du riz cantonais — rapide, économique, parfait pour finir les restes.","ingredients":"150g riz blanc cuit\n2 tranches jambon blanc\n2 oeufs\n2 c.s. sauce soja\n1 c.c. huile de sésame\nOignon vert, poivre","instructions":"1. Faites chauffer l'huile de sésame dans un wok à feu vif.\n2. Battez les oeufs et cuisez-les en omelette brouillée rapide.\n3. Ajoutez le riz et le jambon coupé en dés.\n4. Versez la sauce soja, mélangez vigoureusement 2 min.\n5. Garnissez d'oignon vert.","source":"builtin"},
+
+  { "id":"omelette-blancs-oeufs-jambon","name":"Omelette blancs d'oeufs & jambon","emoji":"🥚","tags":["proteine","lowcal","cutting","rapide"],"kcal":190,"prot":32,"gluc":2,"lip":5,"time":"8 min","portions":1,"desc":"Omelette extrême sèche — presque 0 lipide pour maximum de protéines.","ingredients":"5 blancs d'oeufs\n2 tranches jambon blanc\n30g fromage blanc 0%\nCiboulette, sel, poivre, paprika","instructions":"1. Battez les blancs d'oeufs avec sel, poivre et paprika.\n2. Coupez le jambon en petits dés.\n3. Versez les blancs dans une poêle anti-adhésive légèrement huilée.\n4. Ajoutez le jambon et le fromage blanc.\n5. Repliez l'omelette et servez.","source":"builtin"},
+
+  { "id":"patate-douce-farcie-thon","name":"Patate douce farcie au thon","emoji":"🍠","tags":["proteine","lowcal","cutting"],"kcal":350,"prot":34,"gluc":44,"lip":4,"time":"30 min","portions":1,"desc":"Plat simple et original — la patate douce farcie donne une touche sucrée-salée parfaite.","ingredients":"1 grosse patate douce (250g)\n150g thon au naturel\n2 c.s. fromage blanc 0%\n1 c.c. moutarde\nCiboulette, sel, poivre, citron","instructions":"1. Faites cuire la patate douce au four 25 min à 200°C ou 8 min au micro-ondes.\n2. Égouttez le thon, mélangez avec le fromage blanc, la moutarde, le citron et la ciboulette.\n3. Coupez la patate en deux dans la longueur.\n4. Garnissez généreusement avec la préparation au thon.","source":"builtin"},
+
+  { "id":"edamame-tofu-saute-soja","name":"Edamame & tofu sauté sauce soja","emoji":"🌿","tags":["proteine","vegan","rapide"],"kcal":340,"prot":28,"gluc":20,"lip":16,"time":"12 min","portions":1,"desc":"Plat vegan complet et riche en protéines végétales — idéal pour le sport à base de plantes.","ingredients":"150g tofu ferme\n100g edamame\n80g riz basmati cuit\n2 c.s. sauce soja\n1 c.c. huile de sésame\nGingembre, ail, graines de sésame","instructions":"1. Coupez le tofu en cubes, séchez-le bien.\n2. Faites dorer le tofu dans l'huile de sésame 5 min.\n3. Ajoutez l'ail et le gingembre, cuisez 1 min.\n4. Ajoutez l'edamame et la sauce soja, mélangez 2 min.\n5. Servez sur riz, saupoudrez de sésame.","source":"builtin"}
 
 ];

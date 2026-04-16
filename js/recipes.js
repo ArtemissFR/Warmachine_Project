@@ -127,6 +127,7 @@ const BADGE_HTML = {
   cutting:  '<span class="recipe-badge badge-cutting">CUTTING</span>',
   rapide:   '<span class="recipe-badge badge-rapide">RAPIDE</span>',
 };
+const AI_BADGE = '<span class="recipe-badge badge-ai">🤖 IA</span>';
 
 function starsHtml(n, interactive = false, id = '') {
   if (interactive) {
@@ -191,8 +192,9 @@ function renderGrid() {
 
   grid.innerHTML = filtered.map((r, i) => {
     const style    = getStyle(r);
-    const badges   = r.tags.slice(0, 2).map(t => BADGE_HTML[t] || '').join('');
+    const tagBadges = r.tags.slice(0, 2).map(t => BADGE_HTML[t] || '').join('');
     const isBuiltin = r.source === 'builtin';
+    const badges    = isBuiltin ? AI_BADGE + tagBadges : tagBadges;
     const inDay    = dailyMeals.some(m => m.id === r.id);
 
     const photoHtml = r.photo
@@ -217,7 +219,7 @@ function renderGrid() {
         ${photoHtml}
         <span class="emoji-text">${r.photo ? '' : (r.emoji||'🍽️')}</span>
         <div class="recipe-card-badges">${badges}</div>
-        ${isBuiltin?'<span style="position:absolute;bottom:5px;left:8px;font-family:var(--font-display);font-size:.42rem;letter-spacing:.08em;color:rgba(255,255,255,.2);">BUILT-IN</span>':''}
+
       </div>
       <div class="recipe-card-body">
         <div class="recipe-card-name">${h(r.name)}</div>
@@ -259,6 +261,7 @@ function addToDay(id) {
   }
   saveDailyMeals();
   renderDailyTracker();
+  renderMiniPanel();
   renderGrid();
 }
 
@@ -266,6 +269,7 @@ function removeFromDay(id) {
   dailyMeals = dailyMeals.filter(m => m.id !== id);
   saveDailyMeals();
   renderDailyTracker();
+  renderMiniPanel();
   renderGrid();
 }
 
@@ -273,6 +277,7 @@ function clearDailyMeals() {
   dailyMeals = [];
   saveDailyMeals();
   renderDailyTracker();
+  renderMiniPanel();
   renderGrid();
   showToast('🗑 Journée vidée');
 }
@@ -343,6 +348,67 @@ function renderDailyTracker() {
       <button class="tracker-meal-remove" onclick="removeFromDay('${m.id}')" title="Retirer">✕</button>
     </div>`;
   }).join('');
+}
+
+// ───────────────────────────────────────────────────────────────────
+//  MINI MEAL PANEL
+// ───────────────────────────────────────────────────────────────────
+function renderMiniPanel() {
+  const panel  = document.getElementById('miniMealPanel');
+  if (!panel) return;
+
+  const hasItems = dailyMeals.length > 0;
+  panel.classList.toggle('visible', hasItems);
+  if (!hasItems) return;
+
+  const recipes = allRecipes();
+  const totals  = { kcal:0, prot:0, gluc:0, lip:0 };
+  dailyMeals.forEach(m => {
+    const r = recipes.find(x => x.id === m.id);
+    if (!r) return;
+    const p = m.portions || 1;
+    totals.kcal += (r.kcal||0)*p; totals.prot += (r.prot||0)*p;
+    totals.gluc += (r.gluc||0)*p; totals.lip  += (r.lip ||0)*p;
+  });
+
+  // Badge count
+  document.getElementById('mmpBadge').textContent = dailyMeals.reduce((s,m)=>s+(m.portions||1),0);
+
+  // Footer totals
+  document.getElementById('mmp-kcal').textContent = Math.round(totals.kcal);
+  document.getElementById('mmp-prot').textContent = Math.round(totals.prot)+'g';
+  document.getElementById('mmp-gluc').textContent = Math.round(totals.gluc)+'g';
+  document.getElementById('mmp-lip').textContent  = Math.round(totals.lip)+'g';
+
+  // Items list
+  document.getElementById('mmpItems').innerHTML = dailyMeals.map(m => {
+    const r = recipes.find(x => x.id === m.id);
+    if (!r) return '';
+    const p = m.portions || 1;
+    return `
+      <div class="mmp-item">
+        <span class="mmp-emoji">${r.emoji||'🍽️'}</span>
+        <div class="mmp-info">
+          <div class="mmp-name">${h(r.name)}</div>
+          <div class="mmp-macros">${Math.round((r.kcal||0)*p)} kcal · ${Math.round((r.prot||0)*p)}g prot</div>
+        </div>
+        <div class="mmp-portions">
+          <button class="mmp-port-btn" onclick="adjustPortionInPanel('${m.id}',-1)">−</button>
+          <span class="mmp-port-num">${p}</span>
+          <button class="mmp-port-btn" onclick="adjustPortionInPanel('${m.id}',1)">+</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function adjustPortionInPanel(id, delta) {
+  const m = dailyMeals.find(x => x.id === id);
+  if (!m) return;
+  m.portions = Math.max(1, (m.portions||1) + delta);
+  saveDailyMeals();
+  renderDailyTracker();
+  renderMiniPanel();
+  renderGrid();
 }
 
 function openGoalsModal() {
@@ -706,7 +772,10 @@ function openDetail(id) {
     <div class="detail-emoji-big" style="background:${style.gradient};border-color:${style.accent}30">${r.photo ? '📷' : (r.emoji||'🍽️')}</div>
     <div class="detail-title-block">
       <div class="detail-title">${h(r.name)}</div>
-      <div class="detail-category">${r.tags.map(t=>BADGE_HTML[t]||'').join(' ')}</div>
+      <div class="detail-category">
+        ${isBuiltin ? AI_BADGE : ''}
+        ${r.tags.map(t=>BADGE_HTML[t]||'').join(' ')}
+      </div>
       <div style="margin-top:.5rem;font-family:var(--font-body);font-size:.75rem;color:var(--text-dim);">
         ${r.portions?`${r.portions} portion${r.portions>1?'s':''}`:''}
         ${r.time?` · ⏱ ${h(r.time)}`:''}
@@ -915,6 +984,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // First render
   renderGrid();
   renderDailyTracker();
+  renderMiniPanel();
   initPhotoUpload();
 
   // FAB

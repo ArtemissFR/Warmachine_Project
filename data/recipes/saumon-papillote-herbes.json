@@ -1,0 +1,12 @@
+{
+  "id": "saumon-papillote-herbes",
+  "name": "Saumon en papillote aux herbes",
+  "emoji": "🐟",
+  "tags": ["proteine", "lowcal", "cutting"],
+  "kcal": 310, "prot": 36, "gluc": 6, "lip": 15,
+  "time": "22 min", "portions": 1,
+  "desc": "Cuisson en papillote qui préserve les oméga-3 et la tendreté du saumon.",
+  "ingredients": "180g filet de saumon\n1 courgette\n1 tomate\n1 citron\nAneth, persil, sel, poivre\n1 c.c. huile d'olive",
+  "instructions": "1. Préchauffez le four à 200°C.\n2. Déposez le saumon au centre d'une feuille alu.\n3. Ajoutez les légumes en lamelles, les herbes et les rondelles de citron.\n4. Fermez hermétiquement la papillote.\n5. Enfournez 18 minutes.",
+  "source": "builtin"
+}

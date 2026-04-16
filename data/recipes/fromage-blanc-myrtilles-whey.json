@@ -1,0 +1,12 @@
+{
+  "id": "fromage-blanc-myrtilles-whey",
+  "name": "Bowl fromage blanc 0% myrtilles & whey",
+  "emoji": "🫙",
+  "tags": ["proteine", "rapide", "lowcal"],
+  "kcal": 220, "prot": 32, "gluc": 18, "lip": 1,
+  "time": "3 min", "portions": 1,
+  "desc": "Collation post-workout ou petit-déjeuner ultra rapide, frais et hautement protéiné.",
+  "ingredients": "200g fromage blanc 0%\n1 scoop whey vanille (30g)\n80g myrtilles\n1 c.c. miel",
+  "instructions": "1. Mélangez le fromage blanc et la whey jusqu'à obtenir une texture crémeuse.\n2. Ajoutez les myrtilles et le miel.\n3. Servez frais.",
+  "source": "builtin"
+}
