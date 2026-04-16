@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE OPS — Recettes & Nutrition</title>
+<meta name="description" content="CORE OPS RECIPES — Gérez vos recettes protéinées et faibles en calories pour optimiser votre nutrition sportive.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="manifest" href="manifest.json">
+<style>
+/* ======================================================
+   RECIPES — PAGE SPECIFIC CSS
+   ====================================================== */
+
+/* ── FILTER CHIPS ─────────────────────────────────────── */
+.recipe-filters {
+  display: flex; gap: .6rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem; padding: 0 5rem;
+}
+.recipe-chip {
+  padding: 6px 16px; border-radius: 50px;
+  font-family: var(--font-display); font-size: .62rem; letter-spacing: .15em;
+  cursor: pointer; border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.03); color: var(--text-dim);
+  transition: all .3s ease; white-space: nowrap;
+}
+.recipe-chip:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+.recipe-chip.active { background: rgba(0,212,255,.12); border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 12px rgba(0,212,255,.2); }
+.fridge-chip { border-color: rgba(0,255,200,.2); color: rgba(0,255,200,.7); }
+.fridge-chip.active { background: rgba(0,255,200,.12); border-color: rgba(0,255,200,.6); color: #00ffc8; box-shadow: 0 0 14px rgba(0,255,200,.25); }
+
+/* ── SEARCH ───────────────────────────────────────────── */
+.recipe-search-bar { position: relative; margin-bottom: 1.2rem; padding: 0 5rem; }
+.recipe-search-bar input {
+  width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px; padding: 14px 20px 14px 48px; color: var(--text-primary);
+  font-family: var(--font-body); font-size: .9rem; outline: none; transition: border-color .3s ease;
+}
+.recipe-search-bar input:focus { border-color: rgba(0,212,255,.4); box-shadow: 0 0 20px rgba(0,212,255,.1); }
+.recipe-search-bar input::placeholder { color: var(--text-dim); }
+.recipe-search-icon { position: absolute; left: calc(5rem + 16px); top: 50%; transform: translateY(-50%); font-size: 1rem; opacity: .4; pointer-events: none; }
+
+/* ── FRIDGE ACTIVE BAR ────────────────────────────────── */
+.fridge-active-bar {
+  display: none; margin: 0 5rem 1.2rem;
+  padding: 10px 16px; border-radius: 10px;
+  background: rgba(0,255,200,.07); border: 1px solid rgba(0,255,200,.3);
+  font-family: var(--font-display); font-size: .65rem; letter-spacing: .15em;
+  color: #00ffc8; align-items: center; gap: 12px;
+}
+.fridge-active-bar.visible { display: flex; }
+.fridge-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.fridge-tag {
+  padding: 2px 10px; border-radius: 20px;
+  background: rgba(0,255,200,.12); border: 1px solid rgba(0,255,200,.3);
+  font-size: .6rem; color: #00ffc8;
+}
+.fridge-clear-btn { margin-left: auto; background: none; border: 1px solid rgba(0,255,200,.3); border-radius: 6px; color: #00ffc8; padding: 3px 10px; font-family: var(--font-display); font-size: .58rem; cursor: pointer; letter-spacing: .1em; transition: all .2s ease; }
+.fridge-clear-btn:hover { background: rgba(0,255,200,.12); }
+
+/* ── DAILY MACRO TRACKER ──────────────────────────────── */
+.daily-tracker {
+  margin: 0 5rem 1.5rem;
+  background: var(--bg-secondary); border: 1px solid var(--card-border);
+  border-radius: 16px; overflow: hidden; backdrop-filter: blur(24px);
+}
+.daily-tracker-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px; cursor: pointer;
+  transition: background .2s ease;
+}
+.daily-tracker-header:hover { background: rgba(255,255,255,.03); }
+.dt-icon { font-size: 1.1rem; }
+.dt-title { font-family: var(--font-display); font-size: .7rem; letter-spacing: .2em; color: var(--neon-blue); }
+.dt-summary { font-family: var(--font-body); font-size: .72rem; color: var(--text-dim); margin-left: 4px; }
+.dt-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tracker-goal-btn {
+  background: none; border: 1px solid rgba(255,255,255,.1); border-radius: 6px;
+  color: var(--text-dim); font-family: var(--font-display); font-size: .55rem;
+  letter-spacing: .12em; padding: 4px 10px; cursor: pointer; transition: all .2s ease;
+}
+.tracker-goal-btn:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+.tracker-toggle-icon { font-size: .7rem; color: var(--text-dim); transition: transform .3s ease; }
+.tracker-toggle-icon.open { transform: rotate(180deg); }
+
+.tracker-body { display: none; border-top: 1px solid rgba(255,255,255,.05); padding: 16px 18px; }
+.tracker-body.open { display: block; animation: tabFadeIn .25s ease; }
+
+.tracker-goal-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-bottom: 1rem; }
+.tracker-goal-item { }
+.tracker-goal-label { display: flex; justify-content: space-between; font-family: var(--font-display); font-size: .58rem; color: var(--text-dim); letter-spacing: .1em; margin-bottom: 5px; }
+.tracker-goal-label span:last-child { color: var(--text-secondary); }
+.tracker-goal-track { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+.tracker-goal-fill { height: 100%; border-radius: 3px; transition: width .5s cubic-bezier(.16,1,.3,1); width: 0%; }
+
+.tracker-meals-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.tracker-meal-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; background: rgba(255,255,255,.02);
+  border-radius: 8px; border: 1px solid rgba(255,255,255,.04);
+  font-family: var(--font-body); font-size: .75rem; color: var(--text-secondary);
+}
+.tracker-meal-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.tracker-meal-info { flex: 1; }
+.tracker-meal-name { font-family: var(--font-display); font-size: .7rem; color: var(--text-primary); }
+.tracker-meal-macros { font-size: .65rem; color: var(--text-dim); margin-top: 2px; }
+.tracker-meal-remove { background: none; border: none; color: rgba(255,77,109,.5); cursor: pointer; font-size: .9rem; padding: 2px 6px; border-radius: 4px; transition: all .2s; }
+.tracker-meal-remove:hover { color: #ff4d6d; background: rgba(255,77,109,.1); }
+.tracker-empty-day { text-align: center; padding: 12px; color: var(--text-dim); font-family: var(--font-body); font-size: .75rem; }
+.tracker-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+.tracker-clear-btn { background: none; border: 1px solid rgba(255,77,109,.2); border-radius: 8px; color: rgba(255,77,109,.6); font-family: var(--font-display); font-size: .58rem; letter-spacing: .12em; padding: 6px 14px; cursor: pointer; transition: all .2s ease; }
+.tracker-clear-btn:hover { border-color: #ff4d6d; color: #ff4d6d; background: rgba(255,77,109,.07); }
+
+/* ── STATS BAR ────────────────────────────────────────── */
+.recipe-stats-bar { display: flex; gap: 1.5rem; padding: 0 5rem 1.2rem; flex-wrap: wrap; }
+.recipe-stat-item { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: .75rem; color: var(--text-dim); }
+.recipe-stat-item .stat-n { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
+
+/* ── RECIPE GRID ──────────────────────────────────────── */
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.5rem; padding: 0 5rem 2rem; }
+
+/* ── RECIPE CARD ──────────────────────────────────────── */
+.recipe-card {
+  background: var(--bg-secondary); border: 1px solid var(--card-border);
+  border-radius: 20px; overflow: hidden;
+  transition: all .4s cubic-bezier(.16,1,.3,1); position: relative;
+  cursor: pointer; backdrop-filter: blur(24px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  animation: cardAppear .4s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes cardAppear { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.recipe-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(0,0,0,.3), 0 0 0 1px rgba(0,212,255,.15); border-color: rgba(0,212,255,.25); }
+.recipe-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--card-accent,var(--neon-blue)); transform:scaleX(0); transition:transform .4s ease; }
+.recipe-card:hover::after { transform: scaleX(1); }
+
+.recipe-card-emoji {
+  height: 110px; display: flex; align-items: center; justify-content: center;
+  font-size: 3.2rem; position: relative; overflow: hidden;
+  background: var(--card-bg-gradient, linear-gradient(135deg,rgba(0,212,255,.06),rgba(157,80,187,.06)));
+}
+.recipe-card-emoji img.card-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.7; }
+.recipe-card-emoji::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 120%, var(--card-glow-color,rgba(0,212,255,.15)), transparent 70%); }
+.recipe-card-emoji .emoji-text { position:relative; z-index:1; }
+
+.recipe-card-badges { position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:4px; align-items:flex-end; z-index:2; }
+.recipe-badge { padding:3px 8px; border-radius:4px; font-family:var(--font-display); font-size:.52rem; letter-spacing:.12em; font-weight:700; }
+.badge-protein { background:rgba(57,255,20,.15); color:var(--neon-green); border:1px solid rgba(57,255,20,.3); }
+.badge-lowcal  { background:rgba(0,212,255,.12); color:var(--neon-blue);  border:1px solid rgba(0,212,255,.3); }
+.badge-bulking { background:rgba(255,204,0,.12);  color:var(--neon-gold); border:1px solid rgba(255,204,0,.3); }
+.badge-vegan   { background:rgba(57,255,20,.08);  color:#7fff7f;          border:1px solid rgba(57,255,20,.2); }
+.badge-cutting { background:rgba(157,80,187,.12); color:#c97de8;          border:1px solid rgba(157,80,187,.3); }
+.badge-rapide  { background:rgba(255,100,50,.12); color:#ff9060;          border:1px solid rgba(255,100,50,.3); }
+
+.recipe-card-body { padding: 1.2rem 1.4rem 1.4rem; }
+.recipe-card-name { font-family:var(--font-display); font-size:.9rem; font-weight:700; letter-spacing:.08em; color:var(--text-primary); margin-bottom:.4rem; }
+.recipe-card-desc { font-family:var(--font-body); font-size:.75rem; color:var(--text-secondary); line-height:1.5; margin-bottom:.8rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+.recipe-macros { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.6rem; }
+.macro-pill { display:flex; align-items:center; gap:4px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); font-family:var(--font-display); font-size:.58rem; letter-spacing:.1em; }
+.macro-pill .macro-val { font-weight:700; color:var(--text-primary); }
+.macro-pill .macro-label { color:var(--text-dim); }
+.macro-pill.kcal { border-color:rgba(255,204,0,.2); } .macro-pill.kcal .macro-val { color:var(--neon-gold); }
+.macro-pill.prot { border-color:rgba(57,255,20,.2); } .macro-pill.prot .macro-val { color:var(--neon-green); }
+.macro-pill.time { border-color:rgba(0,212,255,.2); } .macro-pill.time .macro-val { color:var(--neon-blue); }
+
+/* Star rating on card */
+.recipe-card-rating { font-size:.75rem; margin-bottom:.6rem; letter-spacing:2px; }
+
+.recipe-card-actions { display:flex; gap:6px; margin-top:.8rem; padding-top:.8rem; border-top:1px solid rgba(255,255,255,.04); }
+.rc-btn { flex:1; padding:7px 0; border:1px solid rgba(255,255,255,.08); border-radius:8px; background:transparent; color:var(--text-dim); font-family:var(--font-display); font-size:.55rem; letter-spacing:.1em; cursor:pointer; transition:all .3s ease; }
+.rc-btn:hover { border-color:var(--neon-blue); color:var(--neon-blue); background:rgba(0,212,255,.05); }
+.rc-btn.danger:hover { border-color:#ff4d6d; color:#ff4d6d; background:rgba(255,77,109,.05); }
+.rc-btn.fav { font-size:.85rem; flex:0; padding:7px 10px; }
+.rc-btn.fav.active { border-color:var(--neon-gold); color:var(--neon-gold); background:rgba(255,204,0,.07); }
+.rc-btn.today-btn:hover { border-color:var(--neon-green); color:var(--neon-green); background:rgba(57,255,20,.05); }
+.rc-btn.today-btn.added { border-color:var(--neon-green); color:var(--neon-green); background:rgba(57,255,20,.08); }
+
+/* ── EMPTY STATE ─────────────────────────────────────── */
+.recipe-empty { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:5rem 2rem; text-align:center; color:var(--text-dim); font-family:var(--font-body); }
+.recipe-empty .empty-icon { font-size:3rem; opacity:.4; }
+.recipe-empty p { font-size:.85rem; line-height:1.7; }
+
+/* ── FAB ─────────────────────────────────────────────── */
+.recipe-add-fab { position:fixed; bottom:2.5rem; right:2rem; z-index:500; width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); border:none; color:white; font-size:1.6rem; cursor:pointer; box-shadow:0 8px 30px rgba(0,212,255,.35); transition:all .3s ease; display:flex; align-items:center; justify-content:center; }
+.recipe-add-fab:hover { transform:scale(1.12) rotate(90deg); box-shadow:0 12px 40px rgba(0,212,255,.5); }
+
+/* ── TOAST ───────────────────────────────────────────── */
+.recipe-toast { position:fixed; bottom:6rem; left:50%; transform:translateX(-50%) translateY(30px); background:rgba(15,15,25,.92); border:1px solid var(--neon-blue); border-radius:12px; padding:12px 24px; font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; color:var(--neon-blue); z-index:9999; opacity:0; transition:all .4s cubic-bezier(.16,1,.3,1); pointer-events:none; backdrop-filter:blur(16px); box-shadow:0 0 30px rgba(0,212,255,.2); }
+.recipe-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ======================================================
+   RECIPE DETAIL MODAL
+   ====================================================== */
+.recipe-detail-modal { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(12px); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:all .3s ease; }
+.recipe-detail-modal.open { opacity:1; visibility:visible; }
+.recipe-detail-box { background:var(--bg-secondary); border:1px solid rgba(255,255,255,.1); border-radius:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 40px 100px rgba(0,0,0,.6); transform:scale(.95) translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); scrollbar-width:thin; scrollbar-color:rgba(0,212,255,.2) transparent; position:relative; }
+.recipe-detail-modal.open .recipe-detail-box { transform:scale(1) translateY(0); }
+.detail-close-btn { position:absolute; top:1.2rem; right:1.2rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:50%; width:36px; height:36px; color:var(--text-dim); font-size:1rem; cursor:pointer; transition:all .2s ease; display:flex; align-items:center; justify-content:center; z-index:10; }
+.detail-close-btn:hover { background:rgba(255,77,109,.15); border-color:#ff4d6d; color:#ff4d6d; }
+
+/* Photo area in detail */
+.detail-photo-area { width:100%; height:200px; overflow:hidden; border-radius:24px 24px 0 0; position:relative; display:none; }
+.detail-photo-area.visible { display:block; }
+.detail-photo-area img { width:100%; height:100%; object-fit:cover; }
+.detail-photo-area::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, rgba(12,12,18,.9) 100%); }
+
+.detail-header { padding:2rem 2rem 1.5rem; border-bottom:1px solid rgba(255,255,255,.05); display:flex; gap:1.2rem; align-items:flex-start; }
+.detail-emoji-big { font-size:3rem; flex-shrink:0; width:70px; height:70px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.04); border-radius:16px; border:1px solid rgba(255,255,255,.06); }
+.detail-title-block { flex:1; }
+.detail-title { font-family:var(--font-display); font-size:1.4rem; font-weight:800; color:var(--text-primary); margin-bottom:.4rem; }
+.detail-category { font-family:var(--font-body); font-size:.7rem; color:var(--neon-blue); letter-spacing:.15em; }
+
+/* Portion multiplier */
+.portion-multiplier { padding:1rem 2rem; border-bottom:1px solid rgba(255,255,255,.05); }
+.portion-mult-label { font-family:var(--font-display); font-size:.6rem; color:var(--text-dim); letter-spacing:.15em; margin-bottom:8px; display:flex; justify-content:space-between; }
+.portion-mult-val { color:var(--neon-blue); }
+.portion-range { width:100%; accent-color:var(--neon-blue); cursor:pointer; }
+.portion-ticks { display:flex; justify-content:space-between; font-family:var(--font-display); font-size:.5rem; color:var(--text-dim); margin-top:4px; }
+
+/* Macros row */
+.detail-macros-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; padding:1.2rem 2rem; border-bottom:1px solid rgba(255,255,255,.05); }
+.detail-macro-box { text-align:center; padding:.8rem; border-radius:12px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05); }
+.detail-macro-box .dm-val { font-family:var(--font-display); font-size:1.3rem; font-weight:800; display:block; margin-bottom:4px; }
+.detail-macro-box .dm-label { font-family:var(--font-body); font-size:.6rem; color:var(--text-dim); letter-spacing:.1em; text-transform:uppercase; }
+.dm-kcal .dm-val { color:var(--neon-gold); }
+.dm-prot .dm-val { color:var(--neon-green); }
+.dm-gluc .dm-val { color:var(--neon-blue); }
+.dm-lip  .dm-val { color:#c97de8; }
+
+/* Detail body */
+.detail-body { padding:1.5rem 2rem; }
+.detail-section-label { font-family:var(--font-display); font-size:.65rem; color:var(--neon-blue); letter-spacing:.25em; margin-bottom:.8rem; display:flex; align-items:center; gap:10px; }
+.detail-section-label::after { content:''; flex:1; height:1px; background:rgba(0,212,255,.15); }
+.detail-ingredients { display:flex; flex-direction:column; gap:.5rem; margin-bottom:1.5rem; }
+.ingredient-item { display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.02); border-radius:8px; font-family:var(--font-body); font-size:.8rem; color:var(--text-secondary); }
+.ingredient-item::before { content:'▸'; color:var(--neon-blue); font-size:.6rem; flex-shrink:0; }
+.detail-instructions { font-family:var(--font-body); font-size:.82rem; color:var(--text-secondary); line-height:1.8; white-space:pre-wrap; }
+
+/* Star rating widget */
+.star-rating-widget { display:flex; gap:2px; }
+.star-btn { background:none; border:none; font-size:1.4rem; cursor:pointer; padding:2px; transition:transform .15s ease; line-height:1; }
+.star-btn:hover { transform:scale(1.2); }
+.recipe-note-area { width:100%; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:10px 14px; color:var(--text-secondary); font-family:var(--font-body); font-size:.8rem; resize:none; outline:none; min-height:70px; transition:border-color .3s; margin-top:.6rem; }
+.recipe-note-area:focus { border-color:rgba(0,212,255,.3); }
+.recipe-note-area::placeholder { color:var(--text-dim); }
+
+/* ======================================================
+   ADD / EDIT RECIPE MODAL
+   ====================================================== */
+.recipe-form-modal { position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(12px); z-index:2100; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:all .3s ease; }
+.recipe-form-modal.open { opacity:1; visibility:visible; }
+.recipe-form-box { background:var(--bg-secondary); border:1px solid rgba(255,255,255,.1); border-radius:24px; width:660px; max-width:95vw; max-height:92vh; overflow-y:auto; box-shadow:0 40px 100px rgba(0,0,0,.6); padding:2rem; transform:scale(.95) translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); scrollbar-width:thin; scrollbar-color:rgba(0,212,255,.2) transparent; }
+.recipe-form-modal.open .recipe-form-box { transform:scale(1) translateY(0); }
+.form-modal-title { font-family:var(--font-display); font-size:1rem; font-weight:800; letter-spacing:.15em; color:var(--neon-blue); margin-bottom:1.8rem; }
+
+.form-row { display:grid; gap:1rem; margin-bottom:1rem; }
+.form-row.cols-2 { grid-template-columns:1fr 1fr; }
+.form-row.cols-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+.form-field label { display:block; font-family:var(--font-display); font-size:.58rem; color:var(--text-dim); letter-spacing:.15em; margin-bottom:6px; }
+.form-field input, .form-field textarea, .form-field select { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:10px 14px; color:var(--text-primary); font-family:var(--font-body); font-size:.85rem; outline:none; transition:border-color .3s ease; resize:none; }
+.form-field textarea { min-height:80px; line-height:1.6; }
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color:rgba(0,212,255,.4); box-shadow:0 0 16px rgba(0,212,255,.08); }
+.form-field select option { background:#111; }
+
+/* Photo upload */
+.photo-upload-zone {
+  width:100%; min-height:100px; border:2px dashed rgba(255,255,255,.12); border-radius:12px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  cursor:pointer; transition:all .3s ease; padding:16px; position:relative; overflow:hidden;
+  background:rgba(255,255,255,.02);
+}
+.photo-upload-zone:hover { border-color:rgba(0,212,255,.4); background:rgba(0,212,255,.04); }
+.photo-upload-zone.has-photo { border-style:solid; border-color:rgba(0,212,255,.3); padding:0; min-height:160px; }
+.photo-upload-placeholder { text-align:center; }
+.photo-upload-placeholder .pu-icon { font-size:2rem; opacity:.5; display:block; margin-bottom:6px; }
+.photo-upload-placeholder p { font-family:var(--font-display); font-size:.6rem; letter-spacing:.1em; color:var(--text-dim); }
+.photo-preview-img { width:100%; height:160px; object-fit:cover; border-radius:10px; display:none; }
+.photo-upload-zone.has-photo .photo-preview-img { display:block; border-radius:0; }
+.photo-remove-btn { position:absolute; top:8px; right:8px; background:rgba(0,0,0,.6); border:1px solid rgba(255,77,109,.4); border-radius:6px; color:#ff4d6d; font-family:var(--font-display); font-size:.55rem; padding:3px 8px; cursor:pointer; letter-spacing:.1em; display:none; z-index:2; }
+.photo-upload-zone.has-photo .photo-remove-btn { display:block; }
+
+/* Emoji picker */
+.emoji-picker-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.emoji-opt { width:40px; height:40px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); font-size:1.4rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s ease; }
+.emoji-opt:hover { border-color:var(--neon-blue); background:rgba(0,212,255,.08); }
+.emoji-opt.selected { border-color:var(--neon-blue); background:rgba(0,212,255,.14); box-shadow:0 0 10px rgba(0,212,255,.2); }
+
+/* Tag picker */
+.tag-picker { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.tag-check { padding:5px 14px; border-radius:50px; border:1px solid rgba(255,255,255,.1); background:transparent; font-family:var(--font-display); font-size:.58rem; letter-spacing:.12em; cursor:pointer; color:var(--text-dim); transition:all .2s ease; user-select:none; }
+.tag-check[data-tag="proteine"].checked { background:rgba(57,255,20,.12);  color:var(--neon-green); border-color:rgba(57,255,20,.4); }
+.tag-check[data-tag="lowcal"].checked   { background:rgba(0,212,255,.12);  color:var(--neon-blue);  border-color:rgba(0,212,255,.4); }
+.tag-check[data-tag="cutting"].checked  { background:rgba(157,80,187,.12); color:#c97de8;           border-color:rgba(157,80,187,.4); }
+.tag-check[data-tag="bulking"].checked  { background:rgba(255,204,0,.12);  color:var(--neon-gold);  border-color:rgba(255,204,0,.4); }
+.tag-check[data-tag="vegan"].checked    { background:rgba(57,255,20,.08);  color:#7fff7f;           border-color:rgba(57,255,20,.25); }
+.tag-check[data-tag="rapide"].checked   { background:rgba(255,100,50,.12); color:#ff9060;           border-color:rgba(255,100,50,.4); }
+
+/* Macro calc panel */
+.macro-calc-trigger { display:flex; justify-content:flex-end; margin-top:6px; }
+.btn-calc-macros { background:none; border:1px solid rgba(0,212,255,.3); border-radius:8px; color:var(--neon-blue); font-family:var(--font-display); font-size:.6rem; letter-spacing:.12em; padding:6px 14px; cursor:pointer; transition:all .2s ease; }
+.btn-calc-macros:hover { background:rgba(0,212,255,.08); }
+.macro-calc-panel { margin-top:10px; background:rgba(0,212,255,.04); border:1px solid rgba(0,212,255,.2); border-radius:12px; padding:14px; display:none; }
+.macro-calc-panel.visible { display:block; animation:tabFadeIn .25s ease; }
+.calc-panel-title { font-family:var(--font-display); font-size:.6rem; color:var(--neon-blue); letter-spacing:.15em; margin-bottom:10px; }
+.calc-result-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
+.calc-result-item { text-align:center; padding:8px; background:rgba(255,255,255,.03); border-radius:8px; }
+.calc-result-item .crv { font-family:var(--font-display); font-size:1rem; font-weight:700; display:block; }
+.calc-result-item .crl { font-family:var(--font-body); font-size:.55rem; color:var(--text-dim); text-transform:uppercase; }
+.calc-result-item.cri-kcal .crv { color:var(--neon-gold); }
+.calc-result-item.cri-prot .crv { color:var(--neon-green); }
+.calc-result-item.cri-gluc .crv { color:var(--neon-blue); }
+.calc-result-item.cri-lip  .crv { color:#c97de8; }
+.calc-breakdown { font-family:var(--font-body); font-size:.7rem; color:var(--text-dim); line-height:1.8; max-height:120px; overflow-y:auto; margin-bottom:10px; }
+.calc-breakdown .cb-match { color:var(--neon-green); }
+.calc-breakdown .cb-nomatch { color:rgba(255,100,50,.6); }
+.btn-apply-macros { width:100%; padding:8px; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); border:none; border-radius:8px; color:white; font-family:var(--font-display); font-size:.62rem; letter-spacing:.12em; font-weight:700; cursor:pointer; transition:all .2s ease; }
+.btn-apply-macros:hover { opacity:.9; transform:translateY(-1px); }
+
+/* Form actions */
+.form-actions { display:flex; gap:10px; margin-top:1.8rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,.05); }
+.btn-recipe-cancel { flex:1; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:transparent; color:var(--text-dim); font-family:var(--font-display); font-size:.7rem; letter-spacing:.15em; cursor:pointer; transition:all .3s ease; }
+.btn-recipe-cancel:hover { border-color:#ff4d6d; color:#ff4d6d; }
+.btn-recipe-save { flex:2; padding:12px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); color:white; font-family:var(--font-display); font-size:.7rem; letter-spacing:.15em; font-weight:700; cursor:pointer; transition:all .3s ease; box-shadow:0 4px 15px rgba(0,212,255,.3); }
+.btn-recipe-save:hover { box-shadow:0 8px 25px rgba(0,212,255,.5); transform:translateY(-2px); }
+</style>
+</head>
+<body>
+<nexus-background></nexus-background>
+<nexus-navbar active="recipes"></nexus-navbar>
+
+<header class="page-header">
+  <div class="page-label">MODULE 05 — NUTRITION & CUISINE</div>
+  <h1 class="page-title neon-text">RECET<span>TES</span></h1>
+  <div class="page-divider"></div>
+</header>
+
+<!-- AI Insight -->
+<div style="padding:0 5rem; margin-bottom:1.5rem;">
+  <div class="ai-insight-box">
+    <div class="ai-icon">🥗</div>
+    <div class="ai-content">
+      <h4>CORE NUTRITION — BASE DE RECETTES</h4>
+      <p>Enregistrez, organisez et consultez vos recettes. Ajoutez des repas à votre suivi journalier, calculez vos macros automatiquement et utilisez le mode Frigo pour trouver quoi cuisiner.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DAILY MACRO TRACKER ══════════════════════════════════ -->
+<div class="daily-tracker" id="dailyTracker">
+  <div class="daily-tracker-header" onclick="toggleDailyTracker()">
+    <span class="dt-icon">📊</span>
+    <span class="dt-title">MACROS D'AUJOURD'HUI</span>
+    <span class="dt-summary" id="dtSummary">0 kcal · 0g prot</span>
+    <div class="dt-right">
+      <button class="tracker-goal-btn" onclick="event.stopPropagation(); openGoalsModal()">⚙ OBJECTIFS</button>
+      <span class="tracker-toggle-icon" id="trackerToggleIcon">▼</span>
+    </div>
+  </div>
+  <div class="tracker-body" id="trackerBody">
+    <div class="tracker-goal-bars">
+      <div class="tracker-goal-item">
+        <div class="tracker-goal-label"><span>KCAL</span><span id="tg-kcal-num">0 / 2500</span></div>
+        <div class="tracker-goal-track"><div class="tracker-goal-fill" id="tg-kcal-fill" style="background:var(--neon-gold); width:0%;"></div></div>
+      </div>
+      <div class="tracker-goal-item">
+        <div class="tracker-goal-label"><span>PROTÉINES</span><span id="tg-prot-num">0g / 180g</span></div>
+        <div class="tracker-goal-track"><div class="tracker-goal-fill" id="tg-prot-fill" style="background:var(--neon-green); width:0%;"></div></div>
+      </div>
+      <div class="tracker-goal-item">
+        <div class="tracker-goal-label"><span>GLUCIDES</span><span id="tg-gluc-num">0g / 250g</span></div>
+        <div class="tracker-goal-track"><div class="tracker-goal-fill" id="tg-gluc-fill" style="background:var(--neon-blue); width:0%;"></div></div>
+      </div>
+      <div class="tracker-goal-item">
+        <div class="tracker-goal-label"><span>LIPIDES</span><span id="tg-lip-num">0g / 70g</span></div>
+        <div class="tracker-goal-track"><div class="tracker-goal-fill" id="tg-lip-fill" style="background:#c97de8; width:0%;"></div></div>
+      </div>
+    </div>
+    <div class="tracker-meals-list" id="trackerMealsList"></div>
+    <div class="tracker-actions">
+      <button class="tracker-clear-btn" onclick="clearDailyMeals()">🗑 VIDER LA JOURNÉE</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stats bar -->
+<div class="recipe-stats-bar" id="recipeStatsBar">
+  <div class="recipe-stat-item"><span class="stat-n" id="stat-total">0</span><span>Recettes enregistrées</span></div>
+  <div class="recipe-stat-item"><span class="stat-n" id="stat-protein">0</span><span>Haute protéine</span></div>
+  <div class="recipe-stat-item"><span class="stat-n" id="stat-lowcal">0</span><span>Faibles en calories</span></div>
+  <div class="recipe-stat-item"><span class="stat-n" id="stat-fav">0</span><span>Favoris ⭐</span></div>
+</div>
+
+<!-- Search -->
+<div class="recipe-search-bar">
+  <span class="recipe-search-icon">🔍</span>
+  <input type="text" id="recipeSearch" placeholder="Rechercher une recette, ingrédient, tag..." autocomplete="off">
+</div>
+
+<!-- Filter chips -->
+<div class="recipe-filters">
+  <button class="recipe-chip active" data-filter="all">TOUTES</button>
+  <button class="recipe-chip" data-filter="proteine">💪 PROTÉINE</button>
+  <button class="recipe-chip" data-filter="lowcal">💧 LOW CAL</button>
+  <button class="recipe-chip" data-filter="cutting">✂️ CUTTING</button>
+  <button class="recipe-chip" data-filter="bulking">📈 BULKING</button>
+  <button class="recipe-chip" data-filter="vegan">🌱 VEGAN</button>
+  <button class="recipe-chip" data-filter="rapide">⚡ RAPIDE</button>
+  <button class="recipe-chip" data-filter="favoris">⭐ FAVORIS</button>
+  <button class="recipe-chip fridge-chip" id="fridgeChip" onclick="toggleFridgeModal()">🧊 MODE FRIGO</button>
+</div>
+
+<!-- Fridge active indicator -->
+<div class="fridge-active-bar" id="fridgeActiveBar">
+  <span>🧊 FRIGO ACTIF —</span>
+  <div class="fridge-tags" id="fridgeTags"></div>
+  <button class="fridge-clear-btn" onclick="clearFridgeMode()">✕ DÉSACTIVER</button>
+</div>
+
+<!-- Recipe Grid -->
+<div class="recipe-grid" id="recipeGrid"></div>
+
+<!-- FAB -->
+<button class="recipe-add-fab" id="recipeAddFab" title="Ajouter une recette">+</button>
+
+<!-- Toast -->
+<div class="recipe-toast" id="recipeToast"></div>
+
+
+<!-- ══ RECIPE DETAIL MODAL ══════════════════════════════════ -->
+<div class="recipe-detail-modal" id="recipeDetailModal">
+  <div class="recipe-detail-box" id="recipeDetailBox">
+    <button class="detail-close-btn" onclick="closeDetailModal()">✕</button>
+    <div class="detail-photo-area" id="detailPhotoArea"><img id="detailPhotoImg" alt="photo"></div>
+    <div class="detail-header" id="detailHeader"></div>
+    <div class="portion-multiplier" id="detailPortionMult"></div>
+    <div class="detail-macros-row" id="detailMacros"></div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+
+<!-- ══ ADD / EDIT RECIPE MODAL ══════════════════════════════ -->
+<div class="recipe-form-modal" id="recipeFormModal">
+  <div class="recipe-form-box">
+    <div class="form-modal-title" id="formModalTitle">🍳 NOUVELLE RECETTE</div>
+
+    <!-- Photo upload -->
+    <div class="form-field" style="margin-bottom:1.2rem;">
+      <label>PHOTO DE LA RECETTE</label>
+      <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('photoFileInput').click()">
+        <div class="photo-upload-placeholder" id="photoPlaceholder">
+          <span class="pu-icon">📷</span>
+          <p>Cliquer pour ajouter une photo</p>
+          <p style="font-size:.55rem; margin-top:4px; color:rgba(255,255,255,.2);">JPG, PNG — redimensionnement auto</p>
+        </div>
+        <img class="photo-preview-img" id="photoPreviewImg" alt="preview">
+        <button class="photo-remove-btn" id="photoRemoveBtn" onclick="event.stopPropagation(); removePhoto()">✕ SUPPRIMER</button>
+        <input type="file" id="photoFileInput" style="display:none;" accept="image/*">
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>NOM DE LA RECETTE *</label>
+        <input type="text" id="fName" placeholder="ex: Poulet grillé riz basmati" maxlength="60">
+      </div>
+    </div>
+
+    <!-- Emoji -->
+    <div class="form-field" style="margin-bottom:1rem;">
+      <label>ÉMOJI / ICÔNE</label>
+      <div class="emoji-picker-row" id="emojiPicker">
+        <div class="emoji-opt selected" data-emoji="🍗">🍗</div>
+        <div class="emoji-opt" data-emoji="🥩">🥩</div>
+        <div class="emoji-opt" data-emoji="🐟">🐟</div>
+        <div class="emoji-opt" data-emoji="🥚">🥚</div>
+        <div class="emoji-opt" data-emoji="🍳">🍳</div>
+        <div class="emoji-opt" data-emoji="🥗">🥗</div>
+        <div class="emoji-opt" data-emoji="🍱">🍱</div>
+        <div class="emoji-opt" data-emoji="🥣">🥣</div>
+        <div class="emoji-opt" data-emoji="🫙">🫙</div>
+        <div class="emoji-opt" data-emoji="🥤">🥤</div>
+        <div class="emoji-opt" data-emoji="🍵">🍵</div>
+        <div class="emoji-opt" data-emoji="🥜">🥜</div>
+        <div class="emoji-opt" data-emoji="🫘">🫘</div>
+        <div class="emoji-opt" data-emoji="🌮">🌮</div>
+        <div class="emoji-opt" data-emoji="🍜">🍜</div>
+        <div class="emoji-opt" data-emoji="🥙">🥙</div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-field" style="margin-bottom:1rem;">
+      <label>TAGS / CATÉGORIES</label>
+      <div class="tag-picker" id="tagPicker">
+        <span class="tag-check" data-tag="proteine">💪 Protéine</span>
+        <span class="tag-check" data-tag="lowcal">💧 Low Cal</span>
+        <span class="tag-check" data-tag="cutting">✂️ Cutting</span>
+        <span class="tag-check" data-tag="bulking">📈 Bulking</span>
+        <span class="tag-check" data-tag="vegan">🌱 Vegan</span>
+        <span class="tag-check" data-tag="rapide">⚡ Rapide</span>
+      </div>
+    </div>
+
+    <!-- Macros -->
+    <div class="form-row cols-4">
+      <div class="form-field"><label>KCAL</label><input type="number" id="fKcal" placeholder="350" min="0"></div>
+      <div class="form-field"><label>PROTÉINES (g)</label><input type="number" id="fProt" placeholder="40" min="0"></div>
+      <div class="form-field"><label>GLUCIDES (g)</label><input type="number" id="fGluc" placeholder="30" min="0"></div>
+      <div class="form-field"><label>LIPIDES (g)</label><input type="number" id="fLip" placeholder="8" min="0"></div>
+    </div>
+
+    <!-- Time + Portions -->
+    <div class="form-row cols-2" style="margin-bottom:1rem;">
+      <div class="form-field"><label>TEMPS DE PRÉPARATION</label><input type="text" id="fTime" placeholder="15 min" maxlength="20"></div>
+      <div class="form-field"><label>NOMBRE DE PORTIONS</label><input type="number" id="fPortions" placeholder="2" min="1" value="1"></div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-row" style="margin-bottom:1rem;">
+      <div class="form-field">
+        <label>DESCRIPTION COURTE</label>
+        <input type="text" id="fDesc" placeholder="Repas post-workout idéal, riche en protéines..." maxlength="120">
+      </div>
+    </div>
+
+    <!-- Ingredients + Macro calc -->
+    <div class="form-row" style="margin-bottom:.2rem;">
+      <div class="form-field">
+        <label>INGRÉDIENTS (un par ligne avec quantité)</label>
+        <textarea id="fIngredients" placeholder="200g blanc de poulet&#10;80g riz basmati cru&#10;1 c.s. huile d'olive&#10;Sel, poivre"></textarea>
+      </div>
+    </div>
+    <div class="macro-calc-trigger">
+      <button class="btn-calc-macros" type="button" onclick="runMacroCalc()">⚡ CALCULER LES MACROS</button>
+    </div>
+    <div class="macro-calc-panel" id="macrCalcPanel">
+      <div class="calc-panel-title">RÉSULTAT — ESTIMATION POUR 1 PORTION</div>
+      <div class="calc-result-grid" id="calcResultGrid"></div>
+      <div class="calc-breakdown" id="calcBreakdown"></div>
+      <button class="btn-apply-macros" type="button" onclick="applyCalculatedMacros()">✓ APPLIQUER CES VALEURS AUX CHAMPS</button>
+    </div>
+
+    <!-- Instructions -->
+    <div class="form-row" style="margin-top:1rem;">
+      <div class="form-field">
+        <label>PRÉPARATION / INSTRUCTIONS</label>
+        <textarea id="fInstructions" style="min-height:100px;" placeholder="1. Assaisonnez le poulet...&#10;2. Faites cuire le riz..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-recipe-cancel" onclick="closeFormModal()">ANNULER</button>
+      <button class="btn-recipe-save" id="formSaveBtn" onclick="saveRecipe()">✓ ENREGISTRER</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ FRIDGE MODE MODAL ════════════════════════════════════ -->
+<div class="recipe-form-modal" id="fridgeModal">
+  <div class="recipe-form-box" style="max-height:60vh;">
+    <div class="form-modal-title">🧊 MODE FRIGO</div>
+    <div class="form-field" style="margin-bottom:1rem;">
+      <label>INGRÉDIENTS DISPONIBLES (un par ligne ou séparés par virgule)</label>
+      <textarea id="fridgeInput" style="min-height:130px;" placeholder="poulet&#10;riz&#10;oeufs&#10;tomates&#10;feta"></textarea>
+    </div>
+    <p style="font-family:var(--font-body); font-size:.72rem; color:var(--text-dim); margin-bottom:1.5rem; line-height:1.6;">
+      Les recettes contenant <strong style="color:rgba(0,255,200,.8);">au moins un</strong> de vos ingrédients disponibles seront affichées.
+    </p>
+    <div class="form-actions">
+      <button class="btn-recipe-cancel" onclick="closeFridgeModal()">ANNULER</button>
+      <button class="btn-recipe-save" style="background:linear-gradient(135deg,#00ffc8,#00a8a8);" onclick="applyFridgeMode()">🔍 FILTRER LES RECETTES</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ DAILY GOALS MODAL ════════════════════════════════════ -->
+<div class="recipe-form-modal" id="goalsModal">
+  <div class="recipe-form-box" style="max-height:55vh;">
+    <div class="form-modal-title">⚙ OBJECTIFS NUTRITIONNELS JOURNALIERS</div>
+    <div class="form-row cols-2">
+      <div class="form-field"><label>KCAL / JOUR</label><input type="number" id="goalKcal" value="2500" min="500"></div>
+      <div class="form-field"><label>PROTÉINES (g)</label><input type="number" id="goalProt" value="180" min="0"></div>
+    </div>
+    <div class="form-row cols-2" style="margin-bottom:1.5rem;">
+      <div class="form-field"><label>GLUCIDES (g)</label><input type="number" id="goalGluc" value="250" min="0"></div>
+      <div class="form-field"><label>LIPIDES (g)</label><input type="number" id="goalLip" value="70" min="0"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-recipe-cancel" onclick="closeGoalsModal()">ANNULER</button>
+      <button class="btn-recipe-save" onclick="saveGoals()">✓ ENREGISTRER</button>
+    </div>
+  </div>
+</div>
+
+
+<nexus-footer page="recipes"></nexus-footer>
+<nexus-assistant></nexus-assistant>
+
+<script src="js/core.js"></script>
+<script src="js/components.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/stars.js"></script>
+<script src="js/interactions.js"></script>
+<script src="data/foods.js"></script>
+<script src="data/recipes/bundle.js"></script>
+<script src="js/recipes.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "id": "shake-proteine-banane-cacao",
+  "name": "Shake Protéiné Banane Cacao",
+  "emoji": "🥤",
+  "tags": ["proteine", "rapide", "bulking"],
+  "kcal": 380,
+  "prot": 35,
+  "gluc": 50,
+  "lip": 5,
+  "time": "3 min",
+  "portions": 1,
+  "desc": "Shake post-entraînement pour la récupération et la prise de masse.",
+  "ingredients": "1 scoop de whey vanille (30g)\n1 banane mûre\n250ml lait demi-écrémé\n1 c.s. cacao en poudre non sucré\n4 glaçons",
+  "instructions": "1. Mettez tous les ingrédients dans un blender.\n2. Mixez 30 secondes.\n3. Servez immédiatement.",
+  "source": "builtin"
+}

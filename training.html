@@ -29,11 +29,14 @@
   <div class="page-divider"></div>
 </header>
 
-<div class="tabs-nav">
-  <button class="tab-btn active" data-target="tab-overview">WORKSPACE</button>
-  <button class="tab-btn" data-target="tab-stats">ANALYTICS</button>
-  <button class="tab-btn" data-target="tab-body">BODY & NUTRITION</button>
-  <button class="tab-btn" data-target="tab-log">WORKOUT LOG</button>
+<div class="tabs-nav" style="display:flex; justify-content:space-between; align-items:center;">
+  <div style="display:flex;">
+    <button class="tab-btn active" data-target="tab-overview">WORKSPACE</button>
+    <button class="tab-btn" data-target="tab-stats">ANALYTICS</button>
+    <button class="tab-btn" data-target="tab-body">BODY & NUTRITION</button>
+    <button class="tab-btn" data-target="tab-log">WORKOUT LOG</button>
+  </div>
+  <button class="filter-btn" style="border-color:var(--neon-gold); color:var(--neon-gold); margin-right:5rem;" onclick="openModal('wupModal')">🔥 WARM-UP GEN</button>
 </div>
 
 <!-- ==========================================
@@ -68,8 +71,43 @@
       <p>Épinglez vos modules favoris depuis les autres onglets pour les voir apparaître ici.</p>
     </div>
   </div>
+
   <div class="training-grid" id="dashboardGrid">
     <!-- Pinned cards will be injected here -->
+  </div>
+
+  <!-- BIOMETRY SUMMARY (NEW IN WORKSPACE) -->
+  <div class="program-section" id="panel-biometry-summary" style="margin-top:2rem;">
+    <div class="training-card" style="padding:1.5rem; display:grid; grid-template-columns: 1.5fr 1fr; gap:2rem; background:linear-gradient(135deg, rgba(0, 242, 254, 0.05) 0%, rgba(0,0,0,0) 100%); border-right: 2px solid var(--neon-blue);">
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+            <div class="section-title" style="margin-bottom:0.5rem;">STATUT BIOMÉTRIQUE GLOBAL</div>
+            <div style="font-family:var(--font-body); font-size:0.75rem; color:var(--text-secondary); line-height:1.6;">
+                Analyse en temps réel de la sollicitation musculaire. 
+                <br><span style="color:var(--neon-blue);">Passez en mode [ANALYTICS] pour une étude granulaire.</span>
+            </div>
+            <div id="neuralPredictionText_overview" style="margin-top:1.5rem; padding:10px; border-left:2px solid var(--neon-purple); background:rgba(185, 43, 39, 0.05); font-family:var(--font-body); font-size:0.7rem;">
+                Données neurale en cours...
+            </div>
+        </div>
+        <div style="display:flex; justify-content:center; align-items:center; gap:20px;">
+             <!-- Simplified mini-SVG for overview -->
+             <svg viewBox="0 0 100 200" style="height:150px;" class="human-wireframe">
+                 <use href="#muscle-chest"></use><use href="#muscle-abs"></use><use href="#muscle-quads-l"></use><use href="#muscle-quads-r"></use>
+                 <use href="#muscle-shoulders-l"></use><use href="#muscle-shoulders-r"></use>
+                 <path d="M50 20 L55 25 L55 35 L50 40 L45 35 L45 25 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+                 <path d="M35 50 L65 50 L75 55 L80 85 L75 110 L65 115 L65 160 L55 200 M35 115 L35 160 L45 200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+             </svg>
+             <style>
+               .muscle-group {
+                 fill: rgba(0, 242, 254, 0.05);
+                 stroke: rgba(255, 255, 255, 0.2);
+                 stroke-width: 0.8px;
+                 transition: all 0.4s ease;
+                 cursor: crosshair;
+               }
+             </style>
+        </div>
+    </div>
   </div>
 </main>
 
@@ -92,7 +130,9 @@
     <div class="training-card" id="panel-weight-chart" style="padding: 1.5rem;">
       <button class="pin-btn" onclick="togglePin('panel-weight-chart')" title="Épingler au Workspace">📌</button>
       <div class="section-title" style="margin-bottom:1rem;">ÉVOLUTION DU POIDS CORPOREL</div>
-      <canvas id="weightChart" style="width:100%; height:220px;"></canvas>
+      <div class="chart-container">
+        <canvas id="weightChart"></canvas>
+      </div>
     </div>
     
     <div class="training-card" id="panel-cal-volume" style="padding: 1.5rem; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
@@ -136,8 +176,82 @@
          <button class="pin-btn" style="position:static;" onclick="togglePin('panel-perf-chart')" title="Épingler au Workspace">📌</button>
        </div>
     </div>
-    <div class="training-card" style="padding: 1.5rem;">
-      <canvas id="perfChart" style="width:100%; height:250px;"></canvas>
+  </div>
+
+  <!-- BOSS GOALS SECTION -->
+  <div class="program-section" id="panel-boss-goals">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="section-title">OBJECTIFS BOSS</div>
+      <div style="display:flex; gap:10px;">
+        <button class="filter-btn" onclick="openModal('addBossModal')">➕ NOUVEL OBJECTIF</button>
+        <button class="pin-btn" style="position:static;" onclick="togglePin('panel-boss-goals')" title="Épingler au Workspace">📌</button>
+      </div>
+    </div>
+    <div class="boss-goals-grid" id="bossGoalsGrid">
+      <!-- Goals rendered by JS -->
+    </div>
+  </div>
+
+  <!-- BIOMETRY & BALANCE SECTION -->
+  <div class="program-section" id="panel-biometry" style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+    <!-- LEFT: MUSCLE HEATMAP -->
+    <div class="training-card" style="padding:1.5rem;">
+      <div class="section-title">ENGAGEMENT MUSCULAIRE (WIREFRAME)</div>
+      <div class="biometric-container" style="display:flex; justify-content:space-around; align-items:center; padding:1rem 0;">
+        <!-- FRONT SVG -->
+        <div class="body-svg-box" style="width:120px;">
+          <svg viewBox="0 0 100 200" class="human-wireframe" id="svg-front">
+             <path id="muscle-chest" d="M35 55 Q50 50 65 55 L65 70 Q50 75 35 70 Z" class="muscle-group" title="Pectoraux" />
+             <path id="muscle-abs" d="M40 75 L60 75 L58 110 L42 110 Z" class="muscle-group" title="Abdominaux" />
+             <path id="muscle-quads-l" d="M30 115 L45 115 L42 160 L32 160 Z" class="muscle-group" title="Quadriceps G" />
+             <path id="muscle-quads-r" d="M55 115 L70 115 L68 160 L58 160 Z" class="muscle-group" title="Quadriceps D" />
+             <path id="muscle-shoulders-l" d="M25 50 Q30 45 35 52 L32 65 Q28 62 25 58 Z" class="muscle-group" title="Deltoïdes G" />
+             <path id="muscle-shoulders-r" d="M75 50 Q70 45 65 52 L68 65 Q72 62 75 58 Z" class="muscle-group" title="Deltoïdes D" />
+             <path id="muscle-biceps-l" d="M22 65 L30 68 L28 90 L20 85 Z" class="muscle-group" title="Biceps G" />
+             <path id="muscle-biceps-r" d="M78 65 L70 68 L72 90 L80 85 Z" class="muscle-group" title="Biceps D" />
+             <path d="M50 20 L55 25 L55 35 L50 40 L45 35 L45 25 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+             <path d="M35 50 L65 50 L75 55 L80 85 L75 110 L65 115 L65 160 L55 200 M35 115 L35 160 L45 200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+          </svg>
+          <div style="text-align:center; font-family:var(--font-display); font-size:0.5rem; color:var(--text-dim); margin-top:5px; letter-spacing:0.1em;">FRONT VIEW</div>
+        </div>
+        <!-- BACK SVG -->
+        <div class="body-svg-box" style="width:120px;">
+          <svg viewBox="0 0 100 200" class="human-wireframe" id="svg-back">
+             <path id="muscle-back" d="M30 50 L70 50 L75 90 L25 90 Z" class="muscle-group" title="Dorsaux" />
+             <path id="muscle-traps" d="M40 42 L60 42 L65 55 L35 55 Z" class="muscle-group" title="Trapèzes" />
+             <path id="muscle-triceps-l" d="M20 65 L28 68 L26 90 L18 85 Z" class="muscle-group" title="Triceps G" />
+             <path id="muscle-triceps-r" d="M80 65 L72 68 L74 90 L82 85 Z" class="muscle-group" title="Triceps D" />
+             <path id="muscle-glutes" d="M35 112 L65 112 L68 135 L32 135 Z" class="muscle-group" title="Fessiers" />
+             <path id="muscle-hams-l" d="M30 140 L45 140 L42 175 L32 175 Z" class="muscle-group" title="Ischios G" />
+             <path id="muscle-hams-r" d="M55 140 L70 140 L68 175 L58 175 Z" class="muscle-group" title="Ischios D" />
+             <path d="M50 20 L55 25 L55 35 L50 40 L45 35 L45 25 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+             <path d="M30 50 L70 50 L80 85 L70 112 L65 140 L50 200 M35 140 L50 200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
+          </svg>
+          <div style="text-align:center; font-family:var(--font-display); font-size:0.5rem; color:var(--text-dim); margin-top:5px; letter-spacing:0.1em;">BACK VIEW</div>
+        </div>
+      </div>
+      <!-- Tooltip container -->
+      <div id="muscleTooltip" class="muscle-tooltip">
+        <div id="mt-name">Muscle</div>
+        <div class="mt-bar-bg"><div id="mt-fill" class="mt-bar-fill"></div></div>
+        <div id="mt-pct">0%</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: RADAR & PREDICTION -->
+    <div style="display:flex; flex-direction:column; gap:2rem;">
+      <div class="training-card" style="padding:1.5rem; flex:1;">
+        <div class="section-title">BALANCE NEURALE (PUSH/PULL/LEGS)</div>
+        <div style="height:220px; position:relative;">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+      <div class="training-card" style="padding:1.5rem; border:1px dashed var(--neon-purple); background:rgba(185, 43, 39, 0.05);">
+        <div style="font-family:var(--font-display); font-size:0.6rem; color:var(--neon-purple); letter-spacing:0.2em; margin-bottom:1rem;">PRÉDICTION NEURALE</div>
+        <div id="neuralPredictionText" style="font-family:var(--font-body); font-size:0.75rem; line-height:1.6; color:var(--text-secondary);">
+          Analyse des trajectoires de force en cours...
+        </div>
+      </div>
     </div>
   </div>
 
@@ -418,7 +532,51 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Add Boss Goal Modal -->
+  <div class="modal-overlay" id="addBossModal">
+    <div class="modal-box">
+      <div class="modal-title">🏆 NOUVEL OBJECTIF BOSS</div>
+      <div class="modal-field">
+        <label>EXERCICE</label>
+        <select id="bossExo">
+          <option value="Développé Couché">Développé Couché</option>
+          <option value="Squat">Squat</option>
+          <option value="Soulevé de Terre">Soulevé de Terre</option>
+          <option value="Développé Militaire">Développé Militaire</option>
+          <option value="Tractions">Tractions</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>OBJECTIF (KG)</label>
+        <input type="number" id="bossTarget" placeholder="ex: 100" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('addBossModal')">ANNULER</button>
+        <button class="btn-confirm" id="confirmBossGoal">ACTIVER L'OBJECTIF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warm-up Generator Modal -->
+  <div class="modal-overlay" id="wupModal">
+    <div class="modal-box">
+      <div class="modal-title">🔥 GÉNÉRATEUR D'ÉCHAUFFEMENT</div>
+      <div class="modal-field">
+        <label>POIDS DE TRAVAIL CIBLE (KG)</label>
+        <input type="number" id="wupTarget" placeholder="ex: 80" />
+      </div>
+      <div id="wupResult" style="margin-top:1.5rem; display:none;">
+        <div style="font-family:var(--font-display); font-size:0.6rem; color:var(--text-dim); margin-bottom:1rem;">PROTOCOLE OPTIMISÉ :</div>
+        <div id="wupSets" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('wupModal')">FERMER</button>
+        <button class="btn-confirm" id="genWupBtn">GÉNÉRER</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/core.js"></script>
 <script src="js/components.js"></script>
 <script src="js/theme.js"></script>

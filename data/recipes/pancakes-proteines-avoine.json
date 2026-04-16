@@ -1,0 +1,16 @@
+{
+  "id": "pancakes-proteines-avoine",
+  "name": "Pancakes protéinés avoine",
+  "emoji": "🍳",
+  "tags": ["proteine", "bulking"],
+  "kcal": 450,
+  "prot": 32,
+  "gluc": 55,
+  "lip": 9,
+  "time": "12 min",
+  "portions": 2,
+  "desc": "Pancakes moelleux et protéinés pour un breakfast de champion.",
+  "ingredients": "100g flocons d'avoine\n2 œufs\n1 scoop whey (30g)\n150ml lait\n1 c.c. levure chimique\n1 c.c. miel",
+  "instructions": "1. Mixez les flocons d'avoine en farine fine.\n2. Mélangez avec les œufs, la whey, le lait et la levure.\n3. Laissez reposer 5 min.\n4. Faites cuire à la poêle 2 min de chaque côté.\n5. Servez avec le miel.",
+  "source": "builtin"
+}

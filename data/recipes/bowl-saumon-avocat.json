@@ -1,0 +1,16 @@
+{
+  "id": "bowl-saumon-avocat",
+  "name": "Bowl Saumon Avocat",
+  "emoji": "🐟",
+  "tags": ["proteine", "lowcal"],
+  "kcal": 510,
+  "prot": 42,
+  "gluc": 28,
+  "lip": 24,
+  "time": "15 min",
+  "portions": 1,
+  "desc": "Bowl frais riche en oméga-3, parfait pour la récupération musculaire.",
+  "ingredients": "150g saumon fumé\n1/2 avocat\n80g riz blanc cuit\n1 c.s. sauce soja\nGraines de sésame, citron",
+  "instructions": "1. Disposez le riz dans un bol.\n2. Tranchez le saumon et l'avocat.\n3. Arrosez de sauce soja et jus de citron.\n4. Parsemez de graines de sésame.",
+  "source": "builtin"
+}

@@ -2370,6 +2370,7 @@ body::before {
   box-shadow: 0 0 8px var(--accent-color);
 }
 
+
 .heatmap-labels {
   display: flex;
   justify-content: space-between;
@@ -2379,6 +2380,192 @@ body::before {
   margin-top: 0.5rem;
   padding: 0 5px;
 }
+
+/* CHART CONTAINER FOR STABILITY */
+.chart-container {
+  position: relative;
+  height: 250px;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* =============================================
+   V3.2.0 EXTENSIONS — ENHANCED FEATURES
+   ============================================= */
+
+/* 1. BOSS GOALS */
+.boss-goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.boss-card {
+  border: 1px solid var(--neon-gold) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(255, 204, 0, 0.05)) !important;
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.1) !important;
+}
+.boss-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--neon-gold);
+  color: black;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+.boss-progress-container {
+  margin-top: 1.5rem;
+}
+.boss-stats {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+/* 2. ENHANCED LOUPE (LIGHTBOX) */
+.loupe {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 2px solid var(--neon-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--neon-blue), inset 0 0 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+  display: none;
+  background-repeat: no-repeat;
+  z-index: 1000;
+  overflow: hidden;
+}
+.loupe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 212, 255, 0.05) 0px, rgba(0, 212, 255, 0.05) 1px, transparent 2px);
+  pointer-events: none;
+}
+
+/* 3. MOODBOARD MASONRY */
+.mood-grid {
+  columns: 4;
+  column-gap: 1.5rem;
+}
+.mood-item {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.mood-item:hover { transform: scale(1.02); border-color: var(--neon-purple); }
+.mood-item img { width: 100%; display: block; }
+
+@media (max-width: 1024px) { .mood-grid { columns: 3; } }
+@media (max-width: 768px) { .mood-grid { columns: 2; } }
+@media (max-width: 480px) { .mood-grid { columns: 1; } }
+
+/* 4. WEB LINKS IMPROVEMENTS */
+.hub-link-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: white;
+  padding: 4px;
+}
+
+/* =============================================
+   V3.3.0 — BIOMETRICS & ART TOOLS
+   ============================================= */
+
+/* MUSCLE WIREFRAME HEATMAP */
+.human-wireframe {
+  max-height: 250px;
+  filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.1));
+}
+.muscle-group {
+  fill: rgba(255, 255, 255, 0.05);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 0.5px;
+  transition: all 0.4s ease;
+  cursor: crosshair;
+}
+.muscle-group:hover {
+  stroke: var(--neon-blue);
+  stroke-width: 1px;
+  filter: brightness(1.2);
+}
+
+.muscle-tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.9);
+  border: 1px solid var(--neon-blue);
+  padding: 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 2000;
+  width: 150px;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  font-family: var(--font-display);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.mt-bar-bg {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mt-bar-fill {
+  height: 100%;
+  background: var(--neon-blue);
+  width: 0%;
+  transition: width 0.3s;
+}
+#mt-name { font-size: 0.6rem; color: var(--neon-blue); letter-spacing: 0.1em; }
+#mt-pct { font-size: 0.8rem; color: white; font-weight: 700; text-align: right; }
+
+/* PALETTE SWATCHES */
+.palette-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+  justify-content: center;
+}
+.swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.swatch:hover { transform: scale(1.1); }
+
+/* WARM-UP SETS */
+.wup-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid var(--neon-gold);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+}
+
 
 
 

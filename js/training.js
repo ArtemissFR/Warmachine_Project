@@ -59,6 +59,10 @@ function updateDashboard() {
   reinitDashboardCharts();
 }
 
+// Global instances for dashboard charts
+let dashWChartInstance = null;
+let dashPChartInstance = null;
+
 function reinitDashboardCharts() {
   const perfs = JSON.parse(localStorage.getItem('nexus-perf-history') || '[]');
   const weights = JSON.parse(localStorage.getItem('nexus-weight-history') || '[]');
@@ -66,10 +70,12 @@ function reinitDashboardCharts() {
   // Weights Chart in Dashboard
   const dashWC = document.getElementById('dash-weightChart');
   if (dashWC) {
+    if (dashWChartInstance) dashWChartInstance.destroy();
+    
     const labels = weights.map(h => h.date);
     const data = weights.map(h => parseFloat(h.val));
     if (window.Chart) {
-      new Chart(dashWC, {
+      dashWChartInstance = new Chart(dashWC, {
         type: 'line',
         data: {
           labels: labels,
@@ -109,7 +115,9 @@ function reinitDashboardCharts() {
       const labels = filtered.map(p => p.date);
       const data = filtered.map(p => parseFloat(p.weight));
       
-      new Chart(dashPC, {
+      if (dashPChartInstance) dashPChartInstance.destroy();
+      
+      dashPChartInstance = new Chart(dashPC, {
         type: 'line',
         data: {
           labels: labels,
@@ -804,6 +812,7 @@ function initPerf() {
   updateOverviewStats(perfs);
   updateEliteStats(perfs);
   renderPerfChart(perfs);
+  renderAdvancedAnalytics();
   
   if (perfs.length === 0) {
     perfHistoryGrid.innerHTML = '<div style="color:var(--text-dim);font-size:0.8rem;">Aucune performance enregistrée.</div>';
@@ -944,6 +953,276 @@ function renderHeatmap() {
 }
 
 
+/* =========================================================
+   BOSS GOALS SYSTEM
+   ========================================================= */
+function initBossGoals() {
+  const grid = document.getElementById('bossGoalsGrid');
+  if(!grid) return;
+  
+  const goals = JSON.parse(localStorage.getItem('nexus-boss-goals') || '[]');
+  const perfs = JSON.parse(localStorage.getItem('nexus-perf-history') || '[]');
+  
+  grid.innerHTML = '';
+  if(goals.length === 0) {
+    grid.innerHTML = '<div style="color:var(--text-dim); font-size:0.75rem;">Aucun objectif actif.</div>';
+    return;
+  }
+  
+  goals.forEach((goal, idx) => {
+    // Current PR for this exo
+    const exoHistory = perfs.filter(p => p.exo === goal.exo);
+    const currentBest = exoHistory.length > 0 ? Math.max(...exoHistory.map(p => p.weight)) : 0;
+    const progress = Math.min((currentBest / goal.target) * 100, 100);
+    const isCompleted = progress >= 100;
+    
+    const div = document.createElement('div');
+    div.className = 'training-card boss-card';
+    div.style.padding = '1.5rem';
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div class="boss-badge">${isCompleted ? 'DÉTRUIT' : 'CIBLE : BOSS'}</div>
+          <div style="font-family:var(--font-display); font-size:1.1rem; font-weight:900; color:white;">${goal.exo.toUpperCase()}</div>
+        </div>
+        <button onclick="removeBossGoal(${idx})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+      </div>
+      
+      <div class="boss-progress-container">
+        <div class="boss-stats">
+          <span>PROGRESSION</span>
+          <span>${currentBest} / ${goal.target} KG</span>
+        </div>
+        <div class="progress-bar-bg" style="height:6px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden;">
+          <div class="progress-bar-fill" style="width:${progress}%; height:100%; background:var(--neon-gold); box-shadow:0 0 10px var(--neon-gold);"></div>
+        </div>
+        <div style="margin-top:8px; font-family:var(--font-display); font-size:0.6rem; color:${isCompleted ? 'var(--neon-gold)' : 'var(--text-dim)'}; text-align:right;">
+          ${isCompleted ? 'MISSION ACCOMPLIE' : Math.round(progress) + '% DU NIVEAU BOSS'}
+        </div>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+window.removeBossGoal = (idx) => {
+  const goals = JSON.parse(localStorage.getItem('nexus-boss-goals') || '[]');
+  goals.splice(idx, 1);
+  localStorage.setItem('nexus-boss-goals', JSON.stringify(goals));
+  initBossGoals();
+};
+
+document.getElementById('confirmBossGoal')?.addEventListener('click', () => {
+  const exo = document.getElementById('bossExo').value;
+  const target = parseFloat(document.getElementById('bossTarget').value);
+  
+  if(!isNaN(target) && target > 0) {
+    const goals = JSON.parse(localStorage.getItem('nexus-boss-goals') || '[]');
+    goals.push({ exo, target });
+    localStorage.setItem('nexus-boss-goals', JSON.stringify(goals));
+    initBossGoals();
+    closeModal('addBossModal');
+    document.getElementById('bossTarget').value = '';
+    if(window.nexus) nexus.notify("Nouvel Objectif Boss Actif", "success");
+  } else {
+    if(window.nexus) nexus.notify("Veuillez entrer une cible valide", "error");
+  }
+});
+
+/* =========================================================
+   V3.3.0 — BIOMETRY LOGIC
+   ========================================================= */
+
+const MUSCLE_MAP = {
+  "Développé Couché": { primary: "chest", secondary: ["shoulders-l", "shoulders-r", "triceps-l", "triceps-r"], category: "PUSH" },
+  "Squat": { primary: "quads-r", secondary: ["quads-l", "glutes", "abs"], category: "LEGS" },
+  "Soulevé de Terre": { primary: "back", secondary: ["glutes", "hams-l", "hams-r", "abs"], category: "PULL" },
+  "Développé Militaire": { primary: "shoulders-l", secondary: ["shoulders-r", "triceps-l", "triceps-r"], category: "PUSH" },
+  "Dips": { primary: "triceps-l", secondary: ["triceps-r", "chest"], category: "PUSH" },
+  "Tractions": { primary: "back", secondary: ["traps", "biceps-l", "biceps-r"], category: "PULL" },
+  "Rowing Barre": { primary: "back", secondary: ["traps", "biceps-l", "biceps-r"], category: "PULL" },
+  "Curl Biceps": { primary: "biceps-l", secondary: ["biceps-r"], category: "PULL" },
+  "Extensions Triceps": { primary: "triceps-l", secondary: ["triceps-r"], category: "PUSH" },
+  "Leg Extension": { primary: "quads-l", secondary: ["quads-r"], category: "LEGS" },
+  "Leg Curl": { primary: "hams-l", secondary: ["hams-r"], category: "LEGS" },
+  "Élévations Latérales": { primary: "shoulders-l", secondary: ["shoulders-r"], category: "PUSH" },
+  "Oiseau Poulie": { primary: "shoulders-l", secondary: ["shoulders-r", "traps"], category: "PULL" },
+  "Presse à Cuisses": { primary: "quads-l", secondary: ["quads-r", "glutes"], category: "LEGS" },
+  "Abdominaux": { primary: "abs", secondary: [], category: "CORE" }
+};
+
+let radarChartInstance = null;
+
+function renderAdvancedAnalytics() {
+  const perfs = JSON.parse(localStorage.getItem('nexus-perf-history') || '[]');
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  
+  const muscleScores = {};
+  const categoryScores = { "PUSH": 0, "PULL": 0, "LEGS": 0, "CORE": 0 };
+  
+  perfs.forEach(p => {
+    const [d, m, y] = p.date.split('/');
+    const pDate = new Date(y, m-1, d);
+    if(pDate < thirtyDaysAgo) return;
+
+    const mapping = MUSCLE_MAP[p.exo];
+    if(!mapping) return;
+
+    const vol = p.weight * p.sets * p.reps;
+    
+    // Primary muscle (100% volume)
+    muscleScores[mapping.primary] = (muscleScores[mapping.primary] || 0) + vol;
+    // Secondary muscles (30% volume)
+    mapping.secondary.forEach(m => {
+      muscleScores[m] = (muscleScores[m] || 0) + (vol * 0.3);
+    });
+    // Category score
+    categoryScores[mapping.category] = (categoryScores[mapping.category] || 0) + vol;
+  });
+
+  // 1. HEATMAP (SVG)
+  const maxScore = Math.max(...Object.values(muscleScores), 1000);
+  Object.keys(muscleScores).forEach(mId => {
+    const score = muscleScores[mId];
+    const pct = Math.min((score / maxScore) * 100, 100);
+    const paths = document.querySelectorAll(`#muscle-${mId}`);
+    paths.forEach(p => {
+        // HSL: From Green (120) to Red (0)
+        const hue = 120 - (pct * 1.2); 
+        p.style.fill = `hsla(${hue}, 80%, 50%, 0.3)`;
+        p.style.stroke = `hsla(${hue}, 100%, 50%, 0.6)`;
+        p.dataset.pct = Math.round(pct);
+    });
+  });
+
+  // 2. RADAR CHART
+  renderRadar(categoryScores);
+
+  // 3. NEURAL PREDICTION
+  calculateNeuralPrediction(perfs);
+}
+
+function renderRadar(scores) {
+  const ctx = document.getElementById('radarChart');
+  if(!ctx) return;
+  if(radarChartInstance) radarChartInstance.destroy();
+
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['PUSH', 'PULL', 'LEGS', 'CORE'],
+      datasets: [{
+        label: 'Balance Volumétrique',
+        data: [scores.PUSH, scores.PULL, scores.LEGS, scores.CORE],
+        backgroundColor: 'rgba(0, 242, 254, 0.2)',
+        borderColor: '#00f2fe',
+        pointBackgroundColor: '#00f2fe',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: { color: 'rgba(255,255,255,0.1)' },
+          grid: { color: 'rgba(255,255,255,0.1)' },
+          pointLabels: { color: 'rgba(255,255,255,0.5)', font: { family: 'Outfit', size: 10 } },
+          ticks: { display: false }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function calculateNeuralPrediction(perfs) {
+  const text = document.getElementById('neuralPredictionText');
+  const textOverview = document.getElementById('neuralPredictionText_overview');
+  if(!text) return;
+
+  const majorExos = ["Développé Couché", "Squat", "Soulevé de Terre"];
+  let lines = [];
+
+  majorExos.forEach(exo => {
+    const history = perfs.filter(p => p.exo === exo).slice(-5);
+    if(history.length < 3) return;
+
+    const n = history.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    history.forEach((p, i) => {
+      sumX += i;
+      sumY += p.weight;
+      sumXY += i * p.weight;
+      sumXX += i * i;
+    });
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    if(slope > 0) {
+      lines.push(`${exo.toUpperCase()} : +${slope.toFixed(1)}kg suggéré.`);
+    } else {
+      lines.push(`${exo.toUpperCase()} : Focus volume.`);
+    }
+  });
+
+  const output = lines.length ? lines.join('<br>') : "Enregistrez plus de séances pour l'extrapolation.";
+  text.innerHTML = output;
+  if(textOverview) textOverview.innerHTML = output;
+}
+
+// Tooltip Management
+document.addEventListener('mouseover', (e) => {
+    if(e.target.classList.contains('muscle-group')) {
+        const tt = document.getElementById('muscleTooltip');
+        const name = e.target.getAttribute('title');
+        const pct = e.target.dataset.pct || 0;
+        
+        document.getElementById('mt-name').textContent = name.toUpperCase();
+        document.getElementById('mt-pct').textContent = pct + '%';
+        document.getElementById('mt-fill').style.width = pct + '%';
+        
+        tt.style.visibility = 'visible';
+        tt.style.opacity = '1';
+        
+        const rect = e.target.getBoundingClientRect();
+        tt.style.left = (rect.left + window.scrollX + 20) + 'px';
+        tt.style.top = (rect.top + window.scrollY - 100) + 'px';
+    }
+});
+document.addEventListener('mouseout', (e) => {
+    if(e.target.classList.contains('muscle-group')) {
+        const tt = document.getElementById('muscleTooltip');
+        tt.style.opacity = '0';
+        tt.style.visibility = 'hidden';
+    }
+});
+
+// Warm-up Gen
+document.getElementById('genWupBtn')?.addEventListener('click', () => {
+    const target = parseFloat(document.getElementById('wupTarget').value);
+    if(!target || target <= 0) return;
+
+    const res = document.getElementById('wupResult');
+    const container = document.getElementById('wupSets');
+    res.style.display = 'block';
+    container.innerHTML = '';
+
+    const protocol = [
+        { pct: 0.5, reps: 10, label: "ÉVEIL NERVEUX" },
+        { pct: 0.7, reps: 5, label: "CALIBRAGE" },
+        { pct: 0.85, reps: 2, label: "ACCLIMATATION" }
+    ];
+
+    protocol.forEach(step => {
+        const weight = Math.round(target * step.pct);
+        const div = document.createElement('div');
+        div.className = 'wup-row';
+        div.innerHTML = `<span>${step.label}</span> <span>${weight}kg × ${step.reps}</span>`;
+        container.appendChild(div);
+    });
+});
+
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -952,6 +1231,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initPerf();
   initRoutines();
   initPhotos();
+  initBossGoals();
+  renderAdvancedAnalytics();
   
   // Phase 2 features
   renderHeatmap();

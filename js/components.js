@@ -15,6 +15,7 @@ class NexusNavbar extends HTMLElement {
         <ul class="nav-links">
           <li><a href="index.html" class="nav-link ${activePage === 'home' ? 'active' : ''}"><span class="nav-num">🏠</span>DASHBOARD</a></li>
           <li><a href="training.html" class="nav-link ${activePage === 'training' ? 'active' : ''}"><span class="nav-num">💪</span>TRAINING</a></li>
+          <li><a href="recipes.html" class="nav-link ${activePage === 'recipes' ? 'active' : ''}"><span class="nav-num">🥗</span>RECETTES</a></li>
           <li><a href="network.html" class="nav-link ${activePage === 'network' ? 'active' : ''}"><span class="nav-num">🌐</span>NEBULA LINK</a></li>
           <li><a href="gallery.html" class="nav-link ${activePage === 'gallery' ? 'active' : ''}"><span class="nav-num">🎨</span>VISUAL ARCHIVE</a></li>
         </ul>

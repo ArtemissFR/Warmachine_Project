@@ -24,23 +24,31 @@
 
 <main class="page-content">
 
-  <!-- Filters & Sorting -->
-  <div class="gallery-filters" style="display:flex; justify-content:space-between; align-items:center;">
-    <div style="display:flex; gap:0.8rem;">
-      <button class="filter-btn active" data-filter="all">TOUT</button>
-      <button class="filter-btn" data-filter="dessin">✒️ DESSINS</button>
-      <button class="filter-btn" data-filter="ia">🤖 ART IA</button>
-    </div>
-    
-    <div style="display:flex; align-items:center; gap:10px;">
-        <label style="font-family:var(--font-display); font-size:0.6rem; color:var(--text-dim); letter-spacing:0.1em;">TRIER PAR</label>
-        <select id="gallerySort" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:var(--text-primary); font-family:var(--font-body); padding:6px 12px; border-radius:4px; outline:none; font-size:0.75rem; cursor:pointer;">
-            <option value="newest">PLUS RÉCENT</option>
-            <option value="oldest">PLUS ANCIEN</option>
-            <option value="az">NOM (A-Z)</option>
-        </select>
-    </div>
+  <!-- Tabs Navigation -->
+  <div class="tabs-nav" style="margin-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; gap:2rem;">
+    <button class="tab-btn active" data-tab="gallery" style="background:none; border:none; color:white; font-family:var(--font-display); font-size:0.8rem; letter-spacing:0.2em; padding:1rem 0; cursor:pointer; position:relative;">ARCHIVES</button>
+    <button class="tab-btn" data-tab="moodboard" style="background:none; border:none; color:var(--text-dim); font-family:var(--font-display); font-size:0.8rem; letter-spacing:0.2em; padding:1rem 0; cursor:pointer; position:relative;">MOODBOARD</button>
   </div>
+
+  <!-- GALLERY VIEW -->
+  <div id="view-gallery" class="tab-content active">
+    <!-- Filters & Sorting -->
+    <div class="gallery-filters" style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; gap:0.8rem;">
+        <button class="filter-btn active" data-filter="all">TOUT</button>
+        <button class="filter-btn" data-filter="dessin">✒️ DESSINS</button>
+        <button class="filter-btn" data-filter="ia">🤖 ART IA</button>
+      </div>
+      
+      <div style="display:flex; align-items:center; gap:10px;">
+          <label style="font-family:var(--font-display); font-size:0.6rem; color:var(--text-dim); letter-spacing:0.1em;">TRIER PAR</label>
+          <select id="gallerySort" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:var(--text-primary); font-family:var(--font-body); padding:6px 12px; border-radius:4px; outline:none; font-size:0.75rem; cursor:pointer;">
+              <option value="newest">PLUS RÉCENT</option>
+              <option value="oldest">PLUS ANCIEN</option>
+              <option value="az">NOM (A-Z)</option>
+          </select>
+      </div>
+    </div>
 
   <!-- Gallery -->
   <div class="gallery-grid" id="galleryGrid">
@@ -60,15 +68,43 @@
     </div>
   </div>
 
-  <!-- Upload zone -->
-  <div class="upload-zone" id="uploadZone">
-    <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
-    <div class="upload-icon">↑</div>
-    <div class="upload-text">DÉPOSER DES IMAGES ICI</div>
-    <div class="upload-sub">ou cliquer pour sélectionner · PNG, JPG, WEBP · max 20 Mo</div>
-    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <button class="filter-btn" onclick="document.getElementById('fileInput').click();">📂 PARCOURIR</button>
+    <!-- Upload zone -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
+      <div class="upload-icon">↑</div>
+      <div class="upload-text">DÉPOSER DES IMAGES ICI</div>
+      <div class="upload-sub">ou cliquer pour sélectionner · PNG, JPG, WEBP · max 20 Mo</div>
+      <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <button class="filter-btn" onclick="document.getElementById('fileInput').click();">📂 PARCOURIR</button>
+      </div>
     </div>
+  </div>
+
+  <!-- MOODBOARD VIEW -->
+  <div id="view-moodboard" class="tab-content" style="display:none;">
+    <div style="margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-family:var(--font-display); font-size:0.7rem; color:var(--text-dim); letter-spacing:0.1em; text-transform:uppercase;">INSPIRATION ÉPHÉMÈRE</div>
+        
+        <!-- REFERENCE TIMER CONTROLS -->
+        <div class="timer-controls" style="display:flex; align-items:center; gap:15px; background:rgba(255,255,255,0.03); padding:8px 15px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="font-family:var(--font-display); font-size:0.5rem; color:var(--neon-blue); letter-spacing:0.1em;">TIMER RÉFÉRENCE</div>
+            <select id="timerDelay" style="background:none; border:none; color:white; font-family:var(--font-body); font-size:0.7rem; cursor:pointer; outline:none;">
+                <option value="30000">30S</option>
+                <option value="60000" selected>60S</option>
+                <option value="120000">120S</option>
+                <option value="300000">5MIN</option>
+            </select>
+            <button id="startTimer" class="filter-btn" style="padding:4px 10px; font-size:0.6rem;">START</button>
+            <button id="stopTimer" class="filter-btn" style="padding:4px 10px; font-size:0.6rem; display:none; border-color:red; color:red;">STOP</button>
+        </div>
+
+        <button class="filter-btn" onclick="document.getElementById('moodInput').click();">➕ AJOUTER RÉFÉRENCE</button>
+        <input type="file" id="moodInput" accept="image/*" multiple style="display:none;" />
+    </div>
+    <div class="mood-grid" id="moodGrid">
+        <!-- Mood items -->
+    </div>
+    <div id="moodEmpty" style="text-align:center; padding:4rem; color:var(--text-dim); font-size:0.8rem;">Votre moodboard est vide. Ajoutez des images d'inspiration.</div>
   </div>
 
   <!-- Add modal -->
@@ -99,9 +135,16 @@
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-inner">
+    <div id="loupe" class="loupe"></div>
     <button class="lightbox-close" id="lbClose">✖ FERMER</button>
     <img id="lbImg" src="" alt="Preview" />
     <div id="lbCaption" style="text-align:center;margin-top:1rem;font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.2em;color:var(--text-secondary);"></div>
+    
+    <!-- Palette Extractor UI -->
+    <div id="paletteBox" class="palette-container"></div>
+    <div style="text-align:center; margin-top:5px;">
+        <button id="extractBtn" style="background:none; border:none; color:var(--text-dim); font-family:var(--font-display); font-size:0.5rem; letter-spacing:0.1em; cursor:pointer; text-decoration:underline;">EXTRAIRE PALETTE</button>
+    </div>
   </div>
 </div>
 

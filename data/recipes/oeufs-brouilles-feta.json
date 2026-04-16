@@ -1,0 +1,16 @@
+{
+  "id": "oeufs-brouilles-feta",
+  "name": "Oeufs brouillés à la feta",
+  "emoji": "🥚",
+  "tags": ["proteine", "rapide", "lowcal"],
+  "kcal": 260,
+  "prot": 24,
+  "gluc": 3,
+  "lip": 17,
+  "time": "8 min",
+  "portions": 1,
+  "desc": "Petit-déjeuner rapide et riche en protéines pour bien démarrer.",
+  "ingredients": "3 œufs entiers\n30g feta émiettée\n1 c.c. beurre\nCiboulette, sel, poivre",
+  "instructions": "1. Battez les œufs avec sel et poivre.\n2. Faites fondre le beurre à feu doux.\n3. Ajoutez les œufs et remuez lentement.\n4. Incorporez la feta juste avant la fin.\n5. Servez saupoudré de ciboulette.",
+  "source": "builtin"
+}

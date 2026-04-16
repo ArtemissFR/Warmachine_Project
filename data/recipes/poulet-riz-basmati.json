@@ -1,0 +1,16 @@
+{
+  "id": "poulet-riz-basmati",
+  "name": "Poulet grillé & riz basmati",
+  "emoji": "🍗",
+  "tags": ["proteine", "cutting"],
+  "kcal": 420,
+  "prot": 48,
+  "gluc": 38,
+  "lip": 7,
+  "time": "20 min",
+  "portions": 1,
+  "desc": "Repas post-workout classique, ultra protéiné et rassasiant.",
+  "ingredients": "200g blanc de poulet\n80g riz basmati cru\n1 c.s. huile d'olive\nSel, poivre, paprika, ail en poudre",
+  "instructions": "1. Assaisonnez le blanc de poulet avec sel, poivre, paprika et ail.\n2. Faites cuire le riz basmati selon le paquet (env. 12 min).\n3. Grillez le poulet 6 min de chaque côté.\n4. Servez avec la portion de riz.",
+  "source": "builtin"
+}

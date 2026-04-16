@@ -52,9 +52,18 @@ function renderHub(filter = '') {
     const card = document.createElement('div');
     card.className = 'hub-card';
     card.dataset.id = services.indexOf(svc);
+    
+    // Auto favicon for URLs if no icon emoji
+    let iconContent = svc.icon || '🌐';
+    if (svc.url.startsWith('http') && (!svc.icon || svc.icon.length > 2)) {
+      iconContent = `<img src="https://www.google.com/s2/favicons?domain=${svc.url}&sz=64" class="hub-link-icon" alt="icon">`;
+    } else {
+      iconContent = `<div class="hub-card-icon-box">${svc.icon || '🌐'}</div>`;
+    }
+
     card.innerHTML = `
       <div class="hub-card-header">
-        <div class="hub-card-icon-box">${svc.icon || '🌐'}</div>
+        ${iconContent}
         <div class="hub-card-title-group">
           <div class="hub-card-name">${svc.name}</div>
           <div class="hub-card-category">${(svc.category || 'service').toUpperCase()}</div>

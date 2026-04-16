@@ -1,0 +1,16 @@
+{
+  "id": "salade-thon-express",
+  "name": "Salade de thon express",
+  "emoji": "🥗",
+  "tags": ["proteine", "lowcal", "rapide", "cutting"],
+  "kcal": 220,
+  "prot": 30,
+  "gluc": 8,
+  "lip": 7,
+  "time": "5 min",
+  "portions": 1,
+  "desc": "Salade ultra-rapide, idéale pour les journées chargées.",
+  "ingredients": "1 boîte de thon au naturel (150g égouttés)\n1 tomate\n1/2 concombre\nQuelques olives noires\n1 c.s. huile d'olive\nJus de citron, sel, poivre",
+  "instructions": "1. Égouttez le thon.\n2. Coupez la tomate et le concombre en dés.\n3. Mélangez tout dans un bol.\n4. Assaisonnez avec huile, citron, sel et poivre.",
+  "source": "builtin"
+}
