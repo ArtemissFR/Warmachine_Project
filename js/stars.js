@@ -48,6 +48,10 @@
   }
 
   function draw() {
+    if (document.hidden) {
+      requestAnimationFrame(draw);
+      return;
+    }
     ctx.clearRect(0, 0, W, H);
 
     // Stars

@@ -1,3 +1,5 @@
+import { State } from './modules/core/state.js';
+
 /**
  * NEXUS - Settings Module Logic
  */
@@ -12,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const age = document.getElementById('setAge').value;
         const height = document.getElementById('setHeight').value;
         
-        localStorage.setItem('nexus-username', name);
-        localStorage.setItem('nexus-user-gender', gender);
-        localStorage.setItem('nexus-user-age', age);
-        localStorage.setItem('nexus-user-height', height);
+        State.set('nexus-username', name);
+        State.set('nexus-user-gender', gender);
+        State.set('nexus-user-age', age);
+        State.set('nexus-user-height', height);
         
         showNotification('Bio-Data mis à jour !');
     });
@@ -24,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('saveGoalData').addEventListener('click', () => {
         const goal = document.getElementById('setGoal').value;
         const weightGoal = document.getElementById('setWeightGoal').value;
-        localStorage.setItem('nexus-training-goal', goal);
-        localStorage.setItem('nexus-weight-goal', weightGoal);
+        State.set('nexus-training-goal', goal);
+        State.set('nexus-weight-goal', weightGoal);
 
         const currentWeight = parseFloat(document.getElementById('setWeightCurrent').value);
         if (!isNaN(currentWeight)) {
@@ -48,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         const newTheme = isLight ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('nexus-theme', newTheme);
+        State.set('nexus-theme', newTheme);
         themeBtn.innerHTML = newTheme === 'light' ? '☀️ Clair' : '🌙 Sombre';
     });
 
@@ -120,8 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     applyAccentColor(data.p);
                 }
-                localStorage.setItem('nexus-accent', data.p);
-                localStorage.setItem('nexus-variant', v);
+                State.set('nexus-accent', data.p);
+                State.set('nexus-variant', v);
 
                 document.querySelectorAll('.variant-head').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');

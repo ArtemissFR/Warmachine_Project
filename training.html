@@ -17,6 +17,29 @@
 <nexus-background></nexus-background>
 <nexus-navbar active="training"></nexus-navbar>
 
+<!-- Mission Report Modal -->
+<div class="modal-overlay" id="missionReportModal">
+  <div class="modal-box report-box" id="reportContainer">
+    <!-- Content injected by js/modules/analytics/report.js -->
+  </div>
+  <div class="modal-actions" style="width: 100%; max-width: 600px; margin: 1rem auto;">
+    <button class="btn-confirm" onclick="closeModal('missionReportModal')" style="width:100%;">FERMER LE RAPPORT</button>
+  </div>
+</div>
+
+<!-- Muscle Detail Modal -->
+<div class="modal-overlay" id="muscleDetailModal">
+  <div class="modal-box">
+    <div class="modal-title" id="md-title">DÉTAIL MUSCULAIRE</div>
+    <div id="md-history" style="margin-top: 1rem;">
+      <!-- History injected by js -->
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('muscleDetailModal')">FERMER</button>
+    </div>
+  </div>
+</div>
+
 <!-- PR Notification -->
 <div id="prNote" class="pr-notification">
   <div class="pr-badge">NEW PR!</div>
@@ -201,14 +224,14 @@
         <!-- FRONT SVG -->
         <div class="body-svg-box" style="width:120px;">
           <svg viewBox="0 0 100 200" class="human-wireframe" id="svg-front">
-             <path id="muscle-chest" d="M35 55 Q50 50 65 55 L65 70 Q50 75 35 70 Z" class="muscle-group" title="Pectoraux" />
-             <path id="muscle-abs" d="M40 75 L60 75 L58 110 L42 110 Z" class="muscle-group" title="Abdominaux" />
-             <path id="muscle-quads-l" d="M30 115 L45 115 L42 160 L32 160 Z" class="muscle-group" title="Quadriceps G" />
-             <path id="muscle-quads-r" d="M55 115 L70 115 L68 160 L58 160 Z" class="muscle-group" title="Quadriceps D" />
-             <path id="muscle-shoulders-l" d="M25 50 Q30 45 35 52 L32 65 Q28 62 25 58 Z" class="muscle-group" title="Deltoïdes G" />
-             <path id="muscle-shoulders-r" d="M75 50 Q70 45 65 52 L68 65 Q72 62 75 58 Z" class="muscle-group" title="Deltoïdes D" />
-             <path id="muscle-biceps-l" d="M22 65 L30 68 L28 90 L20 85 Z" class="muscle-group" title="Biceps G" />
-             <path id="muscle-biceps-r" d="M78 65 L70 68 L72 90 L80 85 Z" class="muscle-group" title="Biceps D" />
+             <path id="muscle-chest" d="M35 55 Q50 50 65 55 L65 70 Q50 75 35 70 Z" class="muscle-group" title="Pectoraux" onclick="openMuscleDetail('chest')" />
+             <path id="muscle-abs" d="M40 75 L60 75 L58 110 L42 110 Z" class="muscle-group" title="Abdominaux" onclick="openMuscleDetail('abs')" />
+             <path id="muscle-quads-l" d="M30 115 L45 115 L42 160 L32 160 Z" class="muscle-group" title="Quadriceps G" onclick="openMuscleDetail('quads-l')" />
+             <path id="muscle-quads-r" d="M55 115 L70 115 L68 160 L58 160 Z" class="muscle-group" title="Quadriceps D" onclick="openMuscleDetail('quads-r')" />
+             <path id="muscle-shoulders-l" d="M25 50 Q30 45 35 52 L32 65 Q28 62 25 58 Z" class="muscle-group" title="Deltoïdes G" onclick="openMuscleDetail('shoulders-l')" />
+             <path id="muscle-shoulders-r" d="M75 50 Q70 45 65 52 L68 65 Q72 62 75 58 Z" class="muscle-group" title="Deltoïdes D" onclick="openMuscleDetail('shoulders-r')" />
+             <path id="muscle-biceps-l" d="M22 65 L30 68 L28 90 L20 85 Z" class="muscle-group" title="Biceps G" onclick="openMuscleDetail('biceps-l')" />
+             <path id="muscle-biceps-r" d="M78 65 L70 68 L72 90 L80 85 Z" class="muscle-group" title="Biceps D" onclick="openMuscleDetail('biceps-r')" />
              <path d="M50 20 L55 25 L55 35 L50 40 L45 35 L45 25 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
              <path d="M35 50 L65 50 L75 55 L80 85 L75 110 L65 115 L65 160 L55 200 M35 115 L35 160 L45 200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
           </svg>
@@ -217,13 +240,13 @@
         <!-- BACK SVG -->
         <div class="body-svg-box" style="width:120px;">
           <svg viewBox="0 0 100 200" class="human-wireframe" id="svg-back">
-             <path id="muscle-back" d="M30 50 L70 50 L75 90 L25 90 Z" class="muscle-group" title="Dorsaux" />
-             <path id="muscle-traps" d="M40 42 L60 42 L65 55 L35 55 Z" class="muscle-group" title="Trapèzes" />
-             <path id="muscle-triceps-l" d="M20 65 L28 68 L26 90 L18 85 Z" class="muscle-group" title="Triceps G" />
-             <path id="muscle-triceps-r" d="M80 65 L72 68 L74 90 L82 85 Z" class="muscle-group" title="Triceps D" />
-             <path id="muscle-glutes" d="M35 112 L65 112 L68 135 L32 135 Z" class="muscle-group" title="Fessiers" />
-             <path id="muscle-hams-l" d="M30 140 L45 140 L42 175 L32 175 Z" class="muscle-group" title="Ischios G" />
-             <path id="muscle-hams-r" d="M55 140 L70 140 L68 175 L58 175 Z" class="muscle-group" title="Ischios D" />
+             <path id="muscle-back" d="M30 50 L70 50 L75 90 L25 90 Z" class="muscle-group" title="Dorsaux" onclick="openMuscleDetail('back')" />
+             <path id="muscle-traps" d="M40 42 L60 42 L65 55 L35 55 Z" class="muscle-group" title="Trapèzes" onclick="openMuscleDetail('traps')" />
+             <path id="muscle-triceps-l" d="M20 65 L28 68 L26 90 L18 85 Z" class="muscle-group" title="Triceps G" onclick="openMuscleDetail('triceps-l')" />
+             <path id="muscle-triceps-r" d="M80 65 L72 68 L74 90 L82 85 Z" class="muscle-group" title="Triceps D" onclick="openMuscleDetail('triceps-r')" />
+             <path id="muscle-glutes" d="M35 112 L65 112 L68 135 L32 135 Z" class="muscle-group" title="Fessiers" onclick="openMuscleDetail('glutes')" />
+             <path id="muscle-hams-l" d="M30 140 L45 140 L42 175 L32 175 Z" class="muscle-group" title="Ischios G" onclick="openMuscleDetail('hams-l')" />
+             <path id="muscle-hams-r" d="M55 140 L70 140 L68 175 L58 175 Z" class="muscle-group" title="Ischios D" onclick="openMuscleDetail('hams-r')" />
              <path d="M50 20 L55 25 L55 35 L50 40 L45 35 L45 25 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
              <path d="M30 50 L70 50 L80 85 L70 112 L65 140 L50 200 M35 140 L50 200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />
           </svg>
@@ -577,11 +600,44 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+  import { Biometrie } from './js/modules/analytics/biometry.js';
+  import { MissionReport } from './js/modules/analytics/report.js';
+  import { Events, APP_EVENTS } from './js/modules/core/events.js';
+
+  // Attach to window for legacy onclick attributes in HTML
+  window.openMuscleDetail = (muscleId) => {
+    const history = Biometrie.getMuscleHistory(muscleId);
+    const title = document.getElementById('md-title');
+    const container = document.getElementById('md-history');
+    
+    title.textContent = `HISTORIQUE : ${muscleId.toUpperCase()}`;
+    container.innerHTML = history.length 
+      ? history.map(p => `
+        <div class="history-item">
+          <div class="history-item-date">${p.date}</div>
+          <div class="history-item-val">${p.exo} : ${p.weight}kg</div>
+        </div>`).join('')
+      : '<div style="color:var(--text-dim); font-size:0.8rem;">Aucune donnée récente.</div>';
+    
+    document.getElementById('muscleDetailModal').classList.add('active');
+  };
+
+  window.showMissionReport = () => {
+    MissionReport.renderUI(document.getElementById('reportContainer'));
+    document.getElementById('missionReportModal').classList.add('active');
+  };
+
+  // Listen for workout completions to trigger report
+  Events.on(APP_EVENTS.WORKOUT_COMPLETED, () => {
+    setTimeout(window.showMissionReport, 1000);
+  });
+</script>
 <script src="js/core.js"></script>
-<script src="js/components.js"></script>
+<script type="module" src="js/components.js"></script>
 <script src="js/theme.js"></script>
 <script src="js/stars.js"></script>
 <script src="js/interactions.js"></script>
-<script src="js/training.js"></script>
+<script type="module" src="js/training.js"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import { State } from './modules/core/state.js';
+
 /**
  * NEXUS GALLERY MODULE
  * Advanced filtering, sorting, and lightbox management.
@@ -15,12 +17,11 @@ const MOODBOARD_KEY = 'nexus-moodboard-items';
 let moodboardItems = [];
 
 function loadMoodboard() {
-    try { return JSON.parse(localStorage.getItem(MOODBOARD_KEY)) || []; }
-    catch { return []; }
+    return State.get(MOODBOARD_KEY, []);
 }
 
 function saveMoodboard(items) {
-    localStorage.setItem(MOODBOARD_KEY, JSON.stringify(items));
+    State.set(MOODBOARD_KEY, items);
 }
 
 function renderMoodboard() {
@@ -70,12 +71,11 @@ function handleMoodFiles(files) {
 }
 
 function loadGallery() {
-  try { return JSON.parse(localStorage.getItem(GALLERY_KEY)) || []; }
-  catch { return []; }
+  return State.get(GALLERY_KEY, []);
 }
 
 function saveGallery(items) {
-  localStorage.setItem(GALLERY_KEY, JSON.stringify(items));
+  State.set(GALLERY_KEY, items);
 }
 
 function renderGallery() {
@@ -394,4 +394,14 @@ document.getElementById('confirmImgModal')?.addEventListener('click', () => {
 document.getElementById('cancelImgModal')?.addEventListener('click', () => {
     document.getElementById('addImgModal').style.display = 'none';
     pendingFile = null;
+});
+
+// --- STATE SYNC ---
+State.subscribe(GALLERY_KEY, () => {
+    galleryItems = loadGallery();
+    renderGallery();
+});
+State.subscribe(MOODBOARD_KEY, () => {
+    moodboardItems = loadMoodboard();
+    renderMoodboard();
 });

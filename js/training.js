@@ -1,7 +1,11 @@
+import { State } from './modules/core/state.js';
+import { Events, APP_EVENTS } from './modules/core/events.js';
+import { Biometrie } from './modules/analytics/biometry.js';
+
 /* =========================================================
    WORKSPACE & PINNING SYSTEM
    ========================================================= */
-let pinnedPanels = JSON.parse(localStorage.getItem('core-ops-pins') || '[]');
+let pinnedPanels = State.get('core-ops-pins', []);
 
 function togglePin(panelId) {
   const index = pinnedPanels.indexOf(panelId);
@@ -11,7 +15,7 @@ function togglePin(panelId) {
     pinnedPanels.splice(index, 1);
   }
   
-  localStorage.setItem('core-ops-pins', JSON.stringify(pinnedPanels));
+  State.set('core-ops-pins', pinnedPanels);
   updatePinButtons();
   updateDashboard();
 }
@@ -64,8 +68,8 @@ let dashWChartInstance = null;
 let dashPChartInstance = null;
 
 function reinitDashboardCharts() {
-  const perfs = JSON.parse(localStorage.getItem('nexus-perf-history') || '[]');
-  const weights = JSON.parse(localStorage.getItem('nexus-weight-history') || '[]');
+  const perfs = State.get('nexus-perf-history', []);
+  const weights = State.get('nexus-weight-history', []);
   
   // Weights Chart in Dashboard
   const dashWC = document.getElementById('dash-weightChart');
@@ -1223,9 +1227,25 @@ document.getElementById('genWupBtn')?.addEventListener('click', () => {
     });
 });
 
+// --- EXPORTS GLOBAUX POUR COMPATIBILITÉ ---
+window.togglePin = togglePin;
+window.updateDashboard = updateDashboard;
+window.reinitDashboardCharts = reinitDashboardCharts;
+window.openModal = window.openModal || ((id) => document.getElementById(id)?.classList.add('active'));
+window.closeModal = window.closeModal || ((id) => document.getElementById(id)?.classList.remove('active'));
+window.initKcal = initKcal;
+window.initWeight = initWeight;
+window.initPerf = initPerf;
+window.initRoutines = initRoutines;
+window.initPhotos = initPhotos;
+window.initBossGoals = initBossGoals;
+window.renderAdvancedAnalytics = renderAdvancedAnalytics;
+window.renderHeatmap = renderHeatmap;
+window.updateAIInsights = updateAIInsights;
+window.updatePinButtons = updatePinButtons;
+
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
-
   initKcal();
   initWeight();
   initPerf();
@@ -1233,12 +1253,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initPhotos();
   initBossGoals();
   renderAdvancedAnalytics();
-  
-  // Phase 2 features
   renderHeatmap();
-  updateAIInsights(JSON.parse(localStorage.getItem('nexus-perf-history') || '[]'));
-  
-  // Pin system init
+  const perfs = JSON.parse(localStorage.getItem('nexus-perf-history') || '[]');
+  updateAIInsights(perfs);
   updatePinButtons();
   updateDashboard();
+
+  // Biométrie Sync
+  State.subscribe('nexus-perf-history', () => {
+    Biometrie.updateHeatmap();
+    renderAdvancedAnalytics();
+  });
+  
+  // Workspace Sync
+  State.subscribe('core-ops-pins', () => {
+    pinnedPanels = State.get('core-ops-pins', []);
+    updatePinButtons();
+    updateDashboard();
+  });
 });

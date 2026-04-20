@@ -1,3 +1,5 @@
+import { State } from './modules/core/state.js';
+
 /**
  * NEXUS NETWORK HUB
  * Handles service rendering, admin mode, drag & drop, and markdown notes.
@@ -24,14 +26,11 @@ let services = [];
 let isAdmin = sessionStorage.getItem('nexus-admin') === 'true';
 
 function loadServices() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return saved && saved.length ? saved : DEFAULT_SERVICES;
-  } catch { return DEFAULT_SERVICES; }
+  return State.get(STORAGE_KEY, DEFAULT_SERVICES);
 }
 
 function saveServices(svcs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(svcs));
+  State.set(STORAGE_KEY, svcs);
 }
 
 function renderHub(filter = '') {
@@ -223,3 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// --- STATE SYNC ---
+State.subscribe(STORAGE_KEY, () => {
+  services = loadServices();
+  renderHub(document.getElementById('hubSearch').value.toLowerCase().trim());
+});
