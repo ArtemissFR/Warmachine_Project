@@ -180,7 +180,7 @@ function reinitDashboardCharts() {
   }
 }
 
-window.togglePin = togglePin;
+
 /* =========================================================
    TABS NAVIGATION
    ========================================================= */
@@ -233,33 +233,6 @@ function triggerPR(exo, weight) {
   setTimeout(() => note.classList.remove('active'), 5000);
 }
 
-function updateEliteStats(perfs) {
-  let totalVolume = 0;
-  let weeklyVolume = 0;
-  const now = new Date();
-  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-  perfs.forEach(p => {
-    const vol = p.weight * p.sets * p.reps;
-    totalVolume += vol;
-    const [d, m, y] = p.date.split('/');
-    const perfDate = new Date(y, m - 1, d);
-    if (perfDate > oneWeekAgo) weeklyVolume += vol;
-  });
-
-  const today = getTodayString();
-  const sessionVol = perfs.filter(p => p.date === today)
-                          .reduce((acc, p) => acc + (p.weight * p.sets * p.reps), 0);
-                          
-  if(document.getElementById('totalVolume')) 
-    document.getElementById('totalVolume').textContent = `${sessionVol.toLocaleString()} kg`;
-  if(document.getElementById('calEstimate')) 
-    document.getElementById('calEstimate').textContent = Math.round(sessionVol * 0.05);
-
-  updateRankAndStreaks(totalVolume, perfs);
-  updateBackgroundIntensity(weeklyVolume);
-}
-
 function updateRankAndStreaks(totalVol, perfs) {
   const uniqueDatesArr = [...new Set(perfs.map(p => p.date))];
   const trainingDays = uniqueDatesArr.length;
@@ -271,17 +244,16 @@ function updateRankAndStreaks(totalVol, perfs) {
     if (xp < 500) { rankEl.textContent = 'Citoyen'; rankEl.classList.add('rank-citizen'); }
     else if (xp < 2000) { rankEl.textContent = 'Garde Frontière'; rankEl.classList.add('rank-guard'); }
     else if (xp < 5000) { rankEl.textContent = 'Légionnaire'; rankEl.classList.add('rank-legionary'); }
-    else if (xp < 12000) { rankEl.textContent = 'Décurion'; rankEl.classList.add('rank-centurion'); } // Reusing centurion class for simplicity
+    else if (xp < 12000) { rankEl.textContent = 'Décurion'; rankEl.classList.add('rank-centurion'); }
     else if (xp < 25000) { rankEl.textContent = 'Centurion'; rankEl.classList.add('rank-centurion'); }
     else if (xp < 50000) { rankEl.textContent = 'Prétorien'; rankEl.classList.add('rank-commander'); }
     else if (xp < 100000) { rankEl.textContent = 'Commandant'; rankEl.classList.add('rank-commander'); }
     else if (xp < 200000) { rankEl.textContent = 'Maître de Guerre'; rankEl.classList.add('rank-grand-regent'); }
     else { rankEl.textContent = 'Grand Régisseur'; rankEl.classList.add('rank-grand-regent'); }
-    
-    // Add XP display
+
     rankEl.title = `XP: ${xp.toLocaleString()}`;
   }
-  
+
   const streakEl = document.getElementById('streakCount');
   if(streakEl) {
     streakEl.textContent = `${trainingDays} Jours`;
@@ -302,6 +274,36 @@ function updateBackgroundIntensity(weeklyVol) {
   // Transition du Cyan (190) vers le Rouge (0)
   const hue = 190 - (ratio * 190);
   document.documentElement.style.setProperty('--bg-hue', hue);
+}
+
+function updateEliteStats(perfs) {
+  let totalVolume = 0;
+  const now = new Date();
+  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  let weeklyVolume = 0;
+
+  perfs.forEach(p => {
+    const vol = p.weight * p.sets * p.reps;
+    totalVolume += vol;
+    const [d, m, y] = p.date.split('/');
+    const perfDate = new Date(y, m - 1, d);
+    if (perfDate > oneWeekAgo) weeklyVolume += vol;
+  });
+
+  const today = getTodayString();
+  const todayPerfs = perfs.filter(p => p.date === today);
+  const sessionVol = todayPerfs.reduce((acc, p) => acc + (p.weight * p.sets * p.reps), 0);
+
+  if(document.getElementById('totalVolume'))
+    document.getElementById('totalVolume').textContent = `${sessionVol.toLocaleString()} kg`;
+
+  if(document.getElementById('calEstimate')) {
+    const duration = activeRoutine ? (activeRoutine.duration || 60) : 60;
+    document.getElementById('calEstimate').textContent = sessionVol > 0 ? calculateBurnedCalories(duration) : 0;
+  }
+
+  updateRankAndStreaks(totalVolume, perfs);
+  updateBackgroundIntensity(weeklyVolume);
 }
 
 /* =========================================================
@@ -460,36 +462,6 @@ function calculateBurnedCalories(durationMins) {
   const met = 6.0;
   const durationHours = durationMins / 60;
   return Math.round((bmr / 24) * met * durationHours);
-}
-
-function updateEliteStats(perfs) {
-  let totalVolume = 0;
-  const now = new Date();
-  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  let weeklyVolume = 0;
-
-  perfs.forEach(p => {
-    const vol = p.weight * p.sets * p.reps;
-    totalVolume += vol;
-    const [d, m, y] = p.date.split('/');
-    const perfDate = new Date(y, m - 1, d);
-    if (perfDate > oneWeekAgo) weeklyVolume += vol;
-  });
-
-  const today = getTodayString();
-  const todayPerfs = perfs.filter(p => p.date === today);
-  const sessionVol = todayPerfs.reduce((acc, p) => acc + (p.weight * p.sets * p.reps), 0);
-                          
-  if(document.getElementById('totalVolume')) 
-    document.getElementById('totalVolume').textContent = `${sessionVol.toLocaleString()} kg`;
-  
-  if(document.getElementById('calEstimate')) {
-    const duration = activeRoutine ? (activeRoutine.duration || 60) : 60;
-    document.getElementById('calEstimate').textContent = sessionVol > 0 ? calculateBurnedCalories(duration) : 0;
-  }
-
-  updateRankAndStreaks(totalVolume, perfs);
-  updateBackgroundIntensity(weeklyVolume);
 }
 
 let activePhotoType = '';

@@ -19,7 +19,7 @@ window.closeGoalsModal = () => closeGoalsModal();
 window.saveGoals = () => saveGoals();
 window.setRating = (id, n) => setRating(id, n);
 window.runMacroCalc = () => runMacroCalc();
-window.applyCalculatedMacros = () => applyCalculatedMacros;
+window.applyCalculatedMacros = () => applyCalculatedMacros();
 window.toggleFridgeModal = () => toggleFridgeModal();
 window.closeFridgeModal = () => closeFridgeModal();
 window.applyFridgeMode = () => applyFridgeMode();
@@ -323,6 +323,8 @@ function adjustPortionInPanel(id, delta) {
 function openGoalsModal() {
   document.getElementById('goalKcal').value = dailyGoals.kcal;
   document.getElementById('goalProt').value = dailyGoals.prot;
+  document.getElementById('goalGluc').value = dailyGoals.gluc;
+  document.getElementById('goalLip').value  = dailyGoals.lip;
   openModal('goalsModal');
 }
 function closeGoalsModal() { closeModal('goalsModal'); }
@@ -330,7 +332,8 @@ function saveGoals() {
   dailyGoals = {
     kcal: parseInt(document.getElementById('goalKcal').value) || 2500,
     prot: parseInt(document.getElementById('goalProt').value) || 180,
-    gluc: 250, lip: 70
+    gluc: parseInt(document.getElementById('goalGluc').value) || 250,
+    lip:  parseInt(document.getElementById('goalLip').value)  || 70,
   };
   saveGoals_(); closeGoalsModal(); renderDailyTracker();
 }
@@ -346,15 +349,64 @@ function saveNote(id, text) {
   recipeMeta[id].note = text; saveMeta();
 }
 
+function toggleFav(id) {
+  if (favSet.has(id)) favSet.delete(id);
+  else favSet.add(id);
+  saveFavs();
+  renderGrid();
+  // If detail modal is open, update fav button state
+  const favBtn = document.querySelector(`#recipeDetailModal .rc-btn.fav`);
+  const isFav = favSet.has(id);
+  if (favBtn && document.getElementById('recipeDetailModal')?.classList.contains('open')) {
+    favBtn.classList.toggle('active', isFav);
+    favBtn.textContent = isFav ? '⭐' : '☆';
+  }
+}
+
 // ───────────────────────────────────────────────────────────────────
 //  ADD / EDIT SYSTEM
 // ───────────────────────────────────────────────────────────────────
 function openFormModal(prefill = null) {
   editingId = prefill?.id || null;
+  selectedEmoji = prefill?.emoji || '🍗';
+  selectedTags = prefill?.tags ? [...prefill.tags] : [];
+  currentPhoto = prefill?.photo || null;
+
   document.getElementById('fName').value = prefill?.name || '';
   document.getElementById('fKcal').value = prefill?.kcal || '';
   document.getElementById('fProt').value = prefill?.prot || '';
+  document.getElementById('fGluc').value = prefill?.gluc || '';
+  document.getElementById('fLip').value = prefill?.lip || '';
   document.getElementById('fDesc').value = prefill?.desc || '';
+  document.getElementById('fTime').value = prefill?.time || '';
+  document.getElementById('fPortions').value = prefill?.portions || '1';
+  document.getElementById('fIngredients').value = prefill?.ingredients || '';
+  document.getElementById('fInstructions').value = prefill?.instructions || '';
+
+  // Emoji
+  document.querySelectorAll('.emoji-opt').forEach(o => {
+    o.classList.toggle('selected', o.dataset.emoji === selectedEmoji);
+  });
+
+  // Tags
+  document.querySelectorAll('.tag-check').forEach(o => {
+    o.classList.toggle('checked', selectedTags.includes(o.dataset.tag));
+  });
+
+  // Photo
+  const zone = document.getElementById('photoUploadZone');
+  const preview = document.getElementById('photoPreviewImg');
+  if (currentPhoto && zone && preview) {
+    preview.src = currentPhoto;
+    zone.classList.add('has-photo');
+  } else if (zone) {
+    zone.classList.remove('has-photo');
+  }
+
+  const title = document.getElementById('formModalTitle');
+  if (title) title.textContent = editingId ? '✏️ MODIFIER LA RECETTE' : '🍳 NOUVELLE RECETTE';
+
+  document.getElementById('macrCalcPanel')?.classList.remove('visible');
   openModal('recipeFormModal');
 }
 function openEdit(id) { const r = userRecipes.find(x => x.id === id); if(r) openFormModal(r); }
@@ -364,15 +416,26 @@ function saveRecipe() {
   if(!name) return;
   const recipe = {
     id: editingId || `user_${Date.now()}`,
-    name, tags: [],
+    name,
+    emoji: selectedEmoji,
+    tags: selectedTags,
     kcal: parseInt(document.getElementById('fKcal').value) || 0,
     prot: parseInt(document.getElementById('fProt').value) || 0,
+    gluc: parseInt(document.getElementById('fGluc').value) || 0,
+    lip:  parseInt(document.getElementById('fLip').value)  || 0,
     desc: document.getElementById('fDesc').value.trim(),
-    source: 'user', createdAt: Date.now()
+    time: document.getElementById('fTime').value.trim(),
+    portions: parseInt(document.getElementById('fPortions').value) || 1,
+    ingredients: document.getElementById('fIngredients').value.trim(),
+    instructions: document.getElementById('fInstructions').value.trim(),
+    photo: currentPhoto || null,
+    source: 'user',
+    createdAt: Date.now()
   };
   if(editingId) userRecipes = userRecipes.map(r => r.id === editingId ? recipe : r);
   else userRecipes.unshift(recipe);
   saveUserRecipes(); closeFormModal(); renderGrid();
+  showToast(`✓ ${recipe.name} enregistrée`);
 }
 function deleteRecipe(id) {
   if(confirm("Supprimer ?")) {
@@ -400,14 +463,144 @@ function closeFridgeModal() { closeModal('fridgeModal'); }
 function openDetail(id) {
   const r = allRecipes().find(x => x.id === id);
   if(!r) return;
-  // Detail rendering simplified for brevity, same logic as before
-  document.getElementById('detailHeader').innerHTML = `<h2>${h(r.name)}</h2>`;
-  document.getElementById('detailBody').innerHTML = `<p>${h(r.ingredients || '')}</p>`;
+  detailRecipeId = id;
+  currentPortions = 1;
+
+  // Photo area
+  const photoArea = document.getElementById('detailPhotoArea');
+  const photoImg  = document.getElementById('detailPhotoImg');
+  if (photoArea && photoImg) {
+    if (r.photo) { photoImg.src = r.photo; photoArea.classList.add('visible'); }
+    else photoArea.classList.remove('visible');
+  }
+
+  // Header
+  const style = getStyle(r);
+  const tagBadges = r.tags.slice(0,3).map(t => BADGE_HTML[t]||'').join('');
+  const aiBadge = r.source === 'builtin' ? AI_BADGE : '';
+  const headerEl = document.getElementById('detailHeader');
+  if (headerEl) headerEl.innerHTML = `
+    <div class="detail-emoji-big">${r.photo ? `<img src="${r.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;">` : (r.emoji||'🍽️')}</div>
+    <div class="detail-title-block">
+      <div class="detail-title">${h(r.name)}</div>
+      <div class="detail-category" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${aiBadge}${tagBadges}</div>
+      ${r.desc ? `<div style="font-family:var(--font-body);font-size:.78rem;color:var(--text-secondary);margin-top:.5rem;line-height:1.5;">${h(r.desc)}</div>` : ''}
+    </div>`;
+
+  // Portion multiplier
+  const portionEl = document.getElementById('detailPortionMult');
+  if (portionEl) portionEl.innerHTML = `
+    <div class="portion-mult-label"><span>PORTIONS</span><span class="portion-mult-val" id="portionVal">×1</span></div>
+    <input type="range" class="portion-range" id="portionRange" min="1" max="5" step="0.5" value="1">
+    <div class="portion-ticks"><span>×1</span><span>×2</span><span>×3</span><span>×4</span><span>×5</span></div>`;
+
+  const updateMacros = (p) => {
+    const macrosEl = document.getElementById('detailMacros');
+    if (!macrosEl) return;
+    macrosEl.innerHTML = `
+      <div class="detail-macro-box dm-kcal"><span class="dm-val">${Math.round((r.kcal||0)*p)}</span><span class="dm-label">kcal</span></div>
+      <div class="detail-macro-box dm-prot"><span class="dm-val">${Math.round((r.prot||0)*p)}g</span><span class="dm-label">protéines</span></div>
+      <div class="detail-macro-box dm-gluc"><span class="dm-val">${Math.round((r.gluc||0)*p)}g</span><span class="dm-label">glucides</span></div>
+      <div class="detail-macro-box dm-lip"><span class="dm-val">${Math.round((r.lip||0)*p)}g</span><span class="dm-label">lipides</span></div>`;
+  };
+  updateMacros(1);
+
+  document.getElementById('portionRange')?.addEventListener('input', e => {
+    const p = parseFloat(e.target.value);
+    currentPortions = p;
+    document.getElementById('portionVal').textContent = `×${p}`;
+    updateMacros(p);
+  });
+
+  // Body
+  const bodyEl = document.getElementById('detailBody');
+  if (bodyEl) {
+    const ingLines = (r.ingredients||'').split('\n').filter(Boolean);
+    const ingHtml = ingLines.length
+      ? ingLines.map(l => `<div class="ingredient-item">${h(l)}</div>`).join('')
+      : '<div class="ingredient-item" style="color:var(--text-dim);">Non renseigné</div>';
+
+    const timing = r.time ? `<div style="display:flex;gap:8px;margin-bottom:1rem;"><div class="macro-pill time"><span class="macro-val">${h(r.time)}</span><span class="macro-label">prep</span></div>${r.portions>1?`<div class="macro-pill"><span class="macro-val">${r.portions}</span><span class="macro-label">portions</span></div>`:''}</div>` : '';
+
+    const starsHtmlStr = starsHtml(r.rating, true, r.id);
+    bodyEl.innerHTML = `
+      ${timing}
+      <div class="detail-section-label">INGRÉDIENTS</div>
+      <div class="detail-ingredients">${ingHtml}</div>
+      ${r.instructions ? `<div class="detail-section-label">PRÉPARATION</div><div class="detail-instructions">${h(r.instructions)}</div>` : ''}
+      <div class="detail-section-label" style="margin-top:1.5rem;">NOTE PERSO</div>
+      <div class="star-rating-widget" style="margin-bottom:.6rem;">${starsHtmlStr}</div>
+      <textarea class="recipe-note-area" placeholder="Ajouter une note..." oninput="saveNote('${r.id}',this.value)">${h(r.note||'')}</textarea>
+      <div style="display:flex;gap:8px;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.05);">
+        ${r.source==='builtin'
+          ? `<button class="rc-btn" onclick="copyAndEdit('${r.id}'); closeDetailModal();">📋 COPIER & ÉDITER</button>`
+          : `<button class="rc-btn" onclick="openEdit('${r.id}'); closeDetailModal();">✏️ ÉDITER</button><button class="rc-btn danger" onclick="deleteRecipe('${r.id}'); closeDetailModal();">🗑</button>`}
+        <button class="rc-btn today-btn" onclick="addToDay('${r.id}'); closeDetailModal();">📊 AJOUTER AU JOUR</button>
+        <button class="rc-btn fav ${r.fav?'active':''}" onclick="toggleFav('${r.id}')">${r.fav?'⭐':'☆'}</button>
+      </div>`;
+  }
+
   openModal('recipeDetailModal');
 }
 function closeDetailModal() { closeModal('recipeDetailModal'); }
 
-function removePhoto() { currentPhoto = null; }
+function removePhoto() {
+  currentPhoto = null;
+  const zone = document.getElementById('photoUploadZone');
+  if (zone) zone.classList.remove('has-photo');
+  const preview = document.getElementById('photoPreviewImg');
+  if (preview) { preview.src = ''; }
+}
+
+// ───────────────────────────────────────────────────────────────────
+//  MACRO CALCULATOR
+// ───────────────────────────────────────────────────────────────────
+function runMacroCalc() {
+  const raw = document.getElementById('fIngredients')?.value || '';
+  const lines = raw.split('\n').filter(Boolean);
+  const panel = document.getElementById('macrCalcPanel');
+  const resultGrid = document.getElementById('calcResultGrid');
+  const breakdown = document.getElementById('calcBreakdown');
+  if (!panel || !resultGrid || !breakdown) return;
+
+  const foods = window.FOODS || [];
+  let totals = { kcal:0, prot:0, gluc:0, lip:0 };
+  let breakdownHtml = '';
+
+  lines.forEach(line => {
+    const match = line.match(/(\d+(?:[.,]\d+)?)\s*g?\s+(.+)/i);
+    if (!match) { breakdownHtml += `<div class="cb-nomatch">${h(line)} — non reconnu</div>`; return; }
+    const qty = parseFloat(match[1].replace(',', '.'));
+    const name = match[2].trim().toLowerCase();
+    const food = foods.find(f => name.includes(f.name.toLowerCase()) || f.name.toLowerCase().includes(name));
+    if (!food) { breakdownHtml += `<div class="cb-nomatch">${h(line)} — ingrédient inconnu</div>`; return; }
+    const f = qty / 100;
+    totals.kcal += (food.kcal||0) * f;
+    totals.prot += (food.prot||0) * f;
+    totals.gluc += (food.gluc||0) * f;
+    totals.lip  += (food.lip||0)  * f;
+    breakdownHtml += `<div class="cb-match">${Math.round(qty)}g ${food.name} → ${Math.round((food.kcal||0)*f)} kcal / ${Math.round((food.prot||0)*f)}g prot</div>`;
+  });
+
+  calcResult = { kcal: Math.round(totals.kcal), prot: Math.round(totals.prot), gluc: Math.round(totals.gluc), lip: Math.round(totals.lip) };
+
+  resultGrid.innerHTML = `
+    <div class="calc-result-item cri-kcal"><span class="crv">${calcResult.kcal}</span><span class="crl">kcal</span></div>
+    <div class="calc-result-item cri-prot"><span class="crv">${calcResult.prot}g</span><span class="crl">prot</span></div>
+    <div class="calc-result-item cri-gluc"><span class="crv">${calcResult.gluc}g</span><span class="crl">gluc</span></div>
+    <div class="calc-result-item cri-lip"><span class="crv">${calcResult.lip}g</span><span class="crl">lip</span></div>`;
+  breakdown.innerHTML = breakdownHtml || '<div style="color:var(--text-dim)">Aucun ingrédient reconnu.</div>';
+  panel.classList.add('visible');
+}
+
+function applyCalculatedMacros() {
+  if (!calcResult) return;
+  document.getElementById('fKcal').value = calcResult.kcal;
+  document.getElementById('fProt').value = calcResult.prot;
+  document.getElementById('fGluc').value = calcResult.gluc;
+  document.getElementById('fLip').value  = calcResult.lip;
+  showToast('✓ Macros appliquées');
+}
 
 // ───────────────────────────────────────────────────────────────────
 //  CORE UTILS
@@ -458,6 +651,63 @@ const init = async () => {
         activeFilter = 'all'; // Reset category on search
         activeSearch = e.target.value;
         renderGrid();
+    });
+
+    // ── Emoji picker ──────────────────────────────────────────────
+    document.querySelectorAll('.emoji-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.emoji-opt').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            selectedEmoji = opt.dataset.emoji;
+        });
+    });
+
+    // ── Tag picker ────────────────────────────────────────────────
+    document.querySelectorAll('.tag-check').forEach(tag => {
+        tag.addEventListener('click', () => {
+            const t = tag.dataset.tag;
+            tag.classList.toggle('checked');
+            if (tag.classList.contains('checked')) {
+                if (!selectedTags.includes(t)) selectedTags.push(t);
+            } else {
+                selectedTags = selectedTags.filter(x => x !== t);
+            }
+        });
+    });
+
+    // ── Photo upload ──────────────────────────────────────────────
+    const photoInput = document.getElementById('photoFileInput');
+    if (photoInput) {
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 800;
+                    let w = img.width, h = img.height;
+                    if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    currentPhoto = canvas.toDataURL('image/jpeg', 0.75);
+                    const preview = document.getElementById('photoPreviewImg');
+                    const zone = document.getElementById('photoUploadZone');
+                    if (preview) preview.src = currentPhoto;
+                    if (zone) zone.classList.add('has-photo');
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ── Close modals on overlay click ─────────────────────────────
+    document.querySelectorAll('.recipe-detail-modal, .recipe-form-modal').forEach(m => {
+        m.addEventListener('click', (e) => {
+            if (e.target === m) m.classList.remove('open');
+        });
     });
 };
 
